@@ -1,0 +1,13 @@
+{
+  "extends": ["react-app"],
+  "globals": {},
+  "rules": {
+    "no-undef": "off",
+    "no-restricted-globals": "off",
+    "no-unused-vars": "off",
+    "noHref": "off",
+    "array-callback-return": "off",
+    "jsx-a11y/anchor-has-content": "off",
+    "anchor-is-valid": "off"
+  }
+}

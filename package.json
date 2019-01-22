@@ -5,6 +5,8 @@
   "dependencies": {
     "@babel/core": "7.1.6",
     "@svgr/webpack": "2.4.1",
+    "antd": "^3.12.4",
+    "axios": "^0.18.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
@@ -43,6 +45,10 @@
     "react-app-polyfill": "^0.2.0",
     "react-dev-utils": "^7.0.1",
     "react-dom": "^16.7.0",
+    "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
@@ -57,9 +63,6 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",
@@ -112,5 +115,13 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "babel-plugin-import": "^1.11.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "redux-devtools-extension": "^2.13.7",
+    "redux-logger": "^3.0.6"
   }
 }
