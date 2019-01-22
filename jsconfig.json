@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "jsx": "react"
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "config",
+    "scripts"
+  ]
+}

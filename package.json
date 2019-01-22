@@ -116,6 +116,7 @@
     "babel-plugin-import": "^1.11.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "react-hot-loader": "^4.6.3",
     "redux-devtools-extension": "^2.13.7",
     "redux-logger": "^3.0.6"
   }
