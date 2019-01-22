@@ -111,11 +111,6 @@
       "node"
     ]
   },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
-  },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.3.0",
     "babel-plugin-import": "^1.11.0",
