@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import App from './App'
-import './index.css'
+import '@/style/index.less'
 import { Provider } from 'react-redux'
 import store from '@/redux'
 
