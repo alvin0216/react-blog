@@ -14,7 +14,6 @@ function renderRoutes(routes, contextPath) {
       newContextPath = `${routeContextPath}/${item.path}`
     }
     newContextPath = newContextPath.replace(/\/+/g, '/')
-    console.log(routes, newContextPath)
     if (item.component && item.childRoutes) {
       const childRoutes = renderRoutes(item.childRoutes, newContextPath)
       children.push(
