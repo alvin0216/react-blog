@@ -30,7 +30,13 @@ class Root extends Component {
           />
         )
       } else if (item.component) {
-        children.push(<Route key={newContextPath} component={item.component} path={newContextPath} exact />)
+        if (typeof item.component === 'function') {
+          children.push(<Route key={newContextPath} component={item.component} path={newContextPath} exact />)
+        } else {
+          // fix: Failed prop type: Invalid prop `component` of type `object` supplied to `Route`, expected `function`
+          // object 时 即为 lazyload 返回的对象时，使用 () => <Component /> 去装载路由主键
+          children.push(<Route key={newContextPath} component={() => <item.component />} path={newContextPath} exact />)
+        }
       } else if (item.childRoutes) {
         item.childRoutes.forEach(r => renderRoute(r, newContextPath))
       }
