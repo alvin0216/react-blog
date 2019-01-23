@@ -1,20 +1,23 @@
+// import PageNotFound from '@/components/NotFound'
+import homeRoutes from '@/views/web/routes'
 import examplesRoute from '@/examples/routes'
-import PageNotFound from '@/components/NotFound'
-import homeRoutes from '@/views/routes'
+import adminRoutes from '@/views/admin/routes'
 
 const childRoutes = [
-  homeRoutes,
-  examplesRoute //...
+  examplesRoute,
+  adminRoutes,
+  homeRoutes
+  //...
 ]
 
-// generator all the routes 
+// generator all the routes
 const routes = [
-  ...childRoutes.filter(r => r.component || (r.childRoutes && r.childRoutes.length > 0)),
-  {
-    path: '*',
-    name: 'Page not found',
-    component: PageNotFound
-  }
+  ...childRoutes.filter(r => r.component || (r.childRoutes && r.childRoutes.length > 0))
+  // {
+  //   path: '*',
+  //   name: 'Page not found',
+  //   component: PageNotFound
+  // }
 ]
 
 /**
