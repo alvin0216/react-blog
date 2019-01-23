@@ -1,5 +1,6 @@
 import React, { Component, Suspense } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import Loading from '@/components/Loading'
 import routes from '@/routes/config'
 
 class Root extends Component {
@@ -44,7 +45,7 @@ class Root extends Component {
     const children = this.renderRoutes(routes, '/')
     return (
       <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        <Suspense fallback={<Loading />}>{children}</Suspense>
       </BrowserRouter>
     )
   }
