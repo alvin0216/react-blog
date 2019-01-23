@@ -1,7 +1,11 @@
+import { lazy } from 'react'
+
 import Layout from '@/components/Layout'
 import WelcomePage from './index'
 import FormBuilder from './FormBuilder'
 import CodeSplitting from './Code-Splitting'
+
+const Demo = lazy(() => import('./Code-Splitting/demo'))
 
 export default {
   path: 'examples',
@@ -9,6 +13,7 @@ export default {
   childRoutes: [
     { path: '', name: 'Welcome page', component: WelcomePage },
     { path: 'form/:formId', component: FormBuilder },
-    { path: 'code-splitting', component: CodeSplitting }
+    { path: 'code-splitting', component: CodeSplitting },
+    { path: 'demo', component: Demo }
   ]
 }
