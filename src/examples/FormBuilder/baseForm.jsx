@@ -19,7 +19,6 @@ const genderOptions = [{ value: 0, label: 'Male' }, { value: 1, label: 'Female' 
  *    label 显示的 label
  *    tooltip label 右侧显示 tooltip
  *    widget 表单显示的部件
- *    widgetProps 部件的 props
  *
  *    fieldProps - getFieldDecorator(id, options) 对应的为 options （你可以写整个对象也可以写其中的属性。FormBuilder 已经处理好了）
  *      initialValue 初始值
@@ -49,20 +48,20 @@ const formMeta = {
     {
       key: 'password',
       label: 'Password',
-      widget: Input,
+      widget: (
+        <Input
+          type="password"
+          prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+          placeholder="please input your password"
+        />
+      ),
       // 定义widget 部件的 props
-      widgetProps: {
-        prefix: <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />,
-        placeholder: 'please input your password'
-      },
-      type: 'password',
       required: true // 默认增加了 rules [required: true, message: `${label} is required`]
     },
     {
       key: 'date',
       label: 'Birth date',
-      widget: DatePicker,
-      widgetProps: { style: { width: '100%' } }
+      widget: <DatePicker style={{ width: '100%' }} />
     },
     {
       key: 'gender',
