@@ -58,7 +58,7 @@ class BlogHeader extends Component {
 
   render() {
     const { loginModalVisible, registerModalVisible } = this.state
-    let title
+    let title = '首页'
     const matchMenu = menus.find(d => d.link === this.props.location.pathname)
     if (!!matchMenu) title = matchMenu.title
     return (
