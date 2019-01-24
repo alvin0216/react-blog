@@ -1,9 +1,6 @@
-import React, { Component } from 'react'
-import Layout from '@/components/Layout/web'
+import Layout from '@/components/web/layout'
 import PageNotFound from '@/components/NotFound'
-
 import Home from './home'
-const Demo = () => <span>demo</span>
 
 export default {
   path: '/',
@@ -11,7 +8,6 @@ export default {
   component: Layout,
   childRoutes: [
     { path: '', component: Home }, 
-    { path: 'demo', component: Demo },
     { path: '*', component: PageNotFound },
   ]
 }
