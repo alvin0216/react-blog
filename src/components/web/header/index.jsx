@@ -11,8 +11,8 @@ import AuthModal from '../authModal'
 
 const Header = Layout.Header
 
-const NavBar = ({ menus, menuCurrentSelectKey }) => (
-  <Menu mode="horizontal" defaultSelectedKeys={[menuCurrentSelectKey]}>
+const NavBar = ({ menus, menuCurrentSelectKey, mode = 'horizontal', ...props }) => (
+  <Menu mode={mode} defaultSelectedKeys={[menuCurrentSelectKey]} {...props}>
     {menus.map(nav => (
       <Menu.Item key={nav.link}>
         <Link to={nav.link}>
@@ -58,6 +58,9 @@ class BlogHeader extends Component {
 
   render() {
     const { loginModalVisible, registerModalVisible } = this.state
+    let title
+    const matchMenu = menus.find(d => d.link === this.props.location.pathname)
+    if (!!matchMenu) title = matchMenu.title
     return (
       <Header className="header-contaienr">
         <Row>
@@ -65,7 +68,25 @@ class BlogHeader extends Component {
           <Col lg={{ span: 14 }} md={{ span: 14 }} xs={{ span: 0 }}>
             <NavBar menus={menus} menuCurrentSelectKey={this.props.location.pathname} />
           </Col>
-          <Col lg={{ span: 0 }} md={{ span: 0 }} xs={{ span: 10 }} />
+          <Col lg={{ span: 0 }} md={{ span: 0 }} xs={{ span: 10 }}>
+            <Dropdown
+              overlay={
+                <NavBar
+                  mode="vertical"
+                  menus={menus}
+                  menuCurrentSelectKey={this.props.location.pathname}
+                  style={{ width: 90, borderRadius: '5%' }}
+                />
+              }
+              trigger={['click']}>
+              <div>
+                <Button type="primary" ghost style={{ border: 'none' }}>
+                  {title}
+                  <Icon type="caret-down" />
+                </Button>
+              </div>
+            </Dropdown>
+          </Col>
           <Col lg={{ span: 6 }} md={{ span: 6 }} xs={{ span: 14 }}>
             {!this.props.isLogin ? (
               <div className="nav-auth">
@@ -86,14 +107,16 @@ class BlogHeader extends Component {
                 </Button>
               </div>
             ) : (
-              <Dropdown placement="bottomCenter" overlay={this.renderAvatarDropdownMenu()}>
-                <Avatar
-                  className="user-avatar"
-                  size="large"
-                  style={{ backgroundColor: this.state.avatarColor }}>
-                  guodada
-                </Avatar>
-              </Dropdown>
+              <div className="user-info">
+                <Dropdown placement="bottomCenter" overlay={this.renderAvatarDropdownMenu()}>
+                  <Avatar
+                    className="user-avatar"
+                    size="large"
+                    style={{ backgroundColor: this.state.avatarColor }}>
+                    guodada
+                  </Avatar>
+                </Dropdown>
+              </div>
             )}
           </Col>
         </Row>
