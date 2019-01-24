@@ -7,7 +7,7 @@ export default [
   {
     icon: 'edit',
     title: '归档',
-    link: '/archive'
+    link: '/archives'
   },
   {
     icon: 'folder',
