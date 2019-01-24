@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-const Home = () => {
-  return <div>welcome admin home</div>
+class Home extends Component {
+  render() {
+    return <div>admin home</div>
+  }
 }
 
 export default Home

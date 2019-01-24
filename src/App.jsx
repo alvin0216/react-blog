@@ -1,8 +1,12 @@
 import React, { Component, Suspense } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Loading from '@/components/Loading'
 import routes from '@/routes/config'
+import { connect } from 'react-redux'
 
+@connect(state => ({
+  isLogin: state.demo.isLogin
+}))
 class Root extends Component {
   /**
    * 根据路由表生成路由组件
@@ -13,6 +17,15 @@ class Root extends Component {
     const children = []
 
     const renderRoute = (item, routeContextPath) => {
+      // auth handler
+      if (item.protected && !this.props.isLogin) {
+        item = {
+          ...item,
+          component: () => <Redirect to="/admin/login" />,
+          children: []
+        }
+      }
+
       let newContextPath
       if (/^\//.test(item.path)) {
         newContextPath = item.path
@@ -34,7 +47,7 @@ class Root extends Component {
           children.push(<Route key={newContextPath} component={item.component} path={newContextPath} exact />)
         } else {
           // fix: Failed prop type: Invalid prop `component` of type `object` supplied to `Route`, expected `function`
-          // object 时 即为 lazyload 返回的对象时，使用 () => <Component /> 去装载路由主键
+          // object 时 即为 lazyload 返回的对象时，使用 () => <Component /> 去装载路由组件
           children.push(<Route key={newContextPath} component={() => <item.component />} path={newContextPath} exact />)
         }
       } else if (item.childRoutes) {
