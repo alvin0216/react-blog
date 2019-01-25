@@ -2,10 +2,12 @@
 import homeRoutes from '@/views/web/routes'
 import examplesRoute from '@/examples/routes'
 import adminRoutes from '@/views/admin/routes'
+import rootRoutes from './rootRoutes'
 
 const childRoutes = [
   examplesRoute,
   adminRoutes,
+  rootRoutes,
   homeRoutes
   //...
 ]
