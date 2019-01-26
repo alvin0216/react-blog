@@ -2,7 +2,7 @@ import axios from 'axios'
 import { message } from 'antd'
 
 const instance = axios.create({
-  // baseURL: 'https://www.easy-mock.com/mock/5a7278e28d0c633b9c4adbd7/api', // api的base_url
+  baseURL: 'http://127.0.0.1:6060', // api的base_url
   timeout: 20000 // 请求超时时间
 })
 
@@ -27,7 +27,7 @@ instance.interceptors.response.use(
     return response.data
   },
   error => {
-    message.error(error.response.statusText)
+    // message.error(error.response.statusText)
     return Promise.reject(error)
   }
 )

@@ -8,6 +8,7 @@ import CodeSplitting from './Code-Splitting'
 const Demo = lazy(() => import('./Code-Splitting/demo'))
 const AuthPage = lazy(() => import('./AuthPage'))
 const Write = lazy(() => import('./markdown/write'))
+const Show = lazy(() => import('./markdown/show'))
 
 export default {
   path: 'examples',
@@ -20,7 +21,7 @@ export default {
     { path: 'auth', protected: true, component: AuthPage },
     {
       path: 'markdown',
-      childRoutes: [{ path: 'write', component: Write }, { path: 'show', component: Write }]
+      childRoutes: [{ path: 'write', component: Write }, { path: 'show', component: Show }]
     }
   ]
 }
