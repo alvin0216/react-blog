@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 
 import hljs from 'highlight.js'
-import javascript from 'highlight.js/lib/languages/javascript'
-import 'highlight.js/styles/atelier-cave-dark.css'
 
 import marked from 'marked'
 
@@ -10,8 +8,6 @@ import SimpleMDE from 'simplemde'
 import 'simplemde/dist/simplemde.min.css'
 
 import axios from '@/lib/axios'
-
-hljs.registerLanguage('javascript', javascript)
 
 function translateMarkdown(plainText) {
   return marked(plainText, {
@@ -46,9 +42,6 @@ class Write extends Component {
     const markdownText = translateMarkdown(this.smde.value())
     console.log('markdown to html', markdownText)
     this.setState({ markdownText })
-    axios.post('/examples/md', {
-      content: markdownText
-    })
   }
 
   render() {

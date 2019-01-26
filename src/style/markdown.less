@@ -1,5 +1,73 @@
-// ide 
+// ide
 .CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
   background: none !important;
 }
 
+.article-detail {
+  margin: 0 auto;
+  font-family: 'Lato', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: #555;
+  line-height: 2;
+  img {
+    margin: 0 auto 25px;
+    box-sizing: border-box;
+    padding: 3px;
+    border: 1px solid #ddd;
+  }
+
+  pre,
+  code {
+    font-family: consolas, Menlo, 'PingFang SC', 'Microsoft YaHei', monospace;
+  }
+  code {
+    padding: 2px 4px;
+    word-wrap: break-word;
+    color: #ff502c;
+    background: #fff5f5;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+  pre {
+    padding: 10px;
+    border-left: 5px solid #00c8ff;
+    overflow: auto;
+    margin: 20px 0;
+    font-size: 13px;
+    color: #abb2bf;
+    background: #282c34;
+    line-height: 1.6;
+  }
+  pre code {
+    padding: 0;
+    color: #abb2bf;
+    background: none;
+    text-shadow: none;
+  }
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 20px 0 15px 0;
+    padding-top: 10px;
+    font-weight: bold;
+    line-height: 1.5;
+    font-family: 'Lato', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  }
+  h3 {
+    font-size: 1.3em;
+    border-bottom: 1px dotted #eee;
+  }
+  h4 {
+    font-size: 1.2em;
+  }
+  ul {
+    li {
+      line-height: 2;
+    }
+  }
+  .hljs-comment,
+  .hljs-quote {
+    color: #575f6a;
+  }
+}

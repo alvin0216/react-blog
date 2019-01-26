@@ -2,9 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import App from './App'
-import '@/style/index.less'
 import { Provider } from 'react-redux'
 import store from '@/redux'
+import hljs from 'highlight.js'
+import javascript from 'highlight.js/lib/languages/javascript'
+import 'highlight.js/styles/atom-one-light.css'
+import '@/style/index.less'
+
+hljs.registerLanguage('javascript', javascript)
 
 const render = Component => {
   ReactDOM.render(
