@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "cross-env NODE_ENV=development nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,9 +14,12 @@
     "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
-    "koa2-cors": "^2.0.6"
+    "koa2-cors": "^2.0.6",
+    "mysql2": "^1.6.4",
+    "sequelize": "^4.42.0"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "koa-logger": "^3.2.0",
     "nodemon": "^1.18.9"
   }
