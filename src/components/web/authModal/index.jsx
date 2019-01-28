@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Input, Icon, message, Button } from 'antd'
 import { connect } from 'react-redux'
-import { login, loginout } from '@/redux/demo/actions'
+import { login, register } from '@/redux/demo/actions'
 
 @connect(
   null,
-  { login, loginout }
+  { login, register }
 )
 class LoginModel extends Component {
   static propTypes = {
@@ -27,7 +27,7 @@ class LoginModel extends Component {
   handleSubmit = () => {
     const type = this.props.type
     console.log('click button', type)
-    type === 'login' ? this.props.login() : this.props.loginout()
+    type === 'login' ? this.props.login(this.state) : this.props.register(this.state)
     this.props.handleClose(type)
   }
 

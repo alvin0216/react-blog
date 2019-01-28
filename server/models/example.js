@@ -12,8 +12,15 @@ module.exports = (sequelize, dataTypes) => {
       artcle: {
         type: dataTypes.TEXT
       },
-      username: dataTypes.STRING(20),
-      password: dataTypes.STRING(50)
+      username: {
+        type: dataTypes.STRING(20),
+        allowNull: false,
+        unique: true
+      },
+      password: {
+        type: dataTypes.STRING(50),
+        allowNull: false
+      }
     },
     {
       timestamps: false // 不创建 createAt / updateAt 字段
