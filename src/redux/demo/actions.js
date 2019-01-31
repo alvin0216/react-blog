@@ -9,6 +9,7 @@ export const addCount = () => {
 export const login = ({ username, password }) => {
   return dispatch =>
     axios.post('/examples/login', { username, password }).then(res => {
+      localStorage.setItem('token', res.token)
       dispatch({
         type: constants.DEMO_LOGIN
       })

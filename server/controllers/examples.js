@@ -1,4 +1,6 @@
 const ExampleModel = require('../models').examples
+const { TOKEN_NAME, TOKEN_EXPIRESIN } = require('../config')
+const jwt = require('jsonwebtoken')
 const { encrypt, comparePassword } = require('../lib/bcrypt')
 
 module.exports = {
@@ -14,10 +16,13 @@ module.exports = {
         if (!isMatch) {
           ctx.body = { code: 403, message: '密码不正确' }
         } else {
-          ctx.body = { code: 200, message: '登录成功' }
+          const token = jwt.sign({ username }, TOKEN_NAME, { expiresIn: TOKEN_EXPIRESIN }) // 生成 token
+
+          ctx.body = { code: 200, message: '登录成功', token }
         }
       }
     } catch (err) {
+      // throw(err)
       ctx.body = { code: 500, message: 'Internal Server Error.' }
     }
   },
@@ -33,9 +38,13 @@ module.exports = {
         await ExampleModel.create({ username, password: saltPassword })
         ctx.body = { code: 200, message: '注册成功' }
       } catch (err) {
-        console.log(err)
-        ctx.throw(500, 'Internal Server Error.')
+        throw err
+        // ctx.throw(500, 'Internal Server Error.')
       }
     }
+  },
+
+  async auth(ctx) {
+    ctx.body = 'you get auth'
   }
 }
