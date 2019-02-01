@@ -9,12 +9,16 @@ const NavList = ({ routes, contextPath }) => {
       <li key={item.path}>
         <Link to={`${routeContextPath}/${link}`}>{item.name || item.path}</Link>
         {item.childRoutes && (
-          <ul>{item.childRoutes.map(sub => renderRoute(sub, `${routeContextPath}/${item.path}`))}</ul>
+          <ul style={{ margin: 'inherit', listStyle: 'inherit' }}>
+            {item.childRoutes.map(sub => renderRoute(sub, `${routeContextPath}/${item.path}`))}
+          </ul>
         )}
       </li>
     )
   }
-  return <ul>{routes.map(item => renderRoute(item, contextPath))}</ul>
+  return (
+    <ul style={{ margin: 'inherit', listStyle: 'inherit' }}>{routes.map(item => renderRoute(item, contextPath))}</ul>
+  )
 }
 
 class ExampleIndex extends Component {

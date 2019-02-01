@@ -30,7 +30,15 @@ class AdminLayout extends Component {
             <Header style={{ background: '#fff', padding: '0 16px' }}>
               <AdminHeader collapsed={this.state.collapsed} onToggle={this.toggle} />
             </Header>
-            <Content>{this.props.children}</Content>
+            <Content
+              style={{
+                margin: '24px 16px',
+                padding: 24,
+                background: '#fff',
+                minHeight: 280
+              }}>
+              {this.props.children}
+            </Content>
             <Footer style={{ textAlign: 'center' }}>React-Admin ©2019 Created by gershonv@163.com </Footer>
           </Layout>
         </Layout>
