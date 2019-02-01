@@ -1,6 +1,6 @@
 import lazy from '@/components/helper/lazy'
 import Layout from '@/components/admin/layout'
-import PageNotFound from '@/components/NotFound'
+import PageNotFound from '@/components/notFound'
 
 import Home from './home'
 const Edit = lazy(() => import('./edit'))
@@ -18,7 +18,7 @@ export default {
     },
     {
       path: 'articles',
-      icon: 'file',
+      icon: 'edit',
       name: '文章管理',
       childRoutes: [
         { path: 'edit', icon: 'edit', name: '新增文章', component: Edit },

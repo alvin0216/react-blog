@@ -29,7 +29,7 @@ class SiderNav extends Component {
             title={
               <span>
                 {item.icon && <Icon type={item.icon} />}
-                {item.name}
+                <span>{item.name}</span>
               </span>
             }
             key={newContextPath}>
@@ -42,7 +42,7 @@ class SiderNav extends Component {
             <Menu.Item key={newContextPath}>
               <NavLink to={newContextPath}>
                 {item.icon && <Icon type={item.icon} />}
-                {item.name}
+                <span>{item.name}</span>
               </NavLink>
             </Menu.Item>
           )
@@ -65,10 +65,7 @@ class SiderNav extends Component {
           openKeys={openKeys}
           selectedKeys={selectedKeys}
           onOpenChange={this.onOpenChange}
-          onClick={({ key }) => {
-            console.log(key)
-            this.setState({ selectedKeys: [key] })
-          }}
+          onClick={({ key }) => this.setState({ selectedKeys: [key] })}
           theme="dark"
           mode="inline">
           {this.renderMenu(routes)}

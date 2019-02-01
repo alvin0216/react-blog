@@ -1,5 +1,5 @@
 import Layout from '@/components/web/layout'
-import PageNotFound from '@/components/NotFound'
+import PageNotFound from '@/components/notFound'
 import Home from './home'
 
 export default {
