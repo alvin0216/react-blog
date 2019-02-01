@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 
-import Layout from '@/components/Layout'
+import Layout from '@/components/examples/layout'
 import WelcomePage from './index'
 import FormBuilder from './FormBuilder'
 import CodeSplitting from './Code-Splitting'
