@@ -7,13 +7,16 @@ export const addCount = () => {
 }
 
 export const login = ({ username, password }) => {
-  return dispatch =>
-    axios.post('/examples/login', { username, password }).then(res => {
-      localStorage.setItem('token', res.token)
-      dispatch({
-        type: constants.DEMO_LOGIN
-      })
-    })
+  return {
+    type: constants.DEMO_LOGIN
+  }
+  // return dispatch =>
+  //   axios.post('/examples/login', { username, password }).then(res => {
+  //     localStorage.setItem('token', res.token)
+  //     dispatch({
+  //       type: constants.DEMO_LOGIN
+  //     })
+  //   })
 }
 
 export const register = ({ username, password }) => {

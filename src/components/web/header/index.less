@@ -1,31 +1,77 @@
 .header-contaienr {
-  background-color: #fff;
-  .ant-menu-horizontal {
-    height: 64px;
-    line-height: 64px;
-    display: -ms-flexbox;
-    display: flex;
-    justify-content: space-around;
+  background: #fff;
+  -webkit-box-shadow: 0 2px 8px #f0f1f2;
+  box-shadow: 0 2px 8px #f0f1f2;
+  position: relative;
+  z-index: 10;
+  max-width: 100%;
+  #search-box {
+    border-left: 1px solid #ebedf0;
+    float: left;
+    height: 22px;
+    line-height: 22px;
+    padding-left: 16px;
+    margin: 22px auto 0;
+  }
+  #search-box .anticon {
+    color: #ced4d9;
+    position: relative;
+    top: 0.5px;
+  }
+  #search-box input {
+    font-size: 14px;
+    margin-top: -5px;
+    width: 200px;
+    border: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: transparent;
+  }
+  #search-box input::-webkit-input-placeholder {
+    color: #a3b1bf;
+  }
+  #search-box input:-ms-input-placeholder {
+    color: #a3b1bf;
+  }
+  #search-box input::-ms-input-placeholder {
+    color: #a3b1bf;
+  }
+  #search-box input::placeholder {
+    color: #a3b1bf;
+  }
+
+  #nav {
+    border: 0;
+    float: right;
+    font-size: 14px;
+    font-variant: tabular-nums;
+  }
+  #nav.ant-menu-horizontal {
     border-bottom: none;
   }
-  .nav-auth {
+  #nav.ant-menu-horizontal > .ant-menu-item {
+    height: 64px;
+    line-height: 60px;
+    min-width: 72px;
+    border-top: 2px solid transparent;
+  }
+  #nav.ant-menu-horizontal > .ant-menu-item:hover {
+    border-top: 2px solid #1890ff;
+    border-bottom: 2px solid transparent;
+  }
+  #nav.ant-menu-horizontal > .ant-menu-item-selected {
+    border-top: 2px solid #1890ff;
+    border-bottom: 2px solid transparent;
+  }
+  #nav.ant-menu-horizontal > .ant-menu-item-selected a {
+    color: #1890ff;
+  }
+  #nav > .ant-menu-item {
+    text-align: center;
+  }
+
+  #header-userInfo {
     float: right;
-    right: 10px;
+    padding: 0 40px 0 16px;
   }
-
-  .user-info {
-    display: flex;
-    flex-direction: row-reverse;
-    margin-top: 12px;
-  }
-
-  .user-info .user-avatar {
-    border-radius: 50%;
-  }
-  .user-logout {
-    padding: 20px;
-  }
-}
-.ant-dropdown-menu-item a i {
-  padding-right: 8px;
 }

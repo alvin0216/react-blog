@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { message } from 'antd'
-import NProgress from 'nprogress'
+// import NProgress from 'nprogress'
 
 const instance = axios.create({
   baseURL: process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:6060' : '', // api的base_url
@@ -10,7 +10,7 @@ const instance = axios.create({
 //拦截请求
 instance.interceptors.request.use(
   config => {
-    NProgress.start()
+    // NProgress.start()
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.common['Authorization'] = 'Bearer ' + token
@@ -26,11 +26,11 @@ instance.interceptors.request.use(
 //拦截响应
 instance.interceptors.response.use(
   response => {
-    NProgress.done()
+    // NProgress.done()
     return response.data
   },
   error => {
-    NProgress.done()
+    // NProgress.done()
     if (error.response) {
       switch (error.response.status) {
         case 401:
