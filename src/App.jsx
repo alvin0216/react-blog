@@ -1,6 +1,5 @@
-import React, { Component, Suspense } from 'react'
+import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-import Loading from '@/components/Loading'
 import routes from '@/routes/config'
 import { connect } from 'react-redux'
 
@@ -8,6 +7,18 @@ import { connect } from 'react-redux'
   isLogin: state.demo.isLogin
 }))
 class Root extends Component {
+  // 如果路由为 protected 且未登录时, 则定向到登录页 
+  // admin 且未登录时 定向到登录页
+  authHandler = (item, routePath) => {
+    if ((item.protected || routePath.includes('admin')) && !this.props.isLogin) {
+      item = {
+        ...item,
+        component: () => <Redirect to="/login" />,
+        children: []
+      }
+    }
+  }
+
   /**
    * 根据路由表生成路由组件
    * @param {Array} routes - 路由配置表
@@ -17,22 +28,12 @@ class Root extends Component {
     const children = []
 
     const renderRoute = (item, routeContextPath) => {
-      // auth handler
-      if (item.protected && !this.props.isLogin) {
-        item = {
-          ...item,
-          component: () => <Redirect to="/admin/login" />,
-          children: []
-        }
-      }
-
-      let newContextPath
-      if (/^\//.test(item.path)) {
-        newContextPath = item.path
-      } else {
-        newContextPath = `${routeContextPath}/${item.path}`
-      }
+      let newContextPath = item.path ? `${routeContextPath}/${item.path}` : routeContextPath
       newContextPath = newContextPath.replace(/\/+/g, '/')
+
+      // auth handler
+      this.authHandler(item, newContextPath)
+
       if (item.component && item.childRoutes) {
         const childRoutes = this.renderRoutes(item.childRoutes, newContextPath)
         children.push(
@@ -43,13 +44,7 @@ class Root extends Component {
           />
         )
       } else if (item.component) {
-        if (typeof item.component === 'function') {
-          children.push(<Route key={newContextPath} component={item.component} path={newContextPath} exact />)
-        } else {
-          // fix: Failed prop type: Invalid prop `component` of type `object` supplied to `Route`, expected `function`
-          // object 时 即为 lazyload 返回的对象时，使用 () => <Component /> 去装载路由组件
-          children.push(<Route key={newContextPath} component={() => <item.component />} path={newContextPath} exact />)
-        }
+        children.push(<Route key={newContextPath} component={item.component} path={newContextPath} exact />)
       } else if (item.childRoutes) {
         item.childRoutes.forEach(r => renderRoute(r, newContextPath))
       }
@@ -62,11 +57,7 @@ class Root extends Component {
 
   render() {
     const children = this.renderRoutes(routes, '/')
-    return (
-      <BrowserRouter>
-        <Suspense fallback={<Loading />}>{children}</Suspense>
-      </BrowserRouter>
-    )
+    return <BrowserRouter>{children}</BrowserRouter>
   }
 }
 

@@ -1,19 +1,16 @@
-import React, { Component, lazy } from 'react'
-import Lazy, { asyncComponent } from '@/components/helper/lazyLoad'
+import React, { Component, Suspense, lazy } from 'react'
+import Loading from '@/components/helper/Loading'
 
-const WebpackDemo = asyncComponent(() => import('./demo'))
-const ReactLazyDemo = lazy(() => import('./demo'))
+const WebpackDemo = lazy(() => import('./demo'))
 
-@Lazy
 class CodeSplitting extends Component {
   render() {
     return (
-      <div>
+      <Suspense fallback={<Loading />}>
         <h1>CodeSplitting</h1>
         <WebpackDemo />
         <br />
-        <ReactLazyDemo />
-      </div>
+      </Suspense>
     )
   }
 }

@@ -1,4 +1,4 @@
-import { lazy } from 'react'
+import lazy from '@/components/helper/lazy'
 import Layout from '@/components/admin/layout'
 import PageNotFound from '@/components/NotFound'
 

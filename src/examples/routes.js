@@ -1,4 +1,4 @@
-import { lazy } from 'react'
+import lazy from '@/components/helper/lazy'
 
 import Layout from '@/components/examples/layout'
 import WelcomePage from './index'
