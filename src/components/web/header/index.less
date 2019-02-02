@@ -1,10 +1,22 @@
 .header-contaienr {
+  padding: 0;
   background: #fff;
   -webkit-box-shadow: 0 2px 8px #f0f1f2;
   box-shadow: 0 2px 8px #f0f1f2;
   position: relative;
   z-index: 10;
   max-width: 100%;
+  .header-left {
+    text-align: center;
+    font-size: 20px;
+    position: relative;
+    .blog-name {
+      padding-left: 10px;
+    }
+    .nav-phone-icon {
+      display: none;
+    }
+  }
   #search-box {
     border-left: 1px solid #ebedf0;
     float: left;
@@ -40,33 +52,33 @@
     color: #a3b1bf;
   }
 
-  #nav {
+  .header-nav {
     border: 0;
     float: right;
     font-size: 14px;
     font-variant: tabular-nums;
   }
-  #nav.ant-menu-horizontal {
+  .header-nav.ant-menu-horizontal {
     border-bottom: none;
   }
-  #nav.ant-menu-horizontal > .ant-menu-item {
+  .header-nav.ant-menu-horizontal > .ant-menu-item {
     height: 64px;
     line-height: 60px;
     min-width: 72px;
     border-top: 2px solid transparent;
   }
-  #nav.ant-menu-horizontal > .ant-menu-item:hover {
+  .header-nav.ant-menu-horizontal > .ant-menu-item:hover {
     border-top: 2px solid #1890ff;
     border-bottom: 2px solid transparent;
   }
-  #nav.ant-menu-horizontal > .ant-menu-item-selected {
+  .header-nav.ant-menu-horizontal > .ant-menu-item-selected {
     border-top: 2px solid #1890ff;
     border-bottom: 2px solid transparent;
   }
-  #nav.ant-menu-horizontal > .ant-menu-item-selected a {
+  .header-nav.ant-menu-horizontal > .ant-menu-item-selected a {
     color: #1890ff;
   }
-  #nav > .ant-menu-item {
+  .header-nav > .ant-menu-item {
     text-align: center;
   }
 
@@ -74,4 +86,34 @@
     float: right;
     padding: 0 40px 0 16px;
   }
+  @media screen and (max-width: 926px) {
+    #search-box {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 880px) and (min-width: 576px) {
+    .header-left {
+      .blog-name {
+        display: none;
+      }
+    }
+  }
+  @media only screen and (max-width: 576px) {
+    .header-left .nav-phone-icon {
+      display: block;
+      position: absolute;
+      font-size: 14px;
+      right: 30px;
+      top: 25px;
+      width: 16px;
+      height: 22px;
+      z-index: 1;
+    }
+    // .header-left .header-nav {
+    //   left: 440px;
+    // }
+  }
+}
+.header-dropdown {
+  right: 0 !important;
 }
