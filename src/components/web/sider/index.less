@@ -3,6 +3,7 @@
   height: calc(100vh - 64px - 40px);
   text-align: center;
   color: rgba(0, 0, 0, 0.65);
+  overflow-y: auto;
   .sider-avatar {
     width: 132px;
     height: 132px;
@@ -17,6 +18,26 @@
     font-size: 13px;
     margin-top: 5px;
     margin-bottom: 5px;
+  }
+  .link-list {
+    width: 160px;
+    line-height: 24px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    a {
+      vertical-align: top;
+      padding-left: 5px;
+      color: inherit;
+    }
+    li {
+      padding: 0 4px;
+      cursor: pointer;
+    }
+    li:hover {
+      border-radius: 4px;
+      background: #eee;
+    }
   }
   .recent-list {
     text-align: left;
@@ -42,6 +63,8 @@
   }
   .tags-content {
     padding: 0 20px;
+    max-height: 220px;
+    overflow: hidden;
     a {
       color: inherit;
     }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import avatar from '@/assets/sider_avatar.png'
 import { Link } from 'react-router-dom'
 
-import { Divider, Tag } from 'antd'
+import { Divider, Tag, Icon } from 'antd'
 
 // colorList
 
@@ -17,10 +17,6 @@ function random() {
 
 @connect(state => state.article)
 class BolgSider extends Component {
-  jumpTo = value => {
-    console.log(value)
-  }
-
   render() {
     const { recentList, tags } = this.props
     return (
@@ -28,6 +24,21 @@ class BolgSider extends Component {
         <img src={avatar} className="sider-avatar" alt="" />
         <h2 className="name">郭大大</h2>
         <div className="title">前端打杂人员，略微代码洁癖</div>
+        <ul className="link-list">
+          <li>
+            <Icon type="github" />
+            <a target="_blank" rel="noreferrer noopener" href="https://github.com/gershonv">
+              github
+            </a>
+          </li>
+          <li>
+            <i className="iconfont icon-juejin" />
+            <a target="_blank" rel="noreferrer noopener" href="https://juejin.im/user/5acac6c4f265da2378408f92">
+              juejin
+            </a>
+          </li>
+        </ul>
+
         <Divider orientation="left">最近文章</Divider>
         <ul className="recent-list">
           {recentList.map(d => (
