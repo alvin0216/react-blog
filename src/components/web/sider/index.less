@@ -1,4 +1,49 @@
-.main-menu {
+.sider-wrapper {
   border-right: 1px solid #ebedf0;
   height: calc(100vh - 64px - 40px);
+  text-align: center;
+  color: rgba(0, 0, 0, 0.65);
+  .sider-avatar {
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+  }
+  .name {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+  .title {
+    font-size: 13px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .recent-list {
+    text-align: left;
+    li {
+      padding: 0 20px;
+      a {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        line-height: 32px;
+        color: #8590a6;
+        cursor: pointer;
+      }
+      &:hover {
+        background: #f0f2f5;
+        a {
+          color: #40a9ff;
+        }
+      }
+    }
+  }
+  .tags-content {
+    padding: 0 20px;
+    a {
+      color: inherit;
+    }
+  }
 }
