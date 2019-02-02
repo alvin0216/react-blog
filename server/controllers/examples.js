@@ -44,6 +44,10 @@ module.exports = {
     }
   },
 
+  async createArticle(ctx) {},
+
+  async getArticle(ctx) {},
+  
   async auth(ctx) {
     ctx.body = 'you get auth'
   }

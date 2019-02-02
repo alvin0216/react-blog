@@ -9,6 +9,9 @@ router.get('/', async ctx => {
 router.post('/login', ExampleController.login)
 router.post('/register', ExampleController.register)
 
+router.post('/getArticle', ExampleController.getArticle)
+router.post('/createArticle', ExampleController.createArticle)
+
 router.post('/test', async ctx => {
   ctx.body = 1
 })
