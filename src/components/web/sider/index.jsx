@@ -43,7 +43,7 @@ class BolgSider extends Component {
         <ul className="recent-list">
           {recentList.map(d => (
             <li key={d.id}>
-              <Link to={`/${d.id}`}>{d.title}</Link>
+              <Link to={`/article/${d.id}`}>{d.title}</Link>
             </li>
           ))}
         </ul>

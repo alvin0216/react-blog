@@ -1,6 +1,6 @@
 import lazy from '@/components/helper/lazy'
 import Layout from '@/components/admin/layout'
-import PageNotFound from '@/components/notFound'
+import PageNotFound from '@/components/404'
 
 import Home from './home'
 const Edit = lazy(() => import('./edit'))
