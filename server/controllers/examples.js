@@ -1,4 +1,4 @@
-const ExampleModel = require('../models').examples
+const ExampleModel = require('../models').example
 const { TOKEN_SECRET, TOKEN_EXPIRESIN } = require('../config')
 const jwt = require('jsonwebtoken')
 const { encrypt, comparePassword } = require('../lib/bcrypt')
@@ -47,7 +47,7 @@ module.exports = {
   async createArticle(ctx) {},
 
   async getArticle(ctx) {},
-  
+
   async auth(ctx) {
     ctx.body = 'you get auth'
   }

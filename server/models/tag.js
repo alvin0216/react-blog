@@ -1,26 +1,23 @@
 const moment = require('moment')
 // article 表
 module.exports = (sequelize, dataTypes) => {
-  const Tag = sequelize.define(
-    'tag',
-    {
-      id: {
-        type: dataTypes.INTEGER(11),
-        primaryKey: true,
-        autoIncrement: true
-      },
-      name: {
-        type: dataTypes.STRING(100),
-        allowNull: false
-      }
+  const Tag = sequelize.define('tag', {
+    id: {
+      type: dataTypes.INTEGER(11),
+      primaryKey: true,
+      autoIncrement: true
     },
-    {
-      timestamps: false // 不创建 createAt / updateAt 字段
+    name: {
+      type: dataTypes.STRING(100),
+      allowNull: false
     }
-  )
+  })
 
   Tag.associate = models => {
-    Tag.belongsToMany(models.article, { through: 'articleTag' })
+    Tag.belongsTo(models.article, {
+      foreignKey: 'articleId',
+      targetKey: 'id'
+    })
   }
 
   return Tag
