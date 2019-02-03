@@ -18,7 +18,7 @@ function random() {
 @connect(state => state.article)
 class BolgSider extends Component {
   render() {
-    const { recentList, tags } = this.props
+    const { recentList, tagList } = this.props
     return (
       <div className="sider-wrapper">
         <img src={avatar} className="sider-avatar" alt="" />
@@ -49,9 +49,9 @@ class BolgSider extends Component {
         </ul>
         <Divider orientation="left">标签</Divider>
         <div className="tags-content">
-          {tags.map((tag, i) => (
+          {tagList.map((tag, i) => (
             <Tag key={i} color={colorList[i] ? colorList[i] : colorList[random()]}>
-              <Link to={tag}>{tag}</Link>
+              <Link to={tag.name}>{tag.name}</Link>
             </Tag>
           ))}
         </div>

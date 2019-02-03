@@ -1,26 +1,26 @@
 // state
 const defaultState = {
-  categories: ['react', 'vue', 'javascript'],
-  tags: [
-    'react',
-    'vue',
-    'javascript',
-    'css',
-    'Dom',
-    'HTML',
-    'MySql',
-    'element-ui',
-    'sequelize',
-    '原型原型链',
-    '设计模式',
-    '跨域',
-    '面试系列',
-    'koa2',
-    'canvas',
-    'regexp',
-    'this',
-    'webpack',
-    '作用域'
+  categoryList: [
+    { name: 'Sequelize', count: 9 },
+    { name: 'React', count: 11 },
+    { name: '面试系列', count: 2 },
+    { name: 'regexp', count: 3 },
+    { name: 'this', count: 1 }
+  ],
+  tagList: [
+    { name: 'css', count: 1 },
+    { name: 'DOM', count: 3 },
+    { name: 'ES6', count: 3 },
+    { name: 'Javascript', count: 12 },
+    { name: 'Javascript 深入系列', count: 10 },
+    { name: 'MySQL', count: 5 },
+    { name: 'MVVM', count: 1 },
+    { name: 'Sequelize', count: 9 },
+    { name: 'React', count: 11 },
+    { name: '面试系列', count: 2 },
+    { name: 'regexp', count: 3 },
+    { name: 'this', count: 1 },
+    { name: '闭包', count: 1 }
   ],
   recentList: [
     { id: 1, title: '如何利用vw+rem进行移动端布局' },
@@ -28,7 +28,7 @@ const defaultState = {
     { id: 3, title: '随笔 - 如何用es6+写出优雅的js代码' },
     { id: 4, title: 'react - PureComponent 和 memo' },
     { id: 5, title: 'HTTP - 浏览器输入 url 后 http 请求返回的完整过程' },
-    { id: 6, title: 'HTTP - keep-alive' },
+    { id: 6, title: 'HTTP - keep-alive' }
   ]
 }
 
