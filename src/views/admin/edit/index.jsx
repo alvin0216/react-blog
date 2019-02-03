@@ -3,19 +3,18 @@ import { connect } from 'react-redux'
 
 import SimpleMDE from 'simplemde'
 import 'simplemde/dist/simplemde.min.css'
+import './index.less'
 import { translateMarkdown } from '@/lib/index'
-import { Select, Tag, Icon } from 'antd'
+import axios from '@/lib/axios'
 
-const CheckableTag = Tag.CheckableTag
-const Option = Select.Option
+import { Button, Input } from 'antd'
+import SelectCate from './components/Cate'
 
 @connect(state => state.article)
 class Edit extends Component {
   state = {
     markdownText: '',
-    title: '',
-    category: '',
-    tags: []
+    title: ''
   }
 
   componentDidMount() {
@@ -25,17 +24,6 @@ class Edit extends Component {
       autosave: true,
       previewRender: translateMarkdown
     })
-  }
-
-  handleChange = value => {
-    console.log()
-  }
-
-  handleSelectTags = (tag, checked) => {
-    const { tags } = this.state
-    const nextSelectedTags = checked ? [...tags, tag] : tags.filter(t => t !== tag)
-    console.log(nextSelectedTags)
-    this.setState({ tags: nextSelectedTags })
   }
 
   /**
@@ -49,39 +37,34 @@ class Edit extends Component {
     return sortList.slice(0, num)
   }
 
+  handleSubmit = () => {
+    const tags = this.$tagRef.getResult()
+    const categories = this.$categoryRef.getResult()
+
+    axios.post('/article/create', {
+      title: this.state.title,
+      content: this.smde.value(),
+      categories,
+      tags
+    }).then(res => {
+      console.log(res)
+    })
+  }
+
   render() {
-    const CommonlyTagList = this.getCommonlyList(this.props.tagList)
-    const CommonlyCategoryList = this.getCommonlyList(this.props.categoryList, 6)
-    const { tags } = this.state
     return (
       <div>
-        <div className="">
-          <span>Category: </span>
-          {CommonlyCategoryList.map((tag, i) => (
-            <CheckableTag
-              key={tag.name}
-              checked={tags.includes(tag.name)}
-              onChange={checked => this.handleSelectTags(tag.name, checked)}>
-              {tag.name}
-            </CheckableTag>
-          ))}
+        <div className="blog-formItem">
+          <span className="label">标题：</span>
+          <Input placeholder="请输入文章标题" className="title-input" />
         </div>
-        <div className="">
-          <span>Tags: </span>
-          {CommonlyTagList.map((tag, i) => (
-            <CheckableTag
-              key={tag.name}
-              checked={tags.includes(tag.name)}
-              onChange={checked => this.handleSelectTags(tag.name, checked)}>
-              {tag.name}
-            </CheckableTag>
-          ))}
-
-          <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-            <Icon type="plus" /> New Tag
-          </Tag>
-        </div>
+        <SelectCate type="category" showNum={6} onRef={el => (this.$categoryRef = el)} />
+        <SelectCate type="tag" onRef={el => (this.$tagRef = el)} />
+        <br />
         <textarea id="editor" />
+        <Button onClick={this.handleSubmit} type="primary">
+          create
+        </Button>
       </div>
     )
   }

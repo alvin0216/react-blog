@@ -1,11 +1,15 @@
-const { article: ArticleModel, tag: TagModel } = require('../models')
+const { article: ArticleModel, tag: TagModel, category: CategoryModel } = require('../models')
 
 module.exports = {
   // 创建文章
   async create(ctx) {
-    const { title, content, category, tags } = ctx.request.body
-    const tagList = tags.map(tag => ({ name: tag }))
-    await ArticleModel.create({ title, content, category, tags: tagList }, { include: TagModel })
+    const { title, content, categories, tags } = ctx.request.body
+    const tagList = tags.map(t => ({ name: t }))
+    const categoryList = categories.map(c => ({ name: c }))
+    await ArticleModel.create(
+      { title, content, tags: tagList, categories: categoryList },
+      { include: [TagModel, CategoryModel] }
+    )
     ctx.body = { code: 200, message: '成功创建文章' }
   },
 
@@ -57,7 +61,7 @@ module.exports = {
         }
       ],
       offset: offset - 1,
-      limit,
+      limit
       // order: 'updatedAt DESC'
     })
     ctx.body = data
