@@ -6,6 +6,7 @@ module.exports = {
     const { title, content, categories, tags } = ctx.request.body
     const tagList = tags.map(t => ({ name: t }))
     const categoryList = categories.map(c => ({ name: c }))
+    console.log(categoryList)
     await ArticleModel.create(
       { title, content, tags: tagList, categories: categoryList },
       { include: [TagModel, CategoryModel] }
@@ -33,14 +34,9 @@ module.exports = {
     const id = ctx.params.id
     const data = await ArticleModel.findOne({
       where: { id },
-      include: [
-        {
-          model: TagModel,
-          attributes: ['name']
-        }
-      ]
+      include: [{ model: TagModel, attributes: ['name'] }, { model: CategoryModel, attributes: ['name'] }]
     })
-    ctx.body = { code: 200, ...data }
+    ctx.body = { code: 200, data }
   },
 
   /**

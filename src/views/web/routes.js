@@ -9,7 +9,7 @@ export default {
   component: Layout,
   childRoutes: [
     { path: '', component: Home }, 
-    { path: 'article', component: Article }, 
+    { path: 'article/:id', component: Article }, 
     { path: '*', component: PageNotFound },
   ]
 }

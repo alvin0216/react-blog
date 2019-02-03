@@ -4,21 +4,9 @@ module.exports = (sequelize, dataTypes) => {
   const Article = sequelize.define(
     'article',
     {
-      id: {
-        type: dataTypes.INTEGER(11),
-        primaryKey: true,
-        autoIncrement: true
-      },
-      title: {
-        type: dataTypes.STRING(255),
-        allowNull: false
-      },
-      content: {
-        type: dataTypes.TEXT
-      },
-      category: {
-        type: dataTypes.STRING(50)
-      },
+      id: { type: dataTypes.INTEGER(11), primaryKey: true, autoIncrement: true },
+      title: { type: dataTypes.STRING(255), allowNull: false },
+      content: { type: dataTypes.TEXT },
       createdAt: {
         type: dataTypes.DATE,
         defaultValue: dataTypes.NOW,

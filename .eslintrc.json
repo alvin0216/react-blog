@@ -8,6 +8,7 @@
     "noHref": "off",
     "array-callback-return": "off",
     "jsx-a11y/anchor-has-content": "off",
-    "anchor-is-valid": "off"
+    "anchor-is-valid": "off",
+    "no-useless-escape": "off"
   }
 }

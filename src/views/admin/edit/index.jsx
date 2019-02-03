@@ -40,7 +40,7 @@ class Edit extends Component {
   handleSubmit = () => {
     const tags = this.$tagRef.getResult()
     const categories = this.$categoryRef.getResult()
-
+    // console.log(categories)
     axios.post('/article/create', {
       title: this.state.title,
       content: this.smde.value(),

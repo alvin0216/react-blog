@@ -1,10 +1,26 @@
 import React, { Component } from 'react'
 import './index.less'
-import { Link } from 'react-router-dom'
+import axios from '@/lib/axios'
+import { translateMarkdown } from '@/lib/index'
 
+import { Link } from 'react-router-dom'
 import { Tag, Icon } from 'antd'
 
-const colorList = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple']
+import Navigation from './navigation'
+
+const colorList = [
+  'magenta',
+  'red',
+  'volcano',
+  'orange',
+  'gold',
+  'lime',
+  'green',
+  'cyan',
+  'blue',
+  'geekblue',
+  'purple'
+]
 function random() {
   const len = colorList.length
   return Math.floor(Math.random() * len)
@@ -12,27 +28,43 @@ function random() {
 
 class ArticleDetail extends Component {
   state = {
+    title: '',
+    content: '',
     tags: ['react', 'javascript'],
-    category: 'react'
+    categories: [],
+    postTime: '2019-01-01'
+  }
+
+  componentDidMount() {
+    const id = this.props.match.params.id
+    axios.get(`/article/get/${id}`).then(res => {
+      const tags = res.data.tags.map(d => d.name)
+      const categories = res.data.tags.map(d => d.name)
+      const content = translateMarkdown(res.data.content)
+      const { title, createdAt } = res.data
+      this.setState({ tags, categories, content, title, postTime: createdAt.slice(0, 10) })
+    })
   }
 
   render() {
-    const { tags, category } = this.state
+    const { title, tags, categories, content, postTime } = this.state
     return (
       <div className="post-wrap">
         <div className="post-header">
-          <h1 className="post-title">Sequelize - 多表 CURD</h1>
+          <h1 className="post-title">{title}</h1>
 
           <div>
             <i className="iconfont icon-post" />
             &nbsp; Posted on &nbsp;
-            <span>2018-08-03</span>
+            <span>{postTime}</span>
             &nbsp; | &nbsp;
             <Icon type="folder" />
             &nbsp; in &nbsp;
-            <Tag color="#2db7f5">
-              <Link to={category}>{category}</Link>
-            </Tag>
+            {categories.map(item => (
+              <Tag color="#2db7f5" key={item}>
+                <Link to={item}>{item}</Link>
+              </Tag>
+            ))}
           </div>
         </div>
 
@@ -43,6 +75,12 @@ class ArticleDetail extends Component {
               <Link to={tag}>{tag}</Link>
             </Tag>
           ))}
+        </div>
+
+        <div className="article-detail" dangerouslySetInnerHTML={{ __html: content }} />
+
+        <div className='navigation'>
+          <Navigation content={content} />
         </div>
       </div>
     )

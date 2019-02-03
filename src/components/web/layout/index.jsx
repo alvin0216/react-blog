@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { Layout, Icon, Row, Col } from 'antd'
 import Header from '../header'
 import BolgSider from '../sider'
-import Navigation from '../navigation'
+
 
 const { Content, Footer, Sider } = Layout
 
@@ -29,11 +29,11 @@ class WebLayout extends Component {
           </Col>
           <Col {...contentLayout}>
             <div className="content-wrapper">
-              <div className="content-inner-wrapper">{this.props.children}</div>
-              <Navigation />
-              <Footer className="footer">
+              {/* <div className="content-inner-wrapper">{this.props.children}</div> */}
+              {this.props.children}
+              {/* <Footer className="footer">
                 © 2019 <Icon type="user" /> Guodada
-              </Footer>
+              </Footer> */}
             </div>
           </Col>
         </Row>
