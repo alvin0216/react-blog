@@ -9,6 +9,7 @@ const Demo = lazy(() => import('./Code-Splitting/demo'))
 const AuthPage = lazy(() => import('./AuthPage'))
 const Write = lazy(() => import('./markdown/write'))
 const Show = lazy(() => import('./markdown/show'))
+const Hooks = lazy(() => import('./hooks'))
 
 export default {
   path: 'examples',
@@ -22,6 +23,7 @@ export default {
     {
       path: 'markdown',
       childRoutes: [{ path: 'write', component: Write }, { path: 'show', component: Show }]
-    }
+    },
+    { path: 'hooks', component: Hooks }
   ]
 }
