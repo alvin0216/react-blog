@@ -77,7 +77,7 @@ class ArticleDetail extends Component {
   render() {
     const { title, tags, categories, content, postTime, loading } = this.state
     return (
-      <div className="post-wrap">
+      <div className="content-wrap">
         {loading ? (
           <Loading />
         ) : (

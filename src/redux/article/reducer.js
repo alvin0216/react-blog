@@ -1,5 +1,6 @@
 // state
 const defaultState = {
+  colorList: ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'], // 标签颜色
   categoryList: [
     { name: 'Sequelize', count: 9 },
     { name: 'React', count: 11 },

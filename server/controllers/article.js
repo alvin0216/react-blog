@@ -46,20 +46,18 @@ module.exports = {
    * ...
    */
   async getArticleList(ctx) {
-    const { offset = 1, limit = 15, id } = ctx.query
+    let { offset = 1, limit = 15 } = ctx.query
+    offset = parseInt(offset)
+    limit = parseInt(limit)
+
     const data = await ArticleModel.findAll({
       // where: { id },
-      include: [
-        {
-          model: TagModel,
-          attributes: ['name']
-        }
-      ],
+      include: [{ model: TagModel, attributes: ['name'] }, { model: CategoryModel, attributes: ['name'] }],
       offset: offset - 1,
-      limit
-      // order: 'updatedAt DESC'
+      limit,
+      order: [['updatedAt', 'DESC']]
     })
-    ctx.body = data
+    ctx.body = { code: 200, data }
   },
 
   // 删除文章

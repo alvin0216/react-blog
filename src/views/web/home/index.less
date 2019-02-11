@@ -1,0 +1,30 @@
+.list {
+  .ul-list {
+    width: 100%;
+    .ul-list-item {
+      border: 1px solid #ebedf0;
+      padding: 10px 24px;
+      margin-bottom: 10px;
+      .title {
+        color: #394d69;
+        font-size: 1.4rem;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+      .list-item-action {
+        display: flex;
+        color: rgba(0, 0, 0, 0.45);
+        li {
+          position: relative;
+        }
+        li:not(:last-child) {
+          &::after {
+            content: '|';
+            padding: 0 6px;
+            color: rgba(0, 0, 0, 0.45);
+          }
+        }
+      }
+    }
+  }
+}

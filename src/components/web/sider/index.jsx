@@ -6,11 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { Divider, Tag, Icon } from 'antd'
 
-// colorList
-
-const colorList = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple']
-
-function random() {
+function random(colorList) {
   const len = colorList.length
   return Math.floor(Math.random() * len)
 }
@@ -18,7 +14,7 @@ function random() {
 @connect(state => state.article)
 class BolgSider extends Component {
   render() {
-    const { recentList, tagList } = this.props
+    const { recentList, tagList, colorList } = this.props
     return (
       <div className="sider-wrapper">
         <img src={avatar} className="sider-avatar" alt="" />
@@ -50,7 +46,7 @@ class BolgSider extends Component {
         <Divider orientation="left">标签</Divider>
         <div className="tags-content">
           {tagList.map((tag, i) => (
-            <Tag key={i} color={colorList[i] ? colorList[i] : colorList[random()]}>
+            <Tag key={i} color={colorList[i] ? colorList[i] : colorList[random(colorList)]}>
               <Link to={tag.name}>{tag.name}</Link>
             </Tag>
           ))}
