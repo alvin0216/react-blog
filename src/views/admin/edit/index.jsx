@@ -41,14 +41,20 @@ class Edit extends Component {
     const tags = this.$tagRef.getResult()
     const categories = this.$categoryRef.getResult()
     // console.log(categories)
-    axios.post('/article/create', {
-      title: this.state.title,
-      content: this.smde.value(),
-      categories,
-      tags
-    }).then(res => {
-      console.log(res)
-    })
+    axios
+      .post('/article/create', {
+        title: this.state.title,
+        content: this.smde.value(),
+        categories,
+        tags
+      })
+      .then(res => {
+        console.log(res)
+      })
+  }
+
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   render() {
@@ -56,7 +62,13 @@ class Edit extends Component {
       <div>
         <div className="blog-formItem">
           <span className="label">标题：</span>
-          <Input placeholder="请输入文章标题" className="title-input" />
+          <Input
+            placeholder="请输入文章标题"
+            className="title-input"
+            name="title"
+            value={this.state.title}
+            onChange={this.handleChange}
+          />
         </div>
         <SelectCate type="category" showNum={6} onRef={el => (this.$categoryRef = el)} />
         <SelectCate type="tag" onRef={el => (this.$tagRef = el)} />

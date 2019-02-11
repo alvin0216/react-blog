@@ -23,7 +23,7 @@ app.listen(6060, () => {
   db.sequelize
     .sync({ force: false }) // If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
     .then(() => {
-      require('./initData')()
+      // require('./initData')()
 
       console.log('sequelize connect success')
       console.log('sever listen on http://127.0.0.1:6060')

@@ -6,7 +6,6 @@ module.exports = {
     const { title, content, categories, tags } = ctx.request.body
     const tagList = tags.map(t => ({ name: t }))
     const categoryList = categories.map(c => ({ name: c }))
-    console.log(categoryList)
     await ArticleModel.create(
       { title, content, tags: tagList, categories: categoryList },
       { include: [TagModel, CategoryModel] }
