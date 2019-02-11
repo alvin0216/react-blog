@@ -1,4 +1,5 @@
 const { article: ArticleModel, tag: TagModel, category: CategoryModel } = require('../models')
+const { sequelize } = require('../models')
 
 module.exports = {
   // 创建文章
@@ -46,18 +47,21 @@ module.exports = {
    * ...
    */
   async getArticleList(ctx) {
-    let { offset = 1, limit = 15 } = ctx.query
+    let { offset = 1, limit = 10 } = ctx.query
     offset = parseInt(offset)
     limit = parseInt(limit)
 
     const data = await ArticleModel.findAll({
       // where: { id },
       include: [{ model: TagModel, attributes: ['name'] }, { model: CategoryModel, attributes: ['name'] }],
-      offset: offset - 1,
+      offset: (offset - 1) * limit,
       limit,
       order: [['updatedAt', 'DESC']]
     })
-    ctx.body = { code: 200, data }
+    const count = await ArticleModel.findOne({
+      attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'count']]
+    })
+    ctx.body = { code: 200, data, ...count.dataValues }
   },
 
   // 删除文章

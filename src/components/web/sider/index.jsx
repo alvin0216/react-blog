@@ -3,7 +3,7 @@ import './index.less'
 import { connect } from 'react-redux'
 import avatar from '@/assets/sider_avatar.png'
 import { Link } from 'react-router-dom'
-
+import axios from '@/lib/axios'
 import { Divider, Tag, Icon } from 'antd'
 
 function random(colorList) {
@@ -13,8 +13,17 @@ function random(colorList) {
 
 @connect(state => state.article)
 class BolgSider extends Component {
+  state = { recentList: [] }
+
+  componentDidMount() {
+    axios.get('/article/getList', { params: { offset: 1, limit: 6 } }).then(res => {
+      this.setState({ recentList: res.data })
+    })
+  }
+
   render() {
-    const { recentList, tagList, colorList } = this.props
+    const { tagList, colorList } = this.props
+    const { recentList } = this.state
     return (
       <div className="sider-wrapper">
         <img src={avatar} className="sider-avatar" alt="" />
@@ -29,7 +38,10 @@ class BolgSider extends Component {
           </li>
           <li>
             <i className="iconfont icon-juejin" />
-            <a target="_blank" rel="noreferrer noopener" href="https://juejin.im/user/5acac6c4f265da2378408f92">
+            <a
+              target="_blank"
+              rel="noreferrer noopener"
+              href="https://juejin.im/user/5acac6c4f265da2378408f92">
               juejin
             </a>
           </li>

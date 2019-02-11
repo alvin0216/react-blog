@@ -8,16 +8,20 @@ import { translateMarkdown } from '@/lib'
 import Tags from '../Tags'
 
 class Home extends Component {
-  state = { list: [], current: 1 }
+  state = { list: [], current: 1, total: 0 }
 
   componentDidMount() {
-    axios.get('/article/getList', { params: { offset: 1, limit: 15 } }).then(res => {
+    this.fetchList(1)
+  }
+
+  fetchList({ offset = 1 }) {
+    axios.get('/article/getList', { params: { offset, limit: 10 } }).then(res => {
       const list = res.data
       list.forEach(item => {
         let index = item.content.indexOf('<!--more-->')
         item.description = translateMarkdown(item.content.slice(0, index))
       })
-      this.setState({ list })
+      this.setState({ list, total: res.count })
     })
   }
 
@@ -26,11 +30,12 @@ class Home extends Component {
   }
 
   onChange = page => {
+    this.fetchList({ offset: page })
     this.setState({ current: page })
   }
 
   render() {
-    const { list } = this.state
+    const { list, total } = this.state
     return (
       <div className="content-wrap list">
         <ul className="ul-list">
@@ -58,7 +63,9 @@ class Home extends Component {
             </li>
           ))}
         </ul>
-        <Pagination current={this.state.current} onChange={this.onChange} total={50} />
+        <div style={{ textAlign: 'right' }}>
+          <Pagination current={this.state.current} onChange={this.onChange} total={total} />
+        </div>
       </div>
     )
   }

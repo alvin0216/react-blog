@@ -1,13 +1,25 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import routes from '@/routes/config'
 import { connect } from 'react-redux'
+import { getTags, getCategories } from '@/redux/article/actions'
 
-@connect(state => ({
-  isLogin: state.demo.isLogin
-}))
+@connect(
+  null,
+  { getTags, getCategories }
+)
 class Root extends Component {
-  // 如果路由为 protected 且未登录时, 则定向到登录页 
+  static defaultProps = {
+    isLogin: false
+  }
+
+  componentDidMount() {
+    this.props.getTags()
+    this.props.getCategories()
+  }
+
+  // 如果路由为 protected 且未登录时, 则定向到登录页
   // admin 且未登录时 定向到登录页
   authHandler = (item, routePath) => {
     if ((item.protected || routePath.includes('admin')) && !this.props.isLogin) {

@@ -49,7 +49,7 @@ class Edit extends Component {
         tags
       })
       .then(res => {
-        console.log(res)
+        this.setState({ content: '', title: '' })
       })
   }
 
@@ -61,6 +61,9 @@ class Edit extends Component {
     return (
       <div>
         <div className="blog-formItem">
+          <Button onClick={this.handleSubmit} type="primary">
+            create
+          </Button>
           <span className="label">标题：</span>
           <Input
             placeholder="请输入文章标题"
@@ -70,8 +73,8 @@ class Edit extends Component {
             onChange={this.handleChange}
           />
         </div>
-        <SelectCate type="category" showNum={6} onRef={el => (this.$categoryRef = el)} />
-        <SelectCate type="tag" onRef={el => (this.$tagRef = el)} />
+        <SelectCate type="category" showNum={10} onRef={el => (this.$categoryRef = el)} />
+        <SelectCate type="tag"  showNum={12} onRef={el => (this.$tagRef = el)} />
         <br />
         <textarea id="editor" />
         <Button onClick={this.handleSubmit} type="primary">

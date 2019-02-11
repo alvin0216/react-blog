@@ -1,6 +1,20 @@
+import * as constants from '@/redux/constants'
+
 // state
 const defaultState = {
-  colorList: ['magenta', 'blue', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'geekblue', 'purple'], // 标签颜色
+  colorList: [
+    'magenta',
+    'blue',
+    'red',
+    'volcano',
+    'orange',
+    'gold',
+    'lime',
+    'green',
+    'cyan',
+    'geekblue',
+    'purple'
+  ], // 标签颜色
   categoryList: [
     { name: 'Sequelize', count: 9 },
     { name: 'React', count: 11 },
@@ -35,15 +49,13 @@ const defaultState = {
 
 // reducer
 export const demoReducer = (state = defaultState, action) => {
-  switch (action.type) {
-    // case constants.DEMO_ADD_COUNT:
-    //   return { ...state, count: ++state.count }
+  const { type, payload } = action
+  switch (type) {
+    case constants.CATEGORY_GETLIST:
+      return { ...state, categoryList: payload }
 
-    // case constants.DEMO_LOGIN:
-    //   return { ...state, isLogin: true }
-
-    // case constants.DEMO_LOGINOUT:
-    //   return { ...state, isLogin: false }
+    case constants.TAG_GETLIST:
+      return { ...state, tagList: payload }
 
     default:
       return state
