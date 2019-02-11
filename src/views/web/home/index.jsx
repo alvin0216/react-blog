@@ -1,66 +1,64 @@
 import React, { Component } from 'react'
 import './index.less'
-import { Link } from 'react-router-dom'
 
-import { Button, Card, Icon, Tag } from 'antd'
-import { connect } from 'react-redux'
-
+import { Icon, Divider, Pagination } from 'antd'
 import axios from '@/lib/axios'
 import { translateMarkdown } from '@/lib'
 
-@connect(state => state.article)
+import Tags from '../Tags'
+
 class Home extends Component {
-  state = { list: [] }
+  state = { list: [], current: 1 }
 
   componentDidMount() {
     axios.get('/article/getList', { params: { offset: 1, limit: 15 } }).then(res => {
       const list = res.data
       list.forEach(item => {
-        item.content.replace(/(.*)<!--more-->/, ($0, $1) => {
-          item.description = translateMarkdown($1)
-        })
+        let index = item.content.indexOf('<!--more-->')
+        item.description = translateMarkdown(item.content.slice(0, index))
       })
-      console.log(list)
       this.setState({ list })
     })
   }
 
+  jumpTo = id => {
+    this.props.history.push(`/article/${id}`)
+  }
+
+  onChange = page => {
+    this.setState({ current: page })
+  }
+
   render() {
     const { list } = this.state
-    const { colorList } = this.props
     return (
       <div className="content-wrap list">
         <ul className="ul-list">
           {list.map(item => (
             <li key={item.id} className="ul-list-item">
-              <h2 className="title">{item.title}</h2>
-              <p className="description">{item.description}</p>
-              <ul className="list-item-action">
-                <li>
-                  <Icon type="message" style={{ marginRight: 7 }} />
-                  {2}
-                </li>
-                <li>
-                  <i className="iconfont icon-tags" style={{ marginRight: 7, verticalAlign: 'middle' }} />
-                  {item.tags.map((tag, i) => (
-                    <Tag color={colorList[i + 3]} key={tag.name}>
-                      <Link to={tag.name}>{tag.name}</Link>
-                    </Tag>
-                  ))}
-                </li>
-                <li>
-                  <Icon type="folder" style={{ marginRight: 7 }} />
-                  {item.categories.map(cate => (
-                    <Tag color="#2db7f5" key={cate.name}>
-                      <Link to={cate.name}>{cate.name}</Link>
-                    </Tag>
-                  ))}
-                </li>
-              </ul>
+              <Divider orientation="left">
+                <span className="title" onClick={() => this.jumpTo(item.id)}>
+                  {item.title}
+                </span>
+                <span className="create-time">{item.createdAt.slice(0, 10)}</span>
+              </Divider>
+
+              <div
+                onClick={() => this.jumpTo(item.id)}
+                className="article-detail description"
+                dangerouslySetInnerHTML={{ __html: item.description }}
+              />
+
+              <div className="list-item-action">
+                <Icon type="message" style={{ marginRight: 7 }} />
+                {2}
+                <Tags type="tags" list={item.tags} />
+                <Tags type="categories" list={item.categories} />
+              </div>
             </li>
           ))}
         </ul>
-        <div className="" />
+        <Pagination current={this.state.current} onChange={this.onChange} total={50} />
       </div>
     )
   }

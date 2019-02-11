@@ -8,20 +8,9 @@ import { Tag, Icon } from 'antd'
 
 import Navigation from './navigation'
 import loading from '@/assets/loading.gif'
+import Tags from '../Tags'
+import { connect } from 'net'
 
-const colorList = [
-  'magenta',
-  'red',
-  'volcano',
-  'orange',
-  'gold',
-  'lime',
-  'green',
-  'cyan',
-  'blue',
-  'geekblue',
-  'purple'
-]
 function random() {
   const len = colorList.length
   return Math.floor(Math.random() * len)
@@ -56,10 +45,8 @@ class ArticleDetail extends Component {
     axios
       .get(`/article/get/${id}`)
       .then(res => {
-        const tags = res.data.tags.map(d => d.name)
-        const categories = res.data.tags.map(d => d.name)
         const content = translateMarkdown(res.data.content)
-        const { title, createdAt } = res.data
+        const { title, createdAt, tags, categories } = res.data
         this.setState({
           tags,
           categories,
@@ -76,6 +63,7 @@ class ArticleDetail extends Component {
 
   render() {
     const { title, tags, categories, content, postTime, loading } = this.state
+
     return (
       <div className="content-wrap">
         {loading ? (
@@ -85,28 +73,13 @@ class ArticleDetail extends Component {
             <div className="post-header">
               <h1 className="post-title">{title}</h1>
 
-              <div>
+              <div className="others">
                 <i className="iconfont icon-post" />
                 &nbsp; Posted on &nbsp;
                 <span>{postTime}</span>
-                &nbsp; | &nbsp;
-                <Icon type="folder" />
-                &nbsp; in &nbsp;
-                {categories.map(item => (
-                  <Tag color="#2db7f5" key={item}>
-                    <Link to={item}>{item}</Link>
-                  </Tag>
-                ))}
+                <Tags type="tags" list={tags} />
+                <Tags type="categories" list={categories} />
               </div>
-            </div>
-
-            <div className="tags">
-              <i className="iconfont icon-tags" />
-              {tags.map((tag, i) => (
-                <Tag key={i} color={colorList[i] ? colorList[i] : colorList[random()]}>
-                  <Link to={tag}>{tag}</Link>
-                </Tag>
-              ))}
             </div>
 
             <div className="article-detail" dangerouslySetInnerHTML={{ __html: content }} />

@@ -2,27 +2,37 @@
   .ul-list {
     width: 100%;
     .ul-list-item {
+      // background: #f9f9f9;
+      position: relative;
       border: 1px solid #ebedf0;
-      padding: 10px 24px;
+      padding: 16px 24px;
       margin-bottom: 10px;
       .title {
         color: #394d69;
         font-size: 1.4rem;
         font-weight: 600;
         line-height: 1.2;
+        cursor: pointer;
+        &:hover{
+          color: #48b2ff;
+        }
+      }
+      .description {
+        // padding: 15px 10px;
+        cursor: pointer;
+        max-height: 260px;
+        overflow: hidden;
+      }
+      .create-time {
+        font-size: 0.5em;
+        padding-left: 20px;
       }
       .list-item-action {
-        display: flex;
+        vertical-align: middle;
+        margin-top: 10px;
         color: rgba(0, 0, 0, 0.45);
-        li {
-          position: relative;
-        }
-        li:not(:last-child) {
-          &::after {
-            content: '|';
-            padding: 0 6px;
-            color: rgba(0, 0, 0, 0.45);
-          }
+        a {
+          color: inherit;
         }
       }
     }

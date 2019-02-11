@@ -47,7 +47,7 @@ class BolgSider extends Component {
         <div className="tags-content">
           {tagList.map((tag, i) => (
             <Tag key={i} color={colorList[i] ? colorList[i] : colorList[random(colorList)]}>
-              <Link to={tag.name}>{tag.name}</Link>
+              <Link to={`/tags/${tag.name}`}>{tag.name}</Link>
             </Tag>
           ))}
         </div>
