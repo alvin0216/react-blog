@@ -28,15 +28,15 @@ class Archives extends Component {
     this.fetchList(1)
   }
 
-  fetchList({ offset = 1 }) {
-    axios.get('/article/getList', { params: { offset, limit: 15 } }).then(res => {
-      const list = groupBy(res.data, item => item.createdAt.slice(0, 4))
+  fetchList({ page = 1 }) {
+    axios.get('/article/getList', { params: { page, pageSize: 15 } }).then(res => {
+      const list = groupBy(res.rows, item => item.createdAt.slice(0, 4))
       this.setState({ list, total: res.count })
     })
   }
 
   onChange = page => {
-    this.fetchList({ offset: page })
+    this.fetchList({ page: page })
     this.setState({ current: page })
   }
 
@@ -47,11 +47,13 @@ class Archives extends Component {
         <Timeline>
           {list.map((d, i) => (
             <Fragment key={i}>
-              <Timeline.Item>
-                <span className="desc">{`Nice! ${total} posts in total. Keep on posting.`}</span>
-                <br />
-                <br />
-              </Timeline.Item>
+              {i === 0 && (
+                <Timeline.Item>
+                  <span className="desc">{`Nice! ${total} posts in total. Keep on posting.`}</span>
+                  <br />
+                  <br />
+                </Timeline.Item>
+              )}
 
               <Timeline.Item dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />} color="red">
                 <div className="year">{d[0]['createdAt'].slice(0, 4)}...</div>
@@ -68,7 +70,7 @@ class Archives extends Component {
           ))}
         </Timeline>
 
-        <div style={{ textAlign: 'right' }} >
+        <div style={{ textAlign: 'right' }}>
           <Pagination pageSize={15} current={this.state.current} onChange={this.onChange} total={total} />
         </div>
       </div>

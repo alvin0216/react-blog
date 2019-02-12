@@ -1,5 +1,5 @@
 const { sequelize } = require('../models')
-const { tag: TagModel } = require('../models')
+const { tag: TagModel, article: ArticleModel, category: CategoryModel } = require('../models')
 
 module.exports = {
   async getTags(ctx) {
@@ -11,6 +11,20 @@ module.exports = {
   },
 
   async getArticlesByTag(ctx) {
-    const { name } = ctx.params
+    let { name } = ctx.params,
+      { page = 1, pageSize = 15 } = ctx.query,
+      offset = (page - 1) * pageSize
+    pageSize = parseInt(pageSize)
+   
+    const data = await ArticleModel.findAndCountAll({
+      attributes: ['id', 'title', 'createdAt'],
+      include: [{ model: TagModel, where: { name } }, { model: CategoryModel }],
+      offset,
+      limit: pageSize,
+      order: [['createdAt', 'DESC']],
+      distinct: true
+    })
+
+    ctx.body = { code: 200, ...data }
   }
 }

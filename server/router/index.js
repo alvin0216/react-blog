@@ -10,7 +10,7 @@ router.use('/article', ArticleRouter.routes())
 // 获取所有标签以及每个标签的总数
 router.get('/getTags', TagController.getTags)
 //根据标签的名字获取文章
-router.get('/tags/:name/articles', TagController.getArticlesByTag)
+router.get('/tags/:name', TagController.getArticlesByTag)
 
 
 // 获取所有分类以及分类的总数

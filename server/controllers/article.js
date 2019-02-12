@@ -47,21 +47,20 @@ module.exports = {
    * ...
    */
   async getArticleList(ctx) {
-    let { offset = 1, limit = 10 } = ctx.query
-    offset = parseInt(offset)
-    limit = parseInt(limit)
+    let { page = 1, pageSize = 10 } = ctx.query,
+      offset = (page - 1) * pageSize
 
-    const data = await ArticleModel.findAll({
-      // where: { id },
+    pageSize = parseInt(pageSize)
+
+    const data = await ArticleModel.findAndCountAll({
       include: [{ model: TagModel, attributes: ['name'] }, { model: CategoryModel, attributes: ['name'] }],
-      offset: (offset - 1) * limit,
-      limit,
-      order: [['updatedAt', 'DESC']]
+      offset,
+      limit: pageSize,
+      order: [['createdAt', 'DESC']],
+      distinct: true
     })
-    const count = await ArticleModel.findOne({
-      attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'count']]
-    })
-    ctx.body = { code: 200, data, ...count.dataValues }
+
+    ctx.body = { code: 200, ...data }
   },
 
   // 删除文章

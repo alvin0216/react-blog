@@ -16,8 +16,8 @@ class BolgSider extends Component {
   state = { recentList: [] }
 
   componentDidMount() {
-    axios.get('/article/getList', { params: { offset: 1, limit: 6 } }).then(res => {
-      this.setState({ recentList: res.data })
+    axios.get('/article/getList', { params: { page: 1, pageSize: 6 } }).then(res => {
+      this.setState({ recentList: res.rows })
     })
   }
 

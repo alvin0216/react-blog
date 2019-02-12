@@ -14,9 +14,9 @@ class Home extends Component {
     this.fetchList(1)
   }
 
-  fetchList({ offset = 1 }) {
-    axios.get('/article/getList', { params: { offset, limit: 10 } }).then(res => {
-      const list = res.data
+  fetchList({ page = 1 }) {
+    axios.get('/article/getList', { params: { page, pageSize: 10 } }).then(res => {
+      const list = res.rows
       list.forEach(item => {
         let index = item.content.indexOf('<!--more-->')
         item.description = translateMarkdown(item.content.slice(0, index))
@@ -30,7 +30,7 @@ class Home extends Component {
   }
 
   onChange = page => {
-    this.fetchList({ offset: page })
+    this.fetchList({ page: page })
     this.setState({ current: page })
   }
 
