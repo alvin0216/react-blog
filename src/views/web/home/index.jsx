@@ -11,7 +11,7 @@ class Home extends Component {
   state = { list: [], current: 1, total: 0 }
 
   componentDidMount() {
-    this.fetchList(1)
+    this.fetchList({ page: 1 })
   }
 
   fetchList({ page = 1 }) {
@@ -30,14 +30,13 @@ class Home extends Component {
   }
 
   onChange = page => {
-    this.fetchList({ page: page })
-    this.setState({ current: page })
+    this.setState({ current: page }, () => this.fetchList({ page }))
   }
 
   render() {
     const { list, total } = this.state
     return (
-      <div className="content-wrap list">
+      <div className="content-wrap list" id="abc">
         <ul className="ul-list">
           {list.map(item => (
             <li key={item.id} className="ul-list-item">
@@ -63,9 +62,11 @@ class Home extends Component {
             </li>
           ))}
         </ul>
-        <div style={{ textAlign: 'right' }}>
-          <Pagination current={this.state.current} onChange={this.onChange} total={total} />
-        </div>
+        {list.length > 0 && (
+          <div style={{ textAlign: 'right' }}>
+            <Pagination current={this.state.current} onChange={this.onChange} total={total} />
+          </div>
+        )}
       </div>
     )
   }

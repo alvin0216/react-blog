@@ -11,11 +11,11 @@ module.exports = {
   },
 
   async getArticlesByTag(ctx) {
-    let { name } = ctx.params,
-      { page = 1, pageSize = 15 } = ctx.query,
+    let { page = 1, pageSize = 15, name } = ctx.query,
       offset = (page - 1) * pageSize
+
     pageSize = parseInt(pageSize)
-   
+
     const data = await ArticleModel.findAndCountAll({
       attributes: ['id', 'title', 'createdAt'],
       include: [{ model: TagModel, where: { name } }, { model: CategoryModel }],
