@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80012
 File Encoding         : 65001
 
-Date: 2019-02-11 22:44:08
+Date: 2019-02-13 00:38:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -260,9 +260,7 @@ INSERT INTO `tag` VALUES ('44', 'Vue', '29');
 INSERT INTO `tag` VALUES ('45', 'Vue', '30');
 INSERT INTO `tag` VALUES ('46', 'MVVM', '30');
 INSERT INTO `tag` VALUES ('47', 'Vue', '31');
-INSERT INTO `tag` VALUES ('48', 'MVVM', '31');
 INSERT INTO `tag` VALUES ('49', 'Vue', '32');
-INSERT INTO `tag` VALUES ('50', 'MVVM', '32');
 INSERT INTO `tag` VALUES ('51', 'ES6', '33');
 INSERT INTO `tag` VALUES ('52', 'ES6', '34');
 INSERT INTO `tag` VALUES ('53', 'ES6', '35');
@@ -286,7 +284,7 @@ INSERT INTO `tag` VALUES ('71', '设计模式', '45');
 INSERT INTO `tag` VALUES ('72', 'Javascript', '46');
 INSERT INTO `tag` VALUES ('73', 'Javascript', '47');
 INSERT INTO `tag` VALUES ('74', 'Javascript 深入系列', '47');
-INSERT INTO `tag` VALUES ('75', '原型/原型链', '47');
+INSERT INTO `tag` VALUES ('75', '原型原型链', '47');
 INSERT INTO `tag` VALUES ('76', 'Javascript', '48');
 INSERT INTO `tag` VALUES ('77', 'Javascript 深入系列', '48');
 INSERT INTO `tag` VALUES ('78', '作用域', '48');
@@ -297,7 +295,7 @@ INSERT INTO `tag` VALUES ('82', 'Javascript', '50');
 INSERT INTO `tag` VALUES ('83', 'Javascript 深入系列', '50');
 INSERT INTO `tag` VALUES ('84', 'Javascript', '51');
 INSERT INTO `tag` VALUES ('85', 'Javascript 深入系列', '51');
-INSERT INTO `tag` VALUES ('86', '原型/原型链', '51');
+INSERT INTO `tag` VALUES ('86', '原型原型链', '51');
 INSERT INTO `tag` VALUES ('87', 'Javascript', '52');
 INSERT INTO `tag` VALUES ('88', 'Javascript 深入系列', '52');
 INSERT INTO `tag` VALUES ('89', 'this', '52');
