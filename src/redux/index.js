@@ -9,7 +9,8 @@ let storeEnhancers
 if (process.env.NODE_ENV === 'production') {
   storeEnhancers = compose(thunk)
 } else {
-  storeEnhancers = compose(composeWithDevTools(applyMiddleware(thunk, logger)))
+  // storeEnhancers = compose(composeWithDevTools(applyMiddleware(thunk, logger)))
+  storeEnhancers = compose(composeWithDevTools(applyMiddleware(thunk)))
 }
 
 const configureStore = (initialState = {}) => {

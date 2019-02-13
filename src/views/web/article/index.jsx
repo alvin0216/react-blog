@@ -3,20 +3,9 @@ import './index.less'
 import axios from '@/lib/axios'
 import { translateMarkdown } from '@/lib/index'
 
-import { Link } from 'react-router-dom'
-import { Tag, Icon } from 'antd'
-
 import Navigation from './navigation'
-import loading from '@/assets/loading.gif'
+import Loading from '@/components/helper/Loading'
 import Tags from '../Tags'
-import { connect } from 'net'
-
-function random() {
-  const len = colorList.length
-  return Math.floor(Math.random() * len)
-}
-
-const Loading = () => <img src={loading} alt="" className="article-loading" />
 
 class ArticleDetail extends Component {
   state = {

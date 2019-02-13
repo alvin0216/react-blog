@@ -4,14 +4,14 @@ import { Divider } from 'antd'
 
 const Preview = ({ list }) => {
   return (
-    <Fragment>    
+    <ul className="preview">
       <Divider>预览</Divider>
       {list.map(item => (
         <li key={item.id}>
           <Link to={`/article/${item.id}`}>{item.title}</Link>
         </li>
       ))}
-    </Fragment>
+    </ul>
   )
 }
 

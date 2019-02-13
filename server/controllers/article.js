@@ -43,16 +43,18 @@ module.exports = {
    * 查询文章列表
    *
    * @param {Number} offset - 当前页码 默认1
-   * @param {Number} limit - 限制查询数量 默认 15
+   * @param {Number} limit - 限制查询数量 默认 10
    * ...
    */
   async getArticleList(ctx) {
-    let { page = 1, pageSize = 10 } = ctx.query,
-      offset = (page - 1) * pageSize
+    let { page = 1, pageSize = 10, keyword } = ctx.query,
+      offset = (page - 1) * pageSize,
+      where = keyword ? { title: { $like: `%${keyword}%` } } : {}
 
-    pageSize = parseInt(pageSize)
+    pageSize = parseInt(pageSize) // 处理 pageSize
 
     const data = await ArticleModel.findAndCountAll({
+      where,
       include: [{ model: TagModel, attributes: ['name'] }, { model: CategoryModel, attributes: ['name'] }],
       offset,
       limit: pageSize,

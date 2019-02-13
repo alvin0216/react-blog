@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Loading from '@/components/helper/Loading'
+import { SpinLoading } from '@/components/helper/Loading'
 
 /**
  * 使用 webpack 的 import 方法实现动态加载组件！dynamic import
@@ -19,7 +19,7 @@ export const asyncComponent = importComponent =>
 
     render() {
       const RenderComponet = this.state.component
-      return RenderComponet ? <RenderComponet {...this.props} /> : <Loading />
+      return RenderComponet ? <RenderComponet {...this.props} /> : <SpinLoading />
     }
   }
 
