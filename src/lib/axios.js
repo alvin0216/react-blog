@@ -10,7 +10,6 @@ const instance = axios.create({
 //拦截请求
 instance.interceptors.request.use(
   config => {
-    // NProgress.start()
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.common['Authorization'] = 'Bearer ' + token
@@ -19,33 +18,41 @@ instance.interceptors.request.use(
   },
   error => {
     message.error('bed request')
-    // Do something with request error
     Promise.reject(error)
   }
 )
 //拦截响应
 instance.interceptors.response.use(
   response => {
-    // NProgress.done()
     return response.data
   },
-  error => {
-    // NProgress.done()
-    if (error.response) {
-      switch (error.response.status) {
+  err => {
+    if (err && err.response) {
+      switch (err.response.status) {
+        case 400:
+          message.error('错误请求')
+          break
         case 401:
-          message.error('您未被授权，请重新登录')
+          message.error('您未被授权，请重新登录！')
+          break
+        case 403:
+          message.error('拒绝访问！')
+          break
+        case 404:
+          message.error('请求错误,未找到该资源！')
           break
         case 500:
-          message.error('服务器出问题了，请稍后再试')
+          message.err('服务器出问题了，请稍后再试！')
           break
         default:
-          message.error('未知异常')
+          message.err(`连接错误 ${err.response.status}！`)
           break
       }
       localStorage.clear()
+    } else {
+      message.error('连接到服务器异常！')
     }
-    return Promise.reject(error)
+    return Promise.reject(err)
   }
 )
 

@@ -1,23 +1,33 @@
 import React, { Component, Fragment } from 'react'
 
 import { connect } from 'react-redux'
-import { loginout } from '@/redux/demo/actions'
+import { register, loginout } from '@/redux/user/actions'
 
 import { Button, Dropdown, Avatar, Menu } from 'antd'
 import AuthModal from '../authModal'
 
-// use for Avatar
-const colorList = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae']
+const mapStateToProps = state => ({
+  colorList: state.article.colorList,
+  username: state.user.username
+})
+
+function random(arr) {
+  return Math.floor(Math.random() * arr.length)
+}
 
 @connect(
-  state => state.demo,
-  { loginout }
+  mapStateToProps,
+  { register, loginout }
 )
 class UserInfo extends Component {
-  state = {
-    loginModalVisible: false,
-    registerModalVisible: false,
-    avatarColor: colorList[Math.floor(Math.random() * 4)]
+  constructor(props) {
+    super(props)
+    const { colorList } = this.props
+    this.state = {
+      loginModalVisible: false,
+      registerModalVisible: false,
+      avatarColor: colorList[random(colorList)]
+    }
   }
 
   handleClose = type => {
@@ -38,14 +48,14 @@ class UserInfo extends Component {
   }
 
   render() {
-    const { loginModalVisible, registerModalVisible } = this.state
-
+    const { loginModalVisible, registerModalVisible } = this.state,
+      { username } = this.props
     return (
       <div id="header-userInfo">
-        {this.props.isLogin ? (
+        {username ? (
           <Dropdown placement="bottomCenter" overlay={this.renderAvatarDropdownMenu()}>
             <Avatar className="user-avatar" size="large" style={{ backgroundColor: this.state.avatarColor }}>
-              guodada
+              {username}
             </Avatar>
           </Dropdown>
         ) : (

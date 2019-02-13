@@ -1,11 +1,14 @@
 const router = require('koa-router')()
 const examplesRouter = require('./examples')
 const ArticleRouter = require('./article')
+const UserRouter = require('./user')
 const TagController = require('../controllers/tag')
 const CategoryController = require('../controllers/category')
 
+
 router.use('/examples', examplesRouter.routes())
 router.use('/article', ArticleRouter.routes())
+router.use('/user', UserRouter.routes())
 
 // 获取所有标签以及每个标签的总数
 router.get('/tags/getList', TagController.getTags)
