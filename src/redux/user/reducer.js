@@ -22,7 +22,7 @@ export const demoReducer = (state = defaultState, action) => {
       return { ...state, id, username, auth }
 
     case constants.USER_LOGINOUT:
-      return { username: '', auth: 2 }
+      return { id: 0, username: '', auth: 2 }
 
     default:
       return state

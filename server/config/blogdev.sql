@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80012
 File Encoding         : 65001
 
-Date: 2019-02-13 00:38:24
+Date: 2019-02-14 01:53:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -332,8 +332,9 @@ CREATE TABLE `user` (
   `auth` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+INSERT INTO `user` VALUES ('1', 'admin', '$2b$10$E4Qdb4F0FDhN4xTRtz6WO.b7hJZ6J4mZSevVPJgCfsj7wdxUPt5Gy', '2');
