@@ -6,9 +6,10 @@ import axios from '@/lib/axios'
 import { translateMarkdown } from '@/lib'
 
 import Tags from '../Tags'
+import Preview from './preview'
 
 class Home extends Component {
-  state = { list: [], current: 1, total: 0 }
+  state = { list: [], page: 1, total: 0 }
 
   componentDidMount() {
     this.fetchList({ page: 1 })
@@ -30,13 +31,14 @@ class Home extends Component {
   }
 
   onChange = page => {
-    this.setState({ current: page }, () => this.fetchList({ page }))
+    document.querySelector('.content-wrapper').scrollTop = 0
+    this.setState({ page }, () => this.fetchList({ page }))
   }
 
   render() {
-    const { list, total } = this.state
+    const { list, total, page } = this.state
     return (
-      <div className="content-wrap list" id="abc">
+      <div className="content-inner-wrapper home">
         <ul className="ul-list">
           {list.map(item => (
             <li key={item.id} className="ul-list-item">
@@ -64,9 +66,12 @@ class Home extends Component {
         </ul>
         {list.length > 0 && (
           <div style={{ textAlign: 'right' }}>
-            <Pagination current={this.state.current} onChange={this.onChange} total={total} />
+            <Pagination current={page} onChange={this.onChange} total={total} />
           </div>
         )}
+        <ul className="preview">
+          <Preview list={list} />
+        </ul>
       </div>
     )
   }

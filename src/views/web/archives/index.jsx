@@ -43,7 +43,7 @@ class Archives extends Component {
   render() {
     const { list, total } = this.state
     return (
-      <div className="content-wrap archives">
+      <div className="content-inner-wrapper archives">
         <Timeline>
           {list.map((d, i) => (
             <Fragment key={i}>

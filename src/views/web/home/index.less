@@ -1,4 +1,4 @@
-.list {
+.home {
   .ul-list {
     width: 100%;
     .ul-list-item {
@@ -7,7 +7,7 @@
       border: 1px solid #ebedf0;
       padding: 16px 24px;
       margin-bottom: 10px;
-      transition: all .2s linear;
+      transition: all 0.2s linear;
       &:hover {
         background: #effbff;
         box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.1);
@@ -39,6 +39,37 @@
         color: rgba(0, 0, 0, 0.45);
         a {
           color: inherit;
+        }
+      }
+    }
+  }
+  .preview {
+    position: fixed;
+    width: 260px;
+    top: 104px;
+    right: 20px;
+    list-style-type: circle;
+    .title {
+      color: #394d69;
+      font-size: 22px;
+    }
+    li {
+      a {
+        color: #8590a6;
+      }
+      // padding-left: 16px;
+      display: block;
+      -webkit-transition: all 0.3s ease;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-left: -1px;
+
+      &:hover {
+        background: #f0f2f5;
+        a {
+          color: #40a9ff;
         }
       }
     }

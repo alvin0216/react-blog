@@ -57,7 +57,7 @@ class List extends Component {
     const { list, type, page, total } = this.state,
       { name } = this.props.match.params
     return (
-      <div className="content-wrap list-page">
+      <div className="content-inner-wrapper list-page">
         <TimeLineList list={list} name={name} type={type} />
 
         {total > 15 && (

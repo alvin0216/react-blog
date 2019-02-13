@@ -14,7 +14,7 @@ class Categories extends Component {
     const { categoryList, colorList } = this.props
 
     return (
-      <div className="content-wrap categories">
+      <div className="content-inner-wrapper categories">
         <h2 className="title">Categories</h2>
         <p className="category-all-title">{`${categoryList.length} categories in total`}</p>
 

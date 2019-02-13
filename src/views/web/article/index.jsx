@@ -65,7 +65,7 @@ class ArticleDetail extends Component {
     const { title, tags, categories, content, postTime, loading } = this.state
 
     return (
-      <div className="content-wrap">
+      <div className="content-inner-wrapper article">
         {loading ? (
           <Loading />
         ) : (
@@ -84,7 +84,7 @@ class ArticleDetail extends Component {
 
             <div className="article-detail" dangerouslySetInnerHTML={{ __html: content }} />
 
-            <div className="navigation">
+            <div className="right-navigation">
               <Navigation content={content} />
             </div>
           </React.Fragment>
