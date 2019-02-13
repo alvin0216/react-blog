@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Button, message } from 'antd'
-import { loginout } from '@/redux/demo/actions'
+import { logout } from '@/redux/demo/actions'
 
 @withRouter
 @connect(
   null,
-  { loginout }
+  { logout }
 )
 class AuthPage extends Component {
-  loginout = async () => {
-    await this.props.loginout()
+  logout = async () => {
+    await this.props.logout()
     message.success('login out')
   }
 
@@ -19,7 +19,7 @@ class AuthPage extends Component {
     return (
       <div>
         <h1>Protected Page</h1>
-        <Button onClick={this.loginout}>loginout</Button>
+        <Button onClick={this.logout}>logout</Button>
       </div>
     )
   }

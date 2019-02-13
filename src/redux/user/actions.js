@@ -6,8 +6,8 @@ export const login = ({ username, password }) => {
   return dispatch =>
     axios.post('/user/login', { username, password }).then(res => {
       if (res.code === 200) {
-        const { username, auth } = res
-        dispatch({ type: constants.USER_LOGIN, payload: { username, auth } })
+        localStorage.setItem('token', res.token)
+        dispatch({ type: constants.USER_LOGIN, payload: { token: res.token } })
       } else {
         message.error(res.message)
       }
@@ -22,6 +22,7 @@ export const register = ({ username, password }) => {
     })
 }
 
-export const loginout = () => {
+export const logout = () => {
+  localStorage.removeItem('token')
   return { type: constants.USER_LOGINOUT }
 }

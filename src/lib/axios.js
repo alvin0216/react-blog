@@ -33,6 +33,7 @@ instance.interceptors.response.use(
           message.error('错误请求')
           break
         case 401:
+          localStorage.clear()
           message.error('您未被授权，请重新登录！')
           break
         case 403:

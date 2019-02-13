@@ -33,7 +33,8 @@ module.exports = {
       if (!isMatch) {
         response = { code: 400, message: '密码不正确' }
       } else {
-        const token = jwt.sign({ username }, TOKEN_SECRET, { expiresIn: TOKEN_EXPIRESIN }) // 生成 token
+        const { id, auth } = user
+        const token = jwt.sign({ username, id, auth }, TOKEN_SECRET, { expiresIn: TOKEN_EXPIRESIN }) // 生成 token
         response = { code: 200, message: '登录成功', username, auth: user.auth, token }
       }
     }

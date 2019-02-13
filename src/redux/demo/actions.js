@@ -28,6 +28,6 @@ export const register = ({ username, password }) => {
     })
 }
 
-export const loginout = () => ({
+export const logout = () => ({
   type: constants.DEMO_LOGINOUT
 })

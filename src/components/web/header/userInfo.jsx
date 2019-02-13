@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
 import { connect } from 'react-redux'
-import { register, loginout } from '@/redux/user/actions'
+import { register, logout } from '@/redux/user/actions'
 
 import { Button, Dropdown, Avatar, Menu } from 'antd'
 import AuthModal from '../authModal'
@@ -17,7 +17,7 @@ function random(arr) {
 
 @connect(
   mapStateToProps,
-  { register, loginout }
+  { register, logout }
 )
 class UserInfo extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class UserInfo extends Component {
     return (
       <Menu>
         <Menu.Item>
-          <span className="user-logout" onClick={this.props.loginout}>
+          <span className="user-logout" onClick={this.props.logout}>
             退出登录
           </span>
         </Menu.Item>
