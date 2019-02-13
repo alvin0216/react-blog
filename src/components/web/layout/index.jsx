@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './index.less'
 import PropTypes from 'prop-types'
 
-import { Layout, Icon, Row, Col } from 'antd'
+import { Layout, Icon, Row, Col, BackTop } from 'antd'
 import Header from '../header'
 import BolgSider from '../sider'
 
@@ -37,6 +37,7 @@ class WebLayout extends Component {
             </div>
           </Col>
         </Row>
+        <BackTop target={() => document.querySelector('.content-wrapper')} />
       </Layout>
     )
   }
