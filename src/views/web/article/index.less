@@ -32,10 +32,40 @@
     transform: translate(-50%, 20%);
   }
 
-  .ant-comment-actions {
-    margin-top: 0;
-  }
-  .ant-comment-content-detail p {
-    white-space: inherit;
+  .comment-wrapper {
+    font-family: 'Lato', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    .comment-header {
+      padding: 20px 0;
+      color: #555;
+      font-size: 16px;
+      .count {
+        color: #6190e8;
+        border-bottom: 1px dotted #6190e8;
+      }
+      .hr {
+        margin: 10px 0 0 0;
+      }
+    }
+    .controls {
+      float: right;
+      .icon-tips {
+        margin-right: 6px;
+        vertical-align: middle;
+        // font-size: 14px;
+        color: #6190e8;
+        font-weight: bold;
+      }
+      .support-tip {
+        margin-right: 20px;
+        color: #6190e8;
+      }
+    }
+
+    .ant-comment-actions {
+      margin-top: 0;
+    }
+    .ant-comment-content-detail p {
+      white-space: inherit;
+    }
   }
 }

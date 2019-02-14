@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import axios from '@/lib/axios'
+import { getCommentsCount } from '@/lib'
 import { connect } from 'react-redux'
-import { Comment, Avatar, Form, Button, List, Input, Icon } from 'antd'
+import { Comment, Avatar, Form, Button, Divider, Input, Icon } from 'antd'
 import CommentList from './commentList'
 
 const { TextArea } = Input
@@ -11,12 +12,16 @@ const { TextArea } = Input
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
   <div>
     <Form.Item>
-      <TextArea rows={4} onChange={onChange} value={value} />
+      <TextArea rows={4} placeholder="说点什么..." onChange={onChange} value={value} />
     </Form.Item>
     <Form.Item>
-      <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-        Add Comment
-      </Button>
+      <div className="controls">
+        <i className="iconfont icon-tips" />
+        <span className="support-tip">支持 Markdown 语法</span>
+        <Button className="" htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
+          添加评论
+        </Button>
+      </div>
     </Form.Item>
   </div>
 )
@@ -61,6 +66,11 @@ class ArticleComment extends Component {
     const { username } = this.props
     return (
       <div className="comment-wrapper">
+        <div className="comment-header">
+          <span className="count">{getCommentsCount(commentList)}</span> 条评论
+          <Divider className="hr" />
+        </div>
+
         <Comment
           avatar={
             username ? (
