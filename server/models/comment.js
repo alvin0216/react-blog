@@ -10,7 +10,7 @@ module.exports = (sequelize, dataTypes) => {
         autoIncrement: true
       },
       articleId: dataTypes.INTEGER(11), // 评论所属文章 id
-      content: { type: dataTypes.TEXT }, // 评论详情
+      content: { type: dataTypes.TEXT, allowNull: false }, // 评论详情
       createdAt: {
         type: dataTypes.DATE,
         defaultValue: dataTypes.NOW,

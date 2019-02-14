@@ -30,6 +30,7 @@ module.exports = (sequelize, dataTypes) => {
   Article.associate = models => {
     Article.hasMany(models.tag)
     Article.hasMany(models.category)
+    Article.hasMany(models.comment)
   }
 
   return Article

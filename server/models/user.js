@@ -1,5 +1,5 @@
 module.exports = (sequelize, dataTypes) => {
-  return sequelize.define(
+  const User = sequelize.define(
     'user',
     {
       // id sequelize 默认创建...
@@ -21,12 +21,19 @@ module.exports = (sequelize, dataTypes) => {
       },
       auth: {
         type: dataTypes.TINYINT,
-        defaultValue: 0,
-        comment: '用户权限：0 - 普通用户, 1 - admin'
+        defaultValue: 2,
+        comment: '用户权限：1 - admin, 2 - 普通用户'
       }
     },
     {
       timestamps: false // 不创建 createAt / updateAt 字段
     }
   )
+  
+  User.associate = models => {
+    User.hasMany(models.comment)
+    User.hasMany(models.reply)
+  }
+
+  return User
 }

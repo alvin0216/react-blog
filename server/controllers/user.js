@@ -18,7 +18,7 @@ module.exports = {
       }
       ctx.body = response
     } else {
-      ctx.body = { code: 400, message: '用户名/密码不能为空' }
+      ctx.body = { code: 400, message: '用户名或密码不能为空' }
     }
   },
 

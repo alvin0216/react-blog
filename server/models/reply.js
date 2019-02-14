@@ -9,7 +9,7 @@ module.exports = (sequelize, dataTypes) => {
         primaryKey: true,
         autoIncrement: true
       },
-      content: { type: dataTypes.TEXT }, // 评论详情
+      content: { type: dataTypes.TEXT, allowNull: false }, // 评论详情
       createdAt: {
         type: dataTypes.DATE,
         defaultValue: dataTypes.NOW,
@@ -29,6 +29,14 @@ module.exports = (sequelize, dataTypes) => {
       timestamps: true
     }
   )
+
+  Reply.associate = models => {
+    Reply.belongsTo(models.user, {
+      foreignKey: 'articleId',
+      targetKey: 'id',
+      constraints: false
+    })
+  }
 
   return Reply
 }
