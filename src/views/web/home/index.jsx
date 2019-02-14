@@ -3,7 +3,7 @@ import './index.less'
 
 import { Icon, Divider, Pagination, Empty } from 'antd'
 import axios from '@/lib/axios'
-import { translateMarkdown, decodeQuery } from '@/lib'
+import { translateMarkdown, decodeQuery, getCommentsCount } from '@/lib'
 
 import Tags from '../Tags'
 import Preview from './preview'
@@ -88,7 +88,7 @@ class Home extends Component {
 
                   <div className="list-item-action">
                     <Icon type="message" style={{ marginRight: 7 }} />
-                    {2}
+                    {getCommentsCount(item.comments)}
                     <Tags type="tags" list={item.tags} />
                     <Tags type="categories" list={item.categories} />
                   </div>
@@ -99,11 +99,7 @@ class Home extends Component {
               <Fragment>
                 {list.length < total && (
                   <div style={{ textAlign: 'right' }}>
-                    <Pagination
-                      current={parseInt(page) || 1}
-                      onChange={this.handlePageChange}
-                      total={total}
-                    />
+                    <Pagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} />
                   </div>
                 )}
                 <Preview list={list} />

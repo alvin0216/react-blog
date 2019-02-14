@@ -28,3 +28,15 @@ export const decodeQuery = url => {
   })
   return params
 }
+
+// 计算 评论数
+export const getCommentsCount = commentList => {
+  let count = commentList.length
+  commentList.forEach(item => {
+    count += item.replies.length
+  })
+  return count
+}
+
+// 取数组中的随机数
+export const random = arr => Math.floor(Math.random() * arr.length)

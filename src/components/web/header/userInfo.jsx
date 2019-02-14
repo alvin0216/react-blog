@@ -5,28 +5,18 @@ import { register, logout } from '@/redux/user/actions'
 
 import { Button, Dropdown, Avatar, Menu } from 'antd'
 import AuthModal from '../authModal'
-
-const mapStateToProps = state => ({
-  colorList: state.article.colorList,
-  username: state.user.username
-})
-
-function random(arr) {
-  return Math.floor(Math.random() * arr.length)
-}
+import { DEFAULT_AVATAR_COLOR } from '@/redux/constants'
 
 @connect(
-  mapStateToProps,
+  state => state.user,
   { register, logout }
 )
 class UserInfo extends Component {
   constructor(props) {
     super(props)
-    const { colorList } = this.props
     this.state = {
       loginModalVisible: false,
-      registerModalVisible: false,
-      avatarColor: colorList[random(colorList)]
+      registerModalVisible: false
     }
   }
 
@@ -48,13 +38,13 @@ class UserInfo extends Component {
   }
 
   render() {
-    const { loginModalVisible, registerModalVisible } = this.state,
-      { username } = this.props
+    const { loginModalVisible, registerModalVisible } = this.state
+    const { username, avatarColor } = this.props
     return (
       <div id="header-userInfo">
         {username ? (
           <Dropdown placement="bottomCenter" overlay={this.renderAvatarDropdownMenu()}>
-            <Avatar className="user-avatar" size="large" style={{ backgroundColor: this.state.avatarColor }}>
+            <Avatar className="user-avatar" size="large" style={{ backgroundColor: avatarColor }}>
               {username}
             </Avatar>
           </Dropdown>
@@ -68,24 +58,14 @@ class UserInfo extends Component {
               onClick={() => this.setState({ loginModalVisible: true })}>
               登录
             </Button>
-            <Button
-              ghost
-              type="danger"
-              size="small"
-              onClick={() => this.setState({ registerModalVisible: true })}>
+            <Button ghost type="danger" size="small" onClick={() => this.setState({ registerModalVisible: true })}>
               注册
             </Button>
           </Fragment>
         )}
 
         {<AuthModal visible={loginModalVisible} type="login" handleClose={() => this.handleClose('login')} />}
-        {
-          <AuthModal
-            visible={registerModalVisible}
-            type="register"
-            handleClose={() => this.handleClose('register')}
-          />
-        }
+        {<AuthModal visible={registerModalVisible} type="register" handleClose={() => this.handleClose('register')} />}
       </div>
     )
   }

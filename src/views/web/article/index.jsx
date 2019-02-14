@@ -6,7 +6,7 @@ import { translateMarkdown } from '@/lib/index'
 import Navigation from './navigation'
 import Loading from '@/components/helper/Loading'
 import Tags from '../Tags'
-import Comment from '@/components/web/comment'
+import Comment from './comment'
 
 class ArticleDetail extends Component {
   state = {
@@ -79,7 +79,7 @@ class ArticleDetail extends Component {
               <Navigation content={content} />
             </div>
 
-            <Comment articleId={articleId} comments={comments} />
+            <Comment articleId={articleId} commentList={comments} />
           </React.Fragment>
         )}
       </div>
