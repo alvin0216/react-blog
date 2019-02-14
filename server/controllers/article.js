@@ -45,7 +45,7 @@ module.exports = {
         { model: CategoryModel, attributes: ['name'] },
         {
           model: CommentModel,
-          attributes: ['id', 'userId', 'content'],
+          attributes: ['id', 'userId', 'content', 'createdAt'],
           include: [
             {
               model: ReplyModel,
@@ -55,8 +55,10 @@ module.exports = {
             { model: UserModel, as: 'user', attributes: ['username'] }
           ]
         }
-      ]
+      ],
+      order: [[CommentModel, 'createdAt', 'DESC']]
     })
+
     ctx.body = { code: 200, data }
   },
 

@@ -3,9 +3,14 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import blogAuthor from '@/assets/sider_avatar.png'
 
+import { random } from '@/lib'
 import { Comment, Avatar, Form, Button, List, Input, Icon } from 'antd'
 
-@connect(state => state.user)
+
+@connect(state => ({
+  userId: state.user.userId,
+  colorList: state.article.colorList
+}))
 class CommentList extends Component {
   static propTypes = {
     commentList: PropTypes.array
@@ -16,16 +21,16 @@ class CommentList extends Component {
   }
 
   renderAvatar = comment => {
-    const { userId, avatarColor } = this.props
+    const { userId, colorList } = this.props
     if (comment.userId === 1) return <Avatar src={blogAuthor} /> // userId = 1 博主~~~
     if (comment.userId === userId) {
+      return <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+    } else {
       return (
-        <Avatar className="user-avatar" size="large" style={{ backgroundColor: avatarColor }}>
+        <Avatar className="user-avatar" size="default" style={{ backgroundColor: colorList[random(colorList)] }}>
           {comment.user.username}
         </Avatar>
       )
-    } else {
-      return <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
     }
   }
 
@@ -37,10 +42,10 @@ class CommentList extends Component {
           <Comment
             key={comment.id}
             actions={[<span>Reply to</span>]}
-            author={<span>{comment.user.username}</span>}
+            author={<span>{comment.user && comment.user.username}</span>}
             avatar={this.renderAvatar(comment)}
             content={<p>{comment.content}</p>}>
-            111
+            {/* 111 */}
           </Comment>
         ))}
       </div>

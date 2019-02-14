@@ -7,6 +7,10 @@ exports.createToken = info => {
   return token
 }
 
-exports.verifyToken = token => {
-  
+exports.verifyToken = token => {}
+
+exports.decodeToken = (ctx) => {
+  const authorizationHeader = ctx.headers['authorization']
+  const token = authorizationHeader.split(' ')[1] // 取到 token
+  return jwt.decode(token)
 }

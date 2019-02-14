@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import axios from '@/lib/axios'
 import { connect } from 'react-redux'
 import { Comment, Avatar, Form, Button, List, Input, Icon } from 'antd'
 import CommentList from './commentList'
 
 const { TextArea } = Input
-
 
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
   <div>
@@ -28,48 +28,57 @@ class ArticleComment extends Component {
     commentList: PropTypes.array
   }
 
-  state = {
-    comments: [],
-    submitting: false,
-    value: ''
+  static defaultProps = {
+    commentList: []
   }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      commentList: this.props.commentList,
+      submitting: false,
+      value: ''
+    }
+  }
+
   handleSubmit = () => {
     if (!this.state.value) return
-
     this.setState({ submitting: true })
-
-    console.log(111)
+    axios
+      .post('/user/comment', { articleId: this.props.articleId, content: this.state.value })
+      .then(res => {
+        this.setState({ submitting: false, commentList: res.rows, value: '' })
+      })
+      .catch(err => this.setState({ submitting: false }))
   }
 
   handleChange = e => {
-    this.setState({
-      value: e.target.value
-    })
+    this.setState({ value: e.target.value })
   }
 
   render() {
-    const { comments, submitting, value } = this.state
+    const { submitting, value, commentList } = this.state
     const { username } = this.props
     return (
       <div className="comment-wrapper">
-        <CommentList commentList={this.props.commentList}/>
         <Comment
           avatar={
             username ? (
-              <Avatar
-                className="user-avatar"
-                size="large"
-                style={{ backgroundColor: '#52c41a', margin: '5px 5px 0 0' }}>
-                {username}
-              </Avatar>
+              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
             ) : (
               <Icon type="github" theme="filled" style={{ fontSize: 40, margin: '5px 5px 0 0' }} />
             )
           }
           content={
-            <Editor onChange={this.handleChange} onSubmit={this.handleSubmit} submitting={submitting} value={value} />
+            <Editor
+              onChange={this.handleChange}
+              onSubmit={this.handleSubmit}
+              submitting={submitting}
+              value={value}
+            />
           }
         />
+        <CommentList commentList={commentList} />
       </div>
     )
   }
