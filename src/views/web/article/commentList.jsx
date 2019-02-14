@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import blogAuthor from '@/assets/sider_avatar.png'
 
+import axios from '@/lib/axios'
 import { random, groupBy, translateMarkdown } from '@/lib'
 import { Comment, Avatar, Form, Button, List, Input, Icon } from 'antd'
 
@@ -14,12 +15,15 @@ const { TextArea } = Input
 }))
 class CommentList extends Component {
   static propTypes = {
-    commentList: PropTypes.array
+    commentList: PropTypes.array,
+    articleId: PropTypes.number
   }
 
   state = {
     commentList: [],
-    colorMap: {}
+    colorMap: {},
+    commentId: 0,
+    value: ''
   }
 
   componentDidMount() {
@@ -53,14 +57,45 @@ class CommentList extends Component {
     }
   }
 
+  openReply = commentId => {
+    this.setState({ commentId })
+  }
+
+  handleChange = e => {
+    // console.log(e)
+    this.setState({ value: e.target.value })
+  }
+
+  handleKeyUp = e => {
+    if (e.ctrlKey && e.keyCode === 13) {
+      this.onSubmit()
+    }
+  }
+
+  onSubmit = () => {
+    const content = this.state.value.trim()
+    const { articleId } = this.props
+    axios
+      .post('/user/reply', {
+        content,
+        articleId,
+        commentId: this.state.commentId
+      })
+      .then(res => {
+        this.props.setCommentList(res.rows)
+        this.setState({ commentId: 0, value: '' })
+      })
+  }
+
   render() {
     const { commentList } = this.props
+    const { commentId, value } = this.state
     return (
       <div className="">
         {commentList.map(comment => (
           <Comment
             key={comment.id}
-            actions={[<span>Reply to</span>]}
+            actions={[<span onClick={() => this.openReply(comment.id)}>Reply to</span>]}
             author={<span>{comment.user && comment.user.username}</span>}
             avatar={this.renderAvatar(comment)}
             content={
@@ -69,8 +104,23 @@ class CommentList extends Component {
                 dangerouslySetInnerHTML={{ __html: translateMarkdown(comment.content) }}
               />
             }>
-            <TextArea placeholder={`回复${comment.user.username}...`} />
-            <Button htmlType="submit">submit</Button>
+            {commentId === comment.id && (
+              <div className="reply-form">
+                <TextArea
+                  placeholder={`回复${comment.user.username}...`}
+                  value={value}
+                  onChange={this.handleChange}
+                  onKeyUp={this.handleKeyUp}
+                />
+                <div className="reply-form-controls">
+                  <span className="tip">Ctrl or ⌘ + Enter</span>
+                  <Button htmlType="submit" type="primary" disabled={!value.trim()} onClick={this.onSubmit}>
+                    回复
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {comment.replies.map(reply => (
               <Comment
                 key={reply.id}

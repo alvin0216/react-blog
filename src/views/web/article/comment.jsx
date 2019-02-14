@@ -30,7 +30,8 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
 class ArticleComment extends Component {
   static propTypes = {
     articleId: PropTypes.number.isRequired,
-    commentList: PropTypes.array
+    commentList: PropTypes.array,
+    setCommentList: PropTypes.func
   }
 
   static defaultProps = {
@@ -61,9 +62,13 @@ class ArticleComment extends Component {
     this.setState({ value: e.target.value })
   }
 
+  setCommentList = commentList => {
+    this.setState({ commentList })
+  }
+
   render() {
     const { submitting, value, commentList } = this.state
-    const { username } = this.props
+    const { username, articleId } = this.props
     return (
       <div className="comment-wrapper">
         <div className="comment-header">
@@ -88,7 +93,7 @@ class ArticleComment extends Component {
             />
           }
         />
-        <CommentList commentList={commentList} />
+        <CommentList commentList={commentList} articleId={articleId} setCommentList={this.setCommentList} />
       </div>
     )
   }

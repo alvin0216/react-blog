@@ -32,8 +32,10 @@ module.exports = {
 
   // 创建回复
   async reply(ctx) {
-    const { userId, articleId, content, commentId } = ctx.request.body
+    const { userId } = decodeToken(ctx)
+    const { articleId, content, commentId } = ctx.request.body
     await ReplyModel.create({ userId, articleId, content, commentId })
-    ctx.body = { code: 200, message: 'success' }
+    const data = await fetchCommentList(articleId)
+    ctx.body = { code: 200, message: 'success', ...data }
   }
 }
