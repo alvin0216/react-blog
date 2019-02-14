@@ -1,5 +1,11 @@
-const { article: ArticleModel, tag: TagModel, category: CategoryModel } = require('../models')
-const { sequelize } = require('../models')
+const {
+  article: ArticleModel,
+  tag: TagModel,
+  category: CategoryModel,
+  comment: CommentModel,
+  reply: ReplyModel,
+  user: UserModel
+} = require('../models')
 
 module.exports = {
   // 创建文章
@@ -34,7 +40,22 @@ module.exports = {
     const id = ctx.params.id
     const data = await ArticleModel.findOne({
       where: { id },
-      include: [{ model: TagModel, attributes: ['name'] }, { model: CategoryModel, attributes: ['name'] }]
+      include: [
+        { model: TagModel, attributes: ['name'] },
+        { model: CategoryModel, attributes: ['name'] },
+        {
+          model: CommentModel,
+          attributes: ['id', 'userId', 'content'],
+          include: [
+            {
+              model: ReplyModel,
+              attributes: ['id', 'userId', 'content'],
+              include: [{ model: UserModel, as: 'user', attributes: ['username'] }]
+            },
+            { model: UserModel, as: 'user', attributes: ['username'] }
+          ]
+        }
+      ]
     })
     ctx.body = { code: 200, data }
   },
@@ -55,7 +76,15 @@ module.exports = {
 
     const data = await ArticleModel.findAndCountAll({
       where,
-      include: [{ model: TagModel, attributes: ['name'] }, { model: CategoryModel, attributes: ['name'] }],
+      include: [
+        { model: TagModel, attributes: ['name'] },
+        { model: CategoryModel, attributes: ['name'] },
+        {
+          model: CommentModel,
+          attributes: ['id'],
+          include: [{ model: ReplyModel, attributes: ['id'] }]
+        }
+      ],
       offset,
       limit: pageSize,
       order: [['createdAt', 'DESC']],

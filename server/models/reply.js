@@ -32,7 +32,7 @@ module.exports = (sequelize, dataTypes) => {
 
   Reply.associate = models => {
     Reply.belongsTo(models.user, {
-      foreignKey: 'articleId',
+      foreignKey: 'userId',
       targetKey: 'id',
       constraints: false
     })

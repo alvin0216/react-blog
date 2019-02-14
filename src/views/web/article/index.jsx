@@ -6,15 +6,16 @@ import { translateMarkdown } from '@/lib/index'
 import Navigation from './navigation'
 import Loading from '@/components/helper/Loading'
 import Tags from '../Tags'
+import Comment from '@/components/web/comment'
 
 class ArticleDetail extends Component {
   state = {
-    id: '',
     title: '',
     content: '',
     tags: ['react', 'javascript'],
     categories: [],
     postTime: '2019-01-01',
+    comments: [],
     loading: true
   }
 
@@ -35,13 +36,14 @@ class ArticleDetail extends Component {
       .get(`/article/get/${id}`)
       .then(res => {
         const content = translateMarkdown(res.data.content)
-        const { title, createdAt, tags, categories } = res.data
+        const { title, createdAt, tags, categories, comments } = res.data
         this.setState({
           tags,
           categories,
           content,
           title,
           postTime: createdAt.slice(0, 10),
+          comments,
           loading: false
         })
       })
@@ -51,8 +53,8 @@ class ArticleDetail extends Component {
   }
 
   render() {
-    const { title, tags, categories, content, postTime, loading } = this.state
-
+    const { title, tags, categories, content, postTime, comments, loading } = this.state
+    const articleId = parseInt(this.props.match.params.id)
     return (
       <div className="content-inner-wrapper article">
         {loading ? (
@@ -76,6 +78,8 @@ class ArticleDetail extends Component {
             <div className="right-navigation">
               <Navigation content={content} />
             </div>
+
+            <Comment articleId={articleId} comments={comments} />
           </React.Fragment>
         )}
       </div>
