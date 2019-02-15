@@ -3,12 +3,12 @@ import './index.less'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Button, message, Input, Icon } from 'antd'
-import { login } from '@/redux/demo/actions'
+import { login } from '@/redux/user/actions'
 import logo from '@/assets/logo.svg'
 
 @withRouter
 @connect(
-  null,
+  state => state.user,
   { login }
 )
 class Login extends Component {
@@ -17,17 +17,23 @@ class Login extends Component {
     password: ''
   }
 
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
   handleSubmit = async () => {
-    await this.props.login()
-    message.success('success login')
-    this.props.history.push('/examples')
+    await this.props.login(this.state)
+    if (this.props.auth === 1) {
+      this.props.history.push('/admin')
+      message.success('登录成功')
+    }
   }
 
   render() {
     return (
       <div className="login-container">
         <div className="login-form">
-          <img src={logo} alt="" className="App-logo"/>
+          <img src={logo} alt="" className="App-logo" />
           <Input
             size="large"
             style={{ marginBottom: 25 }}

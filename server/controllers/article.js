@@ -7,17 +7,22 @@ const {
   user: UserModel
 } = require('../models')
 
+const { checkAuth } = require('../lib/token')
+
 module.exports = {
   // 创建文章
   async create(ctx) {
-    const { title, content, categories, tags } = ctx.request.body
-    const tagList = tags.map(t => ({ name: t }))
-    const categoryList = categories.map(c => ({ name: c }))
-    await ArticleModel.create(
-      { title, content, tags: tagList, categories: categoryList },
-      { include: [TagModel, CategoryModel] }
-    )
-    ctx.body = { code: 200, message: '成功创建文章' }
+    const isAuth = checkAuth(ctx)
+    if (isAuth) {
+      const { title, content, categories, tags } = ctx.request.body
+      const tagList = tags.map(t => ({ name: t }))
+      const categoryList = categories.map(c => ({ name: c }))
+      const data = await ArticleModel.create(
+        { title, content, tags: tagList, categories: categoryList },
+        { include: [TagModel, CategoryModel] }
+      )
+      ctx.body = { code: 200, message: '成功创建文章', data }
+    }
   },
 
   // 修改文章

@@ -7,7 +7,7 @@ import './index.less'
 import { translateMarkdown } from '@/lib/index'
 import axios from '@/lib/axios'
 
-import { Button, Input } from 'antd'
+import { Button, Input, Modal } from 'antd'
 import SelectCate from './components/Cate'
 
 @connect(state => state.article)
@@ -40,7 +40,7 @@ class Edit extends Component {
   handleSubmit = () => {
     const tags = this.$tagRef.getResult()
     const categories = this.$categoryRef.getResult()
-    // console.log(categories)
+
     axios
       .post('/article/create', {
         title: this.state.title,
@@ -49,7 +49,7 @@ class Edit extends Component {
         tags
       })
       .then(res => {
-        this.setState({ content: '', title: '' })
+        Modal.confirm({ title: '文章创建成功！是否立即查看？', onOk: () => this.props.history.push(`/article/${res.data.id}`) })
       })
   }
 
@@ -74,7 +74,7 @@ class Edit extends Component {
           />
         </div>
         <SelectCate type="category" showNum={10} onRef={el => (this.$categoryRef = el)} />
-        <SelectCate type="tag"  showNum={12} onRef={el => (this.$tagRef = el)} />
+        <SelectCate type="tag" showNum={12} onRef={el => (this.$tagRef = el)} />
         <br />
         <textarea id="editor" />
         <Button onClick={this.handleSubmit} type="primary">

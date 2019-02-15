@@ -37,7 +37,10 @@ class UserInfo extends Component {
     return (
       <div id="header-userInfo">
         {username ? (
-          <Dropdown placement="bottomCenter" overlay={this.renderAvatarDropdownMenu()}>
+          <Dropdown
+            placement="bottomCenter"
+            overlay={this.renderAvatarDropdownMenu()}
+            trigger={['click', 'hover']}>
             <Avatar className="user-avatar" size="large" style={{ backgroundColor: avatarColor }}>
               {username}
             </Avatar>
@@ -58,7 +61,13 @@ class UserInfo extends Component {
           </Fragment>
         )}
 
-        {<AuthModal visible={loginModalVisible} type="login" handleClose={() => this.props.closeAuthModal('login')} />}
+        {
+          <AuthModal
+            visible={loginModalVisible}
+            type="login"
+            handleClose={() => this.props.closeAuthModal('login')}
+          />
+        }
         {
           <AuthModal
             visible={registerModalVisible}

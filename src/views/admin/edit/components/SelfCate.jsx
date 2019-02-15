@@ -16,7 +16,6 @@ class SeleCate extends Component {
 
   handleClose = removedTag => {
     const list = this.state.list.filter(t => t !== removedTag)
-    console.log(list)
     this.setState({ list })
   }
 
@@ -51,7 +50,7 @@ class SeleCate extends Component {
         {list.map((item, index) => {
           const isLongTag = item.length > 20
           const tagElem = (
-            <Tag key={item} closable afterClose={this.handleClose} color='#1890ff'>
+            <Tag key={item} closable afterClose={() => this.handleClose(item)} color="#1890ff">
               {isLongTag ? `${item.slice(0, 20)}...` : item}
             </Tag>
           )

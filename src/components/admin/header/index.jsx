@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './index.less'
-import avatar from '@/assets/admin_avatar.png'
+import { connect } from 'react-redux'
+
+import { withRouter } from 'react-router-dom'
+
+import AuthorAvatar from '@/components/web/AuthorAvatar'
+import { logout } from '@/redux/user/actions'
 import { Button, Icon, Dropdown, Menu } from 'antd'
 
 const DropdownMenu = () => (
@@ -20,25 +25,47 @@ const DropdownMenu = () => (
   </Menu>
 )
 
+@connect(
+  null,
+  { logout }
+)
+@withRouter
 class AdminHeader extends Component {
   static propTypes = {
     collapsed: PropTypes.bool.isRequired,
     onToggle: PropTypes.func
   }
 
+  handleLogout = () => {
+    console.log(this.props)
+    this.props.history.push('/login')
+  }
+
+  renderDropDownMenu = () => {
+    return (
+      <Menu className="menu">
+        <Menu.Item>
+          <span onClick={this.handleLogout}>退出登录</span>
+        </Menu.Item>
+      </Menu>
+    )
+  }
+
   render() {
     const { collapsed } = this.props
     return (
       <div className="admin-header-container">
-        <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} className="trigger" onClick={this.props.onToggle} />
+        <Icon
+          type={collapsed ? 'menu-unfold' : 'menu-fold'}
+          className="trigger"
+          onClick={this.props.onToggle}
+        />
         <div className="header-right">
-          <ul className="header-right-ul">
-            <li>
-              <Dropdown overlay={DropdownMenu}>
-                <img src={avatar} alt="" />
-              </Dropdown>
-            </li>
-          </ul>
+          <Dropdown overlay={this.renderDropDownMenu()}>
+            <span>
+              <AuthorAvatar size="large" />
+            </span>
+          </Dropdown>
         </div>
       </div>
     )

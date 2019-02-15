@@ -24,6 +24,7 @@ instance.interceptors.request.use(
 //拦截响应
 instance.interceptors.response.use(
   response => {
+    if (response.data.code === 401) message.warning(response.data.message) 
     return response.data
   },
   err => {

@@ -118,7 +118,7 @@ class ArticleComment extends Component {
         <div className="comment-header">
           <span className="count">{getCommentsCount(commentList)}</span> 条评论
           <span className="menu-wrap">
-            <Dropdown overlay={this.renderDropdownMenu()}>
+            <Dropdown overlay={this.renderDropdownMenu()} trigger={['click', 'hover']}>
               <span>
                 {username ? username : '未登录用户'} <Icon type="down" />
               </span>
@@ -142,7 +142,12 @@ class ArticleComment extends Component {
             )
           }
           content={
-            <Editor onChange={this.handleChange} onSubmit={this.handleSubmit} submitting={submitting} value={value} />
+            <Editor
+              onChange={this.handleChange}
+              onSubmit={this.handleSubmit}
+              submitting={submitting}
+              value={value}
+            />
           }
         />
         <CommentList commentList={commentList} articleId={articleId} setCommentList={this.setCommentList} />
