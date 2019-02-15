@@ -33,7 +33,7 @@ class Home extends Component {
   fetchList({ page, keyword }) {
     this.setState({ loading: true })
     axios
-      .get('/article/getList', { params: { page, pageSize: 10, keyword } })
+      .get('/article/getList', { params: { page, pageSize: 10, title: keyword } })
       .then(res => {
         const list = res.rows
         // 处理 read more 的内容
@@ -99,7 +99,11 @@ class Home extends Component {
               <Fragment>
                 {list.length < total && (
                   <div style={{ textAlign: 'right' }}>
-                    <Pagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} />
+                    <Pagination
+                      current={parseInt(page) || 1}
+                      onChange={this.handlePageChange}
+                      total={total}
+                    />
                   </div>
                 )}
                 <Preview list={list} />

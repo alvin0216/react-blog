@@ -45,6 +45,9 @@ class AdminHeader extends Component {
     return (
       <Menu className="menu">
         <Menu.Item>
+          <span onClick={() => this.props.history.push('/')}>返回主页</span>
+        </Menu.Item>
+        <Menu.Item>
           <span onClick={this.handleLogout}>退出登录</span>
         </Menu.Item>
       </Menu>

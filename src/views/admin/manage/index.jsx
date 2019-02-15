@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom'
 
 import { random } from '@/lib'
 import { Table, Divider, Tag, Modal, message } from 'antd'
+import QueryForm from './queryForm'
+import moment from 'moment'
 
 @connect(state => ({
   colorList: state.common.colorList,
@@ -21,7 +23,6 @@ class Manager extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
     const { colorList, tagList } = this.props
     let colorMap = {}
     tagList.forEach(item => {
@@ -61,7 +62,8 @@ class Manager extends Component {
       },
       {
         title: '发布时间',
-        dataIndex: 'createdAt'
+        dataIndex: 'createdAt',
+        // sorter: (a, b) => moment(a).isAfter(b)
       },
       {
         title: '修改时间',
@@ -87,8 +89,8 @@ class Manager extends Component {
     ]
   }
 
-  fetchList = ({ current = 1, pageSize = 10 }) => {
-    axios.get('/article/getList', { params: { page: current, pageSize } }).then(res => {
+  fetchList = ({ current = 1, pageSize = 10, ...query }) => {
+    axios.get('/article/getList', { params: { page: current, pageSize, ...query } }).then(res => {
       const pagination = {
         current,
         pageSize,
@@ -99,7 +101,7 @@ class Manager extends Component {
   }
 
   handleChange = pagination => {
-    this.fetchList(pagination)
+    this.fetchList({ ...pagination, ...this.state.query })
   }
 
   /**
@@ -112,6 +114,7 @@ class Manager extends Component {
       onOk: () => {
         axios.delete('/article/delete', { params: { articleId } }).then(res => {
           if (res.code === 200) {
+            this.fetchList(this.state.pagination)
             message.success(res.message)
           }
         })
@@ -119,10 +122,17 @@ class Manager extends Component {
     })
   }
 
+  getQuery = query => {
+    this.setState({ query })
+
+    this.fetchList({ ...query, current: 1 })
+  }
+
   render() {
     const { list, pagination } = this.state
     return (
       <div className="manager">
+        <QueryForm getQuery={this.getQuery} />
         <Table
           rowKey="id"
           bordered

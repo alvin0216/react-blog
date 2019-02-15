@@ -83,17 +83,20 @@ module.exports = {
    * ...
    */
   async getArticleList(ctx) {
-    let { page = 1, pageSize = 10, keyword } = ctx.query,
+    let { page = 1, pageSize = 10, title, tag, category, rangTime } = ctx.query,
       offset = (page - 1) * pageSize,
-      where = keyword ? { title: { $like: `%${keyword}%` } } : {}
+      where = title ? { title: { $like: `%${title}%` } } : {}
+
+    const tagFilter = tag ? { name: { $like: `%${tag}%` } } : {}
+    const categoryFilter = category ? { name: { $like: category } } : {}
 
     pageSize = parseInt(pageSize) // 处理 pageSize
 
     const data = await ArticleModel.findAndCountAll({
       where,
       include: [
-        { model: TagModel, attributes: ['name'] },
-        { model: CategoryModel, attributes: ['name'] },
+        { model: TagModel, attributes: ['name'], where: tagFilter },
+        { model: CategoryModel, attributes: ['name'], where: categoryFilter },
         {
           model: CommentModel,
           attributes: ['id'],

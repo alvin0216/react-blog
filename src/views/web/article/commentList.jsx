@@ -5,7 +5,8 @@ import AuthorAvatar from '@/components/web/AuthorAvatar'
 
 import axios from '@/lib/axios'
 import { random, groupBy, translateMarkdown } from '@/lib'
-import { Comment, Avatar, Form, Button, List, Input, Icon } from 'antd'
+import { Comment, Avatar, Form, Button, List, Input, Tooltip } from 'antd'
+import moment from 'moment'
 
 const { TextArea } = Input
 
@@ -33,7 +34,15 @@ const CommentItem = ({
       author={<span>{item.user && item.user.username}</span>}
       avatar={renderAvatar(item)}
       content={
-        <div className="article-detail" dangerouslySetInnerHTML={{ __html: translateMarkdown(item.content) }} />
+        <div
+          className="article-detail"
+          dangerouslySetInnerHTML={{ __html: translateMarkdown(item.content) }}
+        />
+      }
+      datetime={
+        <Tooltip title={item.createdAt}>
+          <span>{moment(item.createdAt).fromNow()}</span>
+        </Tooltip>
       }>
       {((level === 1 && levelOneId === item.id) || (level === 2 && levelTwoId === item.id)) && (
         <div className="reply-form">
@@ -96,7 +105,10 @@ class CommentList extends Component {
       return <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
     } else {
       return (
-        <Avatar className="user-avatar" size="default" style={{ backgroundColor: colorMap[item.userId] || '#ccc' }}>
+        <Avatar
+          className="user-avatar"
+          size="default"
+          style={{ backgroundColor: colorMap[item.userId] || '#ccc' }}>
           {item.user.username}
         </Avatar>
       )

@@ -38,6 +38,7 @@
     "jwt-decode": "^2.2.0",
     "marked": "^0.6.0",
     "mini-css-extract-plugin": "0.4.3",
+    "moment": "^2.24.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",

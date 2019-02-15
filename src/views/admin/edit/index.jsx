@@ -61,7 +61,12 @@ class Edit extends Component {
       tags
     }
     if (this.state.isEdit) {
-      axios.put('/article/update', { ...params, articleId: this.state.articleId })
+      axios.put('/article/update', { ...params, articleId: this.state.articleId }).then(res => {
+        Modal.confirm({
+          title: '文章修改成功！是否查看详情？',
+          onOk: () => this.props.history.push(`/article/${this.state.articleId}`)
+        })
+      })
     } else {
       axios.post('/article/create', params).then(res => {
         Modal.confirm({
