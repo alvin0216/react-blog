@@ -28,16 +28,22 @@ module.exports = {
 
   // 修改文章
   async update(ctx) {
-    const { articleId, title, content, category, tags } = ctx.request.body
-    if (articleId) {
-      const tagList = tags.map(tag => ({ name: tag, articleId }))
-      await ArticleModel.update({ title, content, category }, { where: { id: articleId } })
-      await TagModel.destroy({ where: { articleId } })
-      await TagModel.bulkCreate(tagList)
+    const isAuth = checkAuth(ctx)
+    if (isAuth) {
+      const { articleId, title, content, categories, tags } = ctx.request.body
+      if (articleId) {
+        const tagList = tags.map(tag => ({ name: tag, articleId }))
+        const categoryList = categories.map(cate => ({ name: cate, articleId }))
+        await ArticleModel.update({ title, content }, { where: { id: articleId } })
+        await TagModel.destroy({ where: { articleId } })
+        await TagModel.bulkCreate(tagList)
+        await CategoryModel.destroy({ where: { articleId } })
+        await CategoryModel.bulkCreate(categoryList)
 
-      ctx.body = { code: 200, message: '成功修改文章' }
-    } else {
-      ctx.body = { code: 403, message: '文章 id 不能为空' }
+        ctx.body = { code: 200, message: '文章修改成功' }
+      } else {
+        ctx.body = { code: 403, message: '文章 id 不能为空' }
+      }
     }
   },
 

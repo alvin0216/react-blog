@@ -52,8 +52,7 @@ instance.interceptors.response.use(
       }
       localStorage.clear()
     } else {
-      console.log(JSON.stringify(err))
-      message.error('连接到服务器异常！')
+      message.error('服务器出了点小问题，请稍后再试！')
     }
     return Promise.reject(err)
   }

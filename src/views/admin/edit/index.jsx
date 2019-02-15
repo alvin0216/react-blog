@@ -7,14 +7,17 @@ import './index.less'
 import { translateMarkdown } from '@/lib/index'
 import axios from '@/lib/axios'
 
-import { Button, Input, Modal } from 'antd'
+import { Button, Input, Modal, BackTop } from 'antd'
 import SelectCate from './components/Cate'
 
 @connect(state => state.article)
 class Edit extends Component {
   state = {
     value: '',
-    title: ''
+    title: '',
+    tagList: [],
+    categoryList: [],
+    isEdit: false // 组件状态 更新或创建
   }
 
   componentDidMount() {
@@ -30,7 +33,9 @@ class Edit extends Component {
       axios.get(`/article/get/${articleId}`).then(res => {
         const { title, tags, categories, content } = res.data
         this.smde.value(content)
-        this.setState({ title, tags, categories })
+        const tagList = tags.map(d => d.name)
+        const categoryList = categories.map(d => d.name)
+        this.setState({ title, tagList, categoryList, isEdit: true, articleId })
       })
     }
   }
@@ -49,50 +54,64 @@ class Edit extends Component {
   handleSubmit = () => {
     const tags = this.$tagRef.getResult()
     const categories = this.$categoryRef.getResult()
-
-    axios
-      .post('/article/create', {
-        title: this.state.title,
-        content: this.smde.value(),
-        categories,
-        tags
-      })
-      .then(res => {
+    let params = {
+      title: this.state.title,
+      content: this.smde.value(),
+      categories,
+      tags
+    }
+    if (this.state.isEdit) {
+      axios.put('/article/update', { ...params, articleId: this.state.articleId })
+    } else {
+      axios.post('/article/create', params).then(res => {
         Modal.confirm({
           title: '文章创建成功！是否立即查看？',
           onOk: () => this.props.history.push(`/article/${res.data.id}`)
         })
       })
+    }
   }
+
+  handleUpdate = () => {}
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
   render() {
-    const { title, value } = this.state
+    const { title, value, categoryList, tagList, isEdit } = this.state
     return (
-      <div>
+      <div className="edit">
         <div className="blog-formItem">
-          <Button onClick={this.handleSubmit} type="primary">
-            create
-          </Button>
           <span className="label">标题：</span>
           <Input
             placeholder="请输入文章标题"
             className="title-input"
             name="title"
-            value={this.state.title}
+            value={title}
             onChange={this.handleChange}
           />
         </div>
-        <SelectCate type="category" showNum={10} onRef={el => (this.$categoryRef = el)} />
-        <SelectCate type="tag" showNum={12} onRef={el => (this.$tagRef = el)} />
+        <SelectCate
+          type="category"
+          showNum={10}
+          onRef={el => (this.$categoryRef = el)}
+          list={categoryList}
+          isEdit={isEdit}
+        />
+        <SelectCate
+          type="tag"
+          showNum={12}
+          onRef={el => (this.$tagRef = el)}
+          list={tagList}
+          isEdit={isEdit}
+        />
         <br />
         <textarea id="editor" defaultValue={value} />
         <Button onClick={this.handleSubmit} type="primary">
-          create
+          {isEdit ? '更新' : '创建'}
         </Button>
+        <BackTop />
       </div>
     )
   }

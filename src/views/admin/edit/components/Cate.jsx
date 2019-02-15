@@ -18,16 +18,22 @@ class SelectCates extends Component {
   constructor(props) {
     super(props)
     const { type, showNum } = this.props
-    this.CommonlyList = this.getCommonlyList(this.props[`${type}List`], showNum)
-    const selectList = this.CommonlyList[0] ? [this.CommonlyList[0]] : [] // 默认选中第一个
-    this.state = {
-      selectList
+
+    let selectList
+
+    if (!this.props.isEdit) {
+      this.CommonlyList = this.getCommonlyList(this.props[`${type}List`], showNum)
+      selectList = this.CommonlyList[0] ? [this.CommonlyList[0]] : [] // 默认选中第一个  selectList = this.props.list
     }
+
+    this.state = { selectList }
   }
 
   static propTypes = {
     type: PropTypes.string.isRequired,
-    showNum: PropTypes.number
+    showNum: PropTypes.number,
+    list: PropTypes.array,
+    isEdit: PropTypes.bool
   }
 
   static defaultProps = {
@@ -50,7 +56,6 @@ class SelectCates extends Component {
   handleSelect = (value, checked) => {
     const { selectList } = this.state
     const nextSelectList = checked ? [...selectList, value] : selectList.filter(t => t !== value)
-    console.log(nextSelectList)
     this.setState({ selectList: nextSelectList })
   }
 
@@ -65,21 +70,37 @@ class SelectCates extends Component {
     this.props.onRef && this.props.onRef(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.list !== nextProps.list && nextProps.isEdit) {
+      this.setState({ selectList: nextProps.list })
+    }
+  }
+
   render() {
     const { selectList } = this.state
-    const { type } = this.props
+    const { type, isEdit } = this.props
     return (
       <div className="blog-formItem">
         <span className="label">{type}: </span>
-        {this.CommonlyList.map((item, i) => (
-          <CheckableTag
-            key={item}
-            checked={selectList.includes(item)}
-            onChange={checked => this.handleSelect(item, checked)}>
-            {item}
-          </CheckableTag>
-        ))}
-        <SelfCate CommonlyList={this.CommonlyList} ref={el => (this.$selfCateRef = el)} />
+
+        {isEdit
+          ? this.props.list.map((item, i) => (
+              <CheckableTag
+                key={item}
+                checked={selectList.includes(item)}
+                onChange={checked => this.handleSelect(item, checked)}>
+                {item}
+              </CheckableTag>
+            ))
+          : this.CommonlyList.map((item, i) => (
+              <CheckableTag
+                key={item}
+                checked={selectList.includes(item)}
+                onChange={checked => this.handleSelect(item, checked)}>
+                {item}
+              </CheckableTag>
+            ))}
+        <SelfCate CommonlyList={this.props.list} ref={el => (this.$selfCateRef = el)} />
       </div>
     )
   }
