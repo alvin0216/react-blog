@@ -1,7 +1,7 @@
 import React, { Component, memo } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import blogAuthor from '@/assets/sider_avatar.png'
+import AuthorAvatar from '@/components/web/AuthorAvatar'
 
 import axios from '@/lib/axios'
 import { random, groupBy, translateMarkdown } from '@/lib'
@@ -33,10 +33,7 @@ const CommentItem = ({
       author={<span>{item.user && item.user.username}</span>}
       avatar={renderAvatar(item)}
       content={
-        <div
-          className="article-detail"
-          dangerouslySetInnerHTML={{ __html: translateMarkdown(item.content) }}
-        />
+        <div className="article-detail" dangerouslySetInnerHTML={{ __html: translateMarkdown(item.content) }} />
       }>
       {((level === 1 && levelOneId === item.id) || (level === 2 && levelTwoId === item.id)) && (
         <div className="reply-form">
@@ -61,7 +58,7 @@ const CommentItem = ({
 
 @connect(state => ({
   userId: state.user.userId,
-  colorList: state.article.colorList
+  colorList: state.common.colorList
 }))
 class CommentList extends Component {
   static propTypes = {
@@ -94,15 +91,12 @@ class CommentList extends Component {
   renderAvatar = item => {
     const { userId } = this.props
     const { colorMap } = this.state
-    if (item.userId === 1) return <Avatar src={blogAuthor} /> // userId = 1 博主~~~
+    if (item.userId === 1) return <AuthorAvatar /> // userId = 1 博主~~~
     if (item.userId === userId) {
       return <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
     } else {
       return (
-        <Avatar
-          className="user-avatar"
-          size="default"
-          style={{ backgroundColor: colorMap[item.userId] || '#ccc' }}>
+        <Avatar className="user-avatar" size="default" style={{ backgroundColor: colorMap[item.userId] || '#ccc' }}>
           {item.user.username}
         </Avatar>
       )

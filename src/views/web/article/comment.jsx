@@ -1,9 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import axios from '@/lib/axios'
-import { getCommentsCount } from '@/lib'
 import { connect } from 'react-redux'
+
+import AuthorAvatar from '@/components/web/AuthorAvatar'
+import { getCommentsCount } from '@/lib'
+import { openAuthModal } from '@/redux/common/actions'
+import { logout } from '@/redux/user/actions'
+
 import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown } from 'antd'
 import CommentList from './commentList'
 
@@ -25,28 +30,10 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </Form.Item>
   </div>
 )
-
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-        1st menu item
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-        2nd menu item
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-        3rd menu item
-      </a>
-    </Menu.Item>
-  </Menu>
+@connect(
+  state => state.user,
+  { openAuthModal, logout }
 )
-
-@connect(state => state.user)
 class ArticleComment extends Component {
   static propTypes = {
     articleId: PropTypes.number.isRequired,
@@ -67,6 +54,9 @@ class ArticleComment extends Component {
     }
   }
 
+  /**
+   * 提交评论
+   */
   handleSubmit = () => {
     if (!this.state.value) return
     this.setState({ submitting: true })
@@ -82,20 +72,54 @@ class ArticleComment extends Component {
     this.setState({ value: e.target.value })
   }
 
+  /**
+   *  子组件 添加 reply 时需要重新设置 list
+   */
   setCommentList = commentList => {
     this.setState({ commentList })
   }
 
+  handleMenuClick = e => {
+    switch (e.key) {
+      case 'login':
+        this.props.openAuthModal('login')
+        break
+      case 'register':
+        this.props.openAuthModal('register')
+        break
+      case 'logout':
+        this.props.logout()
+        break
+      default:
+        break
+    }
+  }
+
+  renderDropdownMenu = () => {
+    const { username } = this.props
+    return username ? (
+      <Menu onClick={this.handleMenuClick}>
+        <Menu.Item key="logout">注销</Menu.Item>
+      </Menu>
+    ) : (
+      <Menu onClick={this.handleMenuClick}>
+        <Menu.Item key="login">登录</Menu.Item>
+        <Menu.Item key="register">注册</Menu.Item>
+      </Menu>
+    )
+  }
+
   render() {
     const { submitting, value, commentList } = this.state
-    const { username, articleId } = this.props
+    const { username, articleId, userId } = this.props
+
     return (
       <div className="comment-wrapper">
         <div className="comment-header">
           <span className="count">{getCommentsCount(commentList)}</span> 条评论
           <span className="menu-wrap">
-            <Dropdown overlay={menu}>
-              <span className="ant-dropdown-link" href="#">
+            <Dropdown overlay={this.renderDropdownMenu()}>
+              <span>
                 {username ? username : '未登录用户'} <Icon type="down" />
               </span>
             </Dropdown>
@@ -106,7 +130,13 @@ class ArticleComment extends Component {
         <Comment
           avatar={
             username ? (
-              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+              <Fragment>
+                {userId !== 1 ? (
+                  <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                ) : (
+                  <AuthorAvatar />
+                )}
+              </Fragment>
             ) : (
               <Icon type="github" theme="filled" style={{ fontSize: 40, margin: '5px 5px 0 0' }} />
             )

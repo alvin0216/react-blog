@@ -2,6 +2,7 @@ import * as constants from '@/redux/constants'
 
 // state
 const defaultState = {
+  colorList: ['magenta', 'blue', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'geekblue', 'purple'], // 标签颜色
   loginModalVisible: false,
   registerModalVisible: false
 }

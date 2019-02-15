@@ -4,7 +4,11 @@ import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Icon, Tag, Divider } from 'antd'
 
-@connect(state => state.article)
+const mapStateToProps = state => ({})
+
+@connect(state => ({
+  colorList: state.common.colorList
+}))
 @withRouter
 class Tags extends Component {
   static propTypes = {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './index.less'
 import { connect } from 'react-redux'
-import avatar from '@/assets/sider_avatar.png'
+import avatar from '@/assets/author_avatar.png'
 import { Link } from 'react-router-dom'
 import axios from '@/lib/axios'
 import { Divider, Tag, Icon } from 'antd'
@@ -11,7 +11,12 @@ function random(colorList) {
   return Math.floor(Math.random() * len)
 }
 
-@connect(state => state.article)
+const mapStateToProps = state => ({
+  tagList: state.article.tagList,
+  colorList: state.common.colorList
+})
+
+@connect(mapStateToProps)
 class BolgSider extends Component {
   state = { recentList: [] }
 
@@ -38,10 +43,7 @@ class BolgSider extends Component {
           </li>
           <li>
             <i className="iconfont icon-juejin" />
-            <a
-              target="_blank"
-              rel="noreferrer noopener"
-              href="https://juejin.im/user/5acac6c4f265da2378408f92">
+            <a target="_blank" rel="noreferrer noopener" href="https://juejin.im/user/5acac6c4f265da2378408f92">
               juejin
             </a>
           </li>
