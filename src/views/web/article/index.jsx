@@ -20,17 +20,18 @@ class ArticleDetail extends Component {
   }
 
   componentDidMount() {
-    this.fetchData()
+    const id = this.props.match.params.id
+    this.fetchData(id)
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params.id !== this.props.match.params.id) {
-      this.fetchData()
+      const id = nextProps.match.params.id
+      this.fetchData(id)
     }
   }
 
-  fetchData = () => {
-    const id = this.props.match.params.id
+  fetchData = id => {
     this.setState({ loading: true })
     axios
       .get(`/article/get/${id}`)
