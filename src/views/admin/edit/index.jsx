@@ -13,7 +13,7 @@ import SelectCate from './components/Cate'
 @connect(state => state.article)
 class Edit extends Component {
   state = {
-    markdownText: '',
+    value: '',
     title: ''
   }
 
@@ -24,6 +24,15 @@ class Edit extends Component {
       autosave: true,
       previewRender: translateMarkdown
     })
+
+    if (this.props.history.location.state) {
+      const { articleId } = this.props.history.location.state
+      axios.get(`/article/get/${articleId}`).then(res => {
+        const { title, tags, categories, content } = res.data
+        this.smde.value(content)
+        this.setState({ title, tags, categories })
+      })
+    }
   }
 
   /**
@@ -49,7 +58,10 @@ class Edit extends Component {
         tags
       })
       .then(res => {
-        Modal.confirm({ title: '文章创建成功！是否立即查看？', onOk: () => this.props.history.push(`/article/${res.data.id}`) })
+        Modal.confirm({
+          title: '文章创建成功！是否立即查看？',
+          onOk: () => this.props.history.push(`/article/${res.data.id}`)
+        })
       })
   }
 
@@ -58,6 +70,7 @@ class Edit extends Component {
   }
 
   render() {
+    const { title, value } = this.state
     return (
       <div>
         <div className="blog-formItem">
@@ -76,7 +89,7 @@ class Edit extends Component {
         <SelectCate type="category" showNum={10} onRef={el => (this.$categoryRef = el)} />
         <SelectCate type="tag" showNum={12} onRef={el => (this.$tagRef = el)} />
         <br />
-        <textarea id="editor" />
+        <textarea id="editor" defaultValue={value} />
         <Button onClick={this.handleSubmit} type="primary">
           create
         </Button>

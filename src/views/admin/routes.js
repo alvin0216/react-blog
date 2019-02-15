@@ -5,6 +5,7 @@ import PageNotFound from '@/components/404'
 import Home from './home'
 const Edit = lazy(() => import('./edit'))
 const Login = lazy(() => import('./login'))
+const Manage = lazy(() => import('./manage'))
 
 export default {
   path: 'admin',
@@ -22,7 +23,7 @@ export default {
       name: '文章管理',
       childRoutes: [
         { path: 'edit', icon: 'edit', name: '新增文章', component: Edit },
-        { path: 'manager', icon: 'folder', name: '管理文章', component: Home }
+        { path: 'manage', icon: 'folder', name: '管理文章', component: Manage }
       ]
     },
     { path: 'login', component: Login },
