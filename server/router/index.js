@@ -4,11 +4,15 @@ const ArticleRouter = require('./article')
 const UserRouter = require('./user')
 const TagController = require('../controllers/tag')
 const CategoryController = require('../controllers/category')
-
+const UserController = require('../controllers/user')
 
 router.use('/examples', examplesRouter.routes())
 router.use('/article', ArticleRouter.routes())
 router.use('/user', UserRouter.routes())
+
+// 登录注册
+router.post('/login', UserController.login)
+router.post('/register', UserController.register)
 
 // 获取所有标签以及每个标签的总数
 router.get('/tags/getList', TagController.getTags)

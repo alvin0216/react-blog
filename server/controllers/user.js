@@ -1,7 +1,6 @@
 const { user: UserModel } = require('../models')
 const { encrypt, comparePassword } = require('../lib/bcrypt')
-const { TOKEN_SECRET, TOKEN_EXPIRESIN } = require('../config')
-const jwt = require('jsonwebtoken')
+const { createToken } = require('../lib/token')
 
 module.exports = {
   async register(ctx) {
@@ -34,7 +33,7 @@ module.exports = {
         response = { code: 400, message: '密码不正确' }
       } else {
         const { id, auth } = user
-        const token = jwt.sign({ username, userId: id, auth }, TOKEN_SECRET, { expiresIn: TOKEN_EXPIRESIN }) // 生成 token
+        const token = createToken({ username, userId: id, auth }) // 生成 token
         response = { code: 200, message: '登录成功', username, auth: user.auth, token }
       }
     }

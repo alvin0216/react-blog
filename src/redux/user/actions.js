@@ -4,7 +4,7 @@ import { message } from 'antd'
 
 export const login = ({ username, password }) => {
   return dispatch =>
-    axios.post('/user/login', { username, password }).then(res => {
+    axios.post('/login', { username, password }).then(res => {
       if (res.code === 200) {
         localStorage.setItem('token', res.token)
         dispatch({ type: constants.USER_LOGIN, payload: { token: res.token } })
@@ -16,7 +16,7 @@ export const login = ({ username, password }) => {
 
 export const register = ({ username, password }) => {
   return dispatch =>
-    axios.post('/user/register', { username, password }).then(res => {
+    axios.post('/register', { username, password }).then(res => {
       if (res.code === 200) message.success(res.message)
       else message.error(res.message)
     })

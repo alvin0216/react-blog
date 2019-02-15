@@ -56,7 +56,8 @@ module.exports = {
           ]
         }
       ],
-      order: [[CommentModel, 'createdAt', 'DESC']]
+      order: [[CommentModel, 'createdAt', 'DESC']],
+      row: true
     })
 
     ctx.body = { code: 200, data }
@@ -90,6 +91,7 @@ module.exports = {
       offset,
       limit: pageSize,
       order: [['createdAt', 'DESC']],
+      row: true,
       distinct: true
     })
 

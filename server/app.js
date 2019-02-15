@@ -12,8 +12,8 @@ const app = new Koa()
 
 app
   .use(cors())
-  // .use(errorHandle)
-  // .use(checkToken)
+  .use(errorHandle)
+  .use(checkToken)
   .use(logger())
   .use(bodyParser())
 

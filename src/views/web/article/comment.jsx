@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import axios from '@/lib/axios'
 import { getCommentsCount } from '@/lib'
 import { connect } from 'react-redux'
-import { Comment, Avatar, Form, Button, Divider, Input, Icon } from 'antd'
+import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown } from 'antd'
 import CommentList from './commentList'
 
 const { TextArea } = Input
@@ -24,6 +24,26 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
       </div>
     </Form.Item>
   </div>
+)
+
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+        1st menu item
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+        2nd menu item
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+        3rd menu item
+      </a>
+    </Menu.Item>
+  </Menu>
 )
 
 @connect(state => state.user)
@@ -73,6 +93,13 @@ class ArticleComment extends Component {
       <div className="comment-wrapper">
         <div className="comment-header">
           <span className="count">{getCommentsCount(commentList)}</span> 条评论
+          <span className="menu-wrap">
+            <Dropdown overlay={menu}>
+              <span className="ant-dropdown-link" href="#">
+                {username ? username : '未登录用户'} <Icon type="down" />
+              </span>
+            </Dropdown>
+          </span>
           <Divider className="hr" />
         </div>
 
@@ -85,12 +112,7 @@ class ArticleComment extends Component {
             )
           }
           content={
-            <Editor
-              onChange={this.handleChange}
-              onSubmit={this.handleSubmit}
-              submitting={submitting}
-              value={value}
-            />
+            <Editor onChange={this.handleChange} onSubmit={this.handleSubmit} submitting={submitting} value={value} />
           }
         />
         <CommentList commentList={commentList} articleId={articleId} setCommentList={this.setCommentList} />
