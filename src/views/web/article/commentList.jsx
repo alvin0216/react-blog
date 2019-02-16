@@ -81,6 +81,7 @@ const CommentItem = ({
 }
 
 @connect(state => ({
+  username: state.user.username,
   userId: state.user.userId,
   auth: state.user.auth,
   colorList: state.common.colorList
@@ -151,6 +152,7 @@ class CommentList extends Component {
 
   onSubmit = () => {
     const content = this.state.value.trim()
+    if (!this.props.username) return message.warn('您未登陆，请登录后再试。')
     const { articleId } = this.props
     axios
       .post('/user/reply', {

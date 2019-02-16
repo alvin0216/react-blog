@@ -9,7 +9,7 @@ import { getCommentsCount } from '@/lib'
 import { openAuthModal } from '@/redux/common/actions'
 import { logout } from '@/redux/user/actions'
 
-import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown } from 'antd'
+import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown, message } from 'antd'
 import CommentList from './commentList'
 
 const { TextArea } = Input
@@ -59,6 +59,8 @@ class ArticleComment extends Component {
    */
   handleSubmit = () => {
     if (!this.state.value) return
+    if (!this.props.username) return message.warn('您未登陆，请登录后再试。')
+
     this.setState({ submitting: true })
     axios
       .post('/user/comment', { articleId: this.props.articleId, content: this.state.value })
