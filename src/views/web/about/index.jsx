@@ -25,6 +25,16 @@ const About = () => {
         <li>学历专业：本科 软件工程</li>
         <li>联系方式：wechat guo6059</li>
         <li>
+          其他博客地址：
+          <a target="_blank" rel="noreferrer noopener" href="https://gershonv.github.io/">
+            hexo 博客
+          </a>
+          <Divider type="vertical" />
+          <a target="_blank" rel="noreferrer noopener" href="https://juejin.im/user/5acac6c4f265da2378408f92">
+            掘金主页
+          </a>
+        </li>
+        <li>
           技能
           <ul>
             <li>
