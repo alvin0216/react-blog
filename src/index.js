@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import store from '@/redux'
 
 import '@/style/reset.less'
+import '@/assets/iconfont/iconfont.css'
 
 import hljs from 'highlight.js'
 import javascript from 'highlight.js/lib/languages/javascript'
