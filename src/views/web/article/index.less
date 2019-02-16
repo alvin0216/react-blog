@@ -78,10 +78,33 @@
       }
     }
 
+    .icon-delete {
+      color: #f00;
+      vertical-align: middle;
+      cursor: pointer;
+      display: none;
+    }
+
+    .ant-comment-content:hover {
+      .icon-delete {
+        display: inline-block;
+      }
+    }
+
+    .ant-popover-open {
+      .icon-delete {
+        display: inline-block;
+      }
+    }
+
+    .icon-delete.active {
+      display: inline-block;
+    }
+
     .ant-comment-inner {
       padding: 6px 0;
     }
-    
+
     .ant-comment-actions {
       margin-top: 0;
     }

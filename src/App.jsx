@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { getTags, getCategories } from '@/redux/article/actions'
 
 @connect(
-  null,
+  state => state.user,
   { getTags, getCategories }
 )
 class Root extends Component {
@@ -19,17 +19,6 @@ class Root extends Component {
     this.props.getCategories()
   }
 
-  // 如果路由为 protected 且未登录时, 则定向到登录页
-  // admin 且未登录时 定向到登录页
-  authHandler = (item, routePath) => {
-    if ((item.protected || routePath.includes('admin')) && !this.props.isLogin) {
-      item = {
-        ...item,
-        component: () => <Redirect to="/login" />,
-        children: []
-      }
-    }
-  }
 
   /**
    * 根据路由表生成路由组件
@@ -44,7 +33,13 @@ class Root extends Component {
       newContextPath = newContextPath.replace(/\/+/g, '/')
 
       // auth handler
-      this.authHandler(item, newContextPath)
+      if ((item.protected || newContextPath.includes('admin')) && this.props.auth !== 1) {
+        item = {
+          ...item,
+          component: () => <Redirect to="/login" />,
+          children: []
+        }
+      }
 
       if (item.component && item.childRoutes) {
         const childRoutes = this.renderRoutes(item.childRoutes, newContextPath)

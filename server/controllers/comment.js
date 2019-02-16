@@ -1,7 +1,7 @@
 // 评论控制器，包括回复内容
 const { sequelize } = require('../models')
 const { comment: CommentModel, reply: ReplyModel, user: UserModel } = require('../models')
-const { decodeToken } = require('../lib/token')
+const { decodeToken, checkAuth } = require('../lib/token')
 
 const fetchCommentList = async articleId =>
   CommentModel.findAndCountAll({
@@ -37,5 +37,24 @@ module.exports = {
     await ReplyModel.create({ userId, articleId, content, commentId })
     const data = await fetchCommentList(articleId)
     ctx.body = { code: 200, message: 'success', ...data }
+  },
+
+  // 删除评论
+  async del(ctx) {
+    const isAuth = checkAuth(ctx)
+    const { commentId, replyId } = ctx.query
+    if (isAuth) {
+      if (commentId) {
+        await sequelize.query(
+          `delete comment, reply from comment left join reply on comment.id=reply.commentId where comment.id=${commentId}`
+        )
+        ctx.body = { code: 200, message: '成功删除该评论！' }
+      } else if (replyId) {
+        await ReplyModel.destroy({ where: { id: replyId } })
+        ctx.body = { code: 200, message: '成功删除该回复！' }
+      } else {
+        ctx.body = { code: 400, message: 'id 不能为空！' }
+      }
+    }
   }
 }

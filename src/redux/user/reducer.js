@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode'
 let defaultState = {
   userId: 0,
   username: '',
-  auth: 2,
+  auth: 0,
   avatarColor: '#52c41a'
 }
 
@@ -23,7 +23,7 @@ export const demoReducer = (state = defaultState, action) => {
       return { ...state, userId, username, auth }
 
     case constants.USER_LOGINOUT:
-      return { id: 0, username: '', auth: 2, avatarColor: '#52c41a' }
+      return { id: 0, username: '', auth: 0, avatarColor: '#52c41a' }
 
     default:
       return state

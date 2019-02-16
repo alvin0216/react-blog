@@ -5,7 +5,7 @@ import AuthorAvatar from '@/components/web/AuthorAvatar'
 
 import axios from '@/lib/axios'
 import { random, groupBy, translateMarkdown } from '@/lib'
-import { Comment, Avatar, Form, Button, List, Input, Tooltip } from 'antd'
+import { Comment, Avatar, Button, Tooltip, Input, Icon, Popconfirm, message } from 'antd'
 import moment from 'moment'
 
 const { TextArea } = Input
@@ -21,6 +21,8 @@ const CommentItem = ({
   handleKeyUp,
   onSubmit,
   renderAvatar,
+  delComment,
+  auth,
   value
 }) => {
   const level = item.replies ? 1 : 2
@@ -30,7 +32,20 @@ const CommentItem = ({
   }
   return (
     <Comment
-      actions={[<span onClick={() => handleClick(level)}>Reply to</span>]}
+      actions={[
+        <span onClick={() => handleClick(level)}>Reply to</span>,
+        <React.Fragment>
+          {auth === 1 && (
+            <Popconfirm
+              title={'是否删除该评论？'}
+              cancelText="取消"
+              okText="确认"
+              onConfirm={() => delComment(item, fatherId)}>
+              <Icon type="delete" className="icon-delete" />
+            </Popconfirm>
+          )}
+        </React.Fragment>
+      ]}
       author={<span>{item.user && item.user.username}</span>}
       avatar={renderAvatar(item)}
       content={
@@ -67,6 +82,7 @@ const CommentItem = ({
 
 @connect(state => ({
   userId: state.user.userId,
+  auth: state.user.auth,
   colorList: state.common.colorList
 }))
 class CommentList extends Component {
@@ -148,34 +164,54 @@ class CommentList extends Component {
       })
   }
 
+  delComment = (item, commentId) => {
+    if (item.replies) {
+      axios.delete('/comment/del', { params: { commentId: item.id } }).then(res => {
+        if (res.code !== 200) return message.error(res.message)
+        const list = this.props.commentList.filter(d => d.id !== item.id)
+        this.props.setCommentList(list)
+        message.success(res.message)
+      })
+    } else {
+      axios.delete('/reply/del', { params: { replyId: item.id } }).then(res => {
+        if (res.code !== 200) return message.error(res.message)
+
+        const list = [...this.props.commentList]
+        list.forEach(d => {
+          if (d.id === commentId) d.replies = d.replies.filter(v => v.id !== item.id)
+        })
+        this.props.setCommentList(list)
+        message.success(res.message)
+      })
+    }
+  }
+
   render() {
-    const { commentList } = this.props
+    const { commentList, auth } = this.props
     const { levelOneId, value, levelTwoId } = this.state
+
+    const commonProps = {
+      value,
+      auth,
+      renderAvatar: this.renderAvatar,
+      openReply: this.openReply,
+      handleChange: this.handleChange,
+      handleKeyUp: this.handleKeyUp,
+      onSubmit: this.onSubmit,
+      delComment: this.delComment
+    }
+
     return (
       <div className="">
         {commentList.map(comment => (
-          <CommentItem
-            key={comment.id}
-            item={comment}
-            levelOneId={levelOneId}
-            value={value}
-            renderAvatar={this.renderAvatar}
-            openReply={this.openReply}
-            handleChange={this.handleChange}
-            handleKeyUp={this.handleKeyUp}
-            onSubmit={this.onSubmit}>
+          <CommentItem key={comment.id} item={comment} levelOneId={levelOneId} {...commonProps}>
             {comment.replies.map(reply => (
               <CommentItem
                 key={reply.id}
                 item={reply}
                 levelTwoId={levelTwoId}
                 fatherId={comment.id}
-                value={value}
-                renderAvatar={this.renderAvatar}
-                openReply={this.openReply}
-                handleChange={this.handleChange}
-                handleKeyUp={this.handleKeyUp}
-                onSubmit={this.onSubmit}
+                {...commonProps}
               />
             ))}
           </CommentItem>

@@ -26,6 +26,8 @@ class Login extends Component {
     if (this.props.auth === 1) {
       this.props.history.push('/admin')
       message.success('登录成功')
+    } else if (this.props.auth === 2) {
+      message.warning('您的权限不足！')
     }
   }
 
