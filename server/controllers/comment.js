@@ -56,5 +56,10 @@ module.exports = {
         ctx.body = { code: 400, message: 'id 不能为空！' }
       }
     }
+  },
+
+  async getAboutComments(ctx) {
+    const data = await fetchCommentList(-1)
+    ctx.body = { code: 200, ...data }
   }
 }

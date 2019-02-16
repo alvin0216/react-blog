@@ -89,7 +89,8 @@ const CommentItem = ({
 class CommentList extends Component {
   static propTypes = {
     commentList: PropTypes.array,
-    articleId: PropTypes.number
+    articleId: PropTypes.number,
+    setCommentList: PropTypes.func
   }
 
   state = {

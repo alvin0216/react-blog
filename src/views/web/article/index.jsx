@@ -8,7 +8,7 @@ import { openDrawer, closeDrawer } from '@/redux/common/actions'
 import Navigation from './navigation'
 import Loading from '@/components/helper/Loading'
 import Tags from '../Tags'
-import Comment from './comment'
+import Comment from '@/components/web/comment'
 import { Drawer, Icon } from 'antd'
 
 @connect(
@@ -25,7 +25,7 @@ class ArticleDetail extends Component {
     tags: ['react', 'javascript'],
     categories: [],
     postTime: '2019-01-01',
-    comments: [],
+    commentList: [],
     loading: true
   }
 
@@ -54,7 +54,7 @@ class ArticleDetail extends Component {
           content,
           title,
           postTime: createdAt.slice(0, 10),
-          comments,
+          commentList: comments,
           loading: false
         })
       })
@@ -63,8 +63,10 @@ class ArticleDetail extends Component {
       })
   }
 
+  setCommentList = commentList => this.setState({ commentList })
+
   render() {
-    const { title, tags, categories, content, postTime, comments, loading } = this.state
+    const { title, tags, categories, content, postTime, commentList, loading } = this.state
     const articleId = parseInt(this.props.match.params.id)
     return (
       <div className="content-inner-wrapper article">
@@ -111,7 +113,7 @@ class ArticleDetail extends Component {
               </Fragment>
             )}
 
-            <Comment articleId={articleId} commentList={comments} />
+            <Comment articleId={articleId} commentList={commentList} setCommentList={this.setCommentList} />
           </React.Fragment>
         )}
       </div>

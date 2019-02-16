@@ -27,6 +27,7 @@ router.get('/categories/getArticles', CategoryController.getArticlesByCate)
 // 删除评论
 router.delete('/comment/del', CommentController.del)
 router.delete('/reply/del', CommentController.del)
+router.get('/comment/getAboutComments', CommentController.getAboutComments)
 
 router.get('/', async ctx => {
   ctx.body = 'hello koa2'

@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import './index.less'
 
 import axios from '@/lib/axios'
 import { connect } from 'react-redux'
@@ -10,11 +11,11 @@ import { openAuthModal } from '@/redux/common/actions'
 import { logout } from '@/redux/user/actions'
 
 import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown, message } from 'antd'
-import CommentList from './commentList'
+import CommentList from './list'
 
 const { TextArea } = Input
 
-const Editor = ({ onChange, onSubmit, submitting, value }) => (
+const Editor = ({ onChange, onSubmit, submitting, value, articleId }) => (
   <div>
     <Form.Item>
       <TextArea rows={4} placeholder="说点什么..." onChange={onChange} value={value} />
@@ -24,7 +25,7 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
         <i className="iconfont icon-tips" />
         <span className="support-tip">支持 Markdown 语法</span>
         <Button className="" htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-          添加评论
+          {articleId !== -1 ? '添加评论' : '留言'}
         </Button>
       </div>
     </Form.Item>
@@ -36,8 +37,8 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
 )
 class ArticleComment extends Component {
   static propTypes = {
-    articleId: PropTypes.number.isRequired,
-    commentList: PropTypes.array,
+    articleId: PropTypes.number, // 文章 id，如果为 -1 则代表是自由评论区！
+    commentList: PropTypes.array, // 评论列表
     setCommentList: PropTypes.func
   }
 
@@ -45,13 +46,9 @@ class ArticleComment extends Component {
     commentList: []
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      commentList: this.props.commentList,
-      submitting: false,
-      value: ''
-    }
+  state = {
+    submitting: false,
+    value: ''
   }
 
   /**
@@ -65,20 +62,13 @@ class ArticleComment extends Component {
     axios
       .post('/user/comment', { articleId: this.props.articleId, content: this.state.value })
       .then(res => {
-        this.setState({ submitting: false, commentList: res.rows, value: '' })
+        this.setState({ submitting: false, value: '' }, () => this.props.setCommentList(res.rows))
       })
       .catch(err => this.setState({ submitting: false }))
   }
 
   handleChange = e => {
     this.setState({ value: e.target.value })
-  }
-
-  /**
-   *  子组件 添加 reply 时需要重新设置 list
-   */
-  setCommentList = commentList => {
-    this.setState({ commentList })
   }
 
   handleMenuClick = e => {
@@ -112,13 +102,14 @@ class ArticleComment extends Component {
   }
 
   render() {
-    const { submitting, value, commentList } = this.state
-    const { username, articleId, userId } = this.props
+    const { submitting, value } = this.state
+    const { username, articleId, userId, commentList } = this.props
 
     return (
       <div className="comment-wrapper">
         <div className="comment-header">
-          <span className="count">{getCommentsCount(commentList)}</span> 条评论
+          <span className="count">{getCommentsCount(commentList)}</span>{' '}
+          {articleId !== -1 ? '条评论' : '条留言'}
           <span className="menu-wrap">
             <Dropdown overlay={this.renderDropdownMenu()} trigger={['click', 'hover']}>
               <span>
@@ -149,10 +140,15 @@ class ArticleComment extends Component {
               onSubmit={this.handleSubmit}
               submitting={submitting}
               value={value}
+              articleId={articleId}
             />
           }
         />
-        <CommentList commentList={commentList} articleId={articleId} setCommentList={this.setCommentList} />
+        <CommentList
+          commentList={commentList}
+          articleId={articleId}
+          setCommentList={this.props.setCommentList}
+        />
       </div>
     )
   }
