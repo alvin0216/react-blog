@@ -1,9 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import './index.less'
 
-import { Icon, Divider, Pagination, Empty } from 'antd'
+import { connect } from 'react-redux'
+
+import { Icon, Divider, Pagination, Empty, Drawer } from 'antd'
 import axios from '@/lib/axios'
 import { translateMarkdown, decodeQuery, getCommentsCount } from '@/lib'
+import { openDrawer, closeDrawer } from '@/redux/common/actions'
 
 import Tags from '../Tags'
 import Preview from './preview'
@@ -15,10 +18,18 @@ const NoDataDesc = ({ keyword }) => (
   </Fragment>
 )
 
+@connect(
+  state => ({
+    windowWidth: state.common.windowWidth,
+    drawerVisible: state.common.drawerVisible
+  }),
+  { openDrawer, closeDrawer }
+)
 class Home extends Component {
   state = { list: [], total: 0, loading: false }
 
   componentDidMount() {
+    this.props.closeDrawer()
     const params = decodeQuery(this.props.location.search)
     this.fetchList(params)
   }
@@ -66,6 +77,19 @@ class Home extends Component {
     const { page, keyword } = decodeQuery(this.props.location.search)
     return (
       <div className="content-inner-wrapper home">
+        {/* {this.props.windowWidth < 1100 && (
+          <div className="">
+            <button>oncl</button>
+            <Drawer
+              title="Basic Drawer"
+              placement="left"
+              closable={false}
+              onClose={this.onClose}
+              visible={true}>
+              <Preview list={list} />
+            </Drawer>
+          </div>
+        )} */}
         {loading ? (
           <Loading />
         ) : (
@@ -106,7 +130,24 @@ class Home extends Component {
                     />
                   </div>
                 )}
-                <Preview list={list} />
+
+                {this.props.windowWidth > 1300 ? (
+                  <Preview list={list} />
+                ) : (
+                  <Fragment>
+                    <div className="drawer-btn" onClick={this.props.openDrawer}>
+                      <Icon type="menu-o" className="nav-phone-icon" />
+                    </div>
+                    <Drawer
+                      title="文章导航"
+                      placement="right"
+                      closable={false}
+                      onClose={this.props.closeDrawer}
+                      visible={this.props.drawerVisible}>
+                      <Preview list={list} />
+                    </Drawer>
+                  </Fragment>
+                )}
               </Fragment>
             ) : (
               <div className="no-data">

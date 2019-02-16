@@ -1,13 +1,23 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import './index.less'
 import axios from '@/lib/axios'
+import { connect } from 'react-redux'
 import { translateMarkdown } from '@/lib/index'
+import { openDrawer, closeDrawer } from '@/redux/common/actions'
 
 import Navigation from './navigation'
 import Loading from '@/components/helper/Loading'
 import Tags from '../Tags'
 import Comment from './comment'
+import { Drawer, Icon } from 'antd'
 
+@connect(
+  state => ({
+    windowWidth: state.common.windowWidth,
+    drawerVisible: state.common.drawerVisible
+  }),
+  { openDrawer, closeDrawer }
+)
 class ArticleDetail extends Component {
   state = {
     title: '',
@@ -58,6 +68,9 @@ class ArticleDetail extends Component {
     const articleId = parseInt(this.props.match.params.id)
     return (
       <div className="content-inner-wrapper article">
+        <div className="drawer-btn" onClick={this.props.openDrawer}>
+          <Icon type="menu-o" className="nav-phone-icon" />
+        </div>
         {loading ? (
           <Loading />
         ) : (
@@ -76,9 +89,27 @@ class ArticleDetail extends Component {
 
             <div className="article-detail" dangerouslySetInnerHTML={{ __html: content }} />
 
-            <div className="right-navigation">
-              <Navigation content={content} />
-            </div>
+            {this.props.windowWidth > 1300 ? (
+              <div className="right-navigation">
+                <Navigation content={content} />
+              </div>
+            ) : (
+              <Fragment>
+                <div className="drawer-btn" onClick={this.props.openDrawer}>
+                  <Icon type="menu-o" className="nav-phone-icon" />
+                </div>
+                <Drawer
+                  title="导航"
+                  placement="right"
+                  closable={false}
+                  onClose={this.props.closeDrawer}
+                  visible={this.props.drawerVisible}>
+                  <div className="right-navigation">
+                    <Navigation content={content} />
+                  </div>
+                </Drawer>
+              </Fragment>
+            )}
 
             <Comment articleId={articleId} commentList={comments} />
           </React.Fragment>
