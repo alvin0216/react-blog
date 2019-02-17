@@ -31,19 +31,25 @@ class List extends Component {
   state = { list: [], page: 1, total: 0, type: 'categories', name: '' }
 
   componentDidMount() {
-    const type = this.props.location.pathname.includes('categories') ? 'categories' : 'tags',
-      name = this.props.match.params.name
-    this.setState({ type }, this.fetchList({ page: 1, name }))
+    const params = this.decodeQuery(this.props)
+    this.setState({ type: params.type }, this.fetchList({ page: 1, ...params }))
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.match.params.name !== nextProps.match.params.name) {
-      this.fetchList({ page: 1, name: nextProps.match.params.name })
+      const params = this.decodeQuery(nextProps)
+      this.fetchList({ page: 1, ...params })
     }
   }
 
-  fetchList = ({ page = 1, name }) => {
-    axios.get(`/${this.state.type}/getArticles`, { params: { page, pageSize: 15, name } }).then(res => {
+  decodeQuery = props => {
+    const type = props.location.pathname.includes('categories') ? 'categories' : 'tags'
+    const name = props.match.params.name
+    return { type, name }
+  }
+
+  fetchList = ({ page = 1, name, type }) => {
+    axios.get(`/${type}/getArticles`, { params: { page, pageSize: 15, name } }).then(res => {
       this.setState({ list: res.rows, total: res.count })
     })
   }
@@ -54,8 +60,8 @@ class List extends Component {
   }
 
   render() {
-    const { list, type, page, total } = this.state,
-      { name } = this.props.match.params
+    const { list, type, page, total } = this.state
+    const { name } = this.props.match.params
     return (
       <div className="content-inner-wrapper list-page">
         <TimeLineList list={list} name={name} type={type} />

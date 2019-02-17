@@ -87,8 +87,10 @@ module.exports = {
       offset = (page - 1) * pageSize,
       where = title ? { title: { $like: `%${title}%` } } : {}
 
-    const tagFilter = tag ? { name: { $like: `%${tag}%` } } : {}
-    const categoryFilter = category ? { name: { $like: category } } : {}
+    // const tagFilter = tag ? { name: { $like: `%${tag}%` } } : {}
+    // const categoryFilter = category ? { name: { $like: category } } : {}
+    const tagFilter = tag ? { name: tag } : {}
+    const categoryFilter = category ? { name: category } : {}
 
     pageSize = parseInt(pageSize) // 处理 pageSize
 
