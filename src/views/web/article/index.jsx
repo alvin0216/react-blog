@@ -70,9 +70,6 @@ class ArticleDetail extends Component {
     const articleId = parseInt(this.props.match.params.id)
     return (
       <div className="content-inner-wrapper article">
-        <div className="drawer-btn" onClick={this.props.openDrawer}>
-          <Icon type="menu-o" className="nav-phone-icon" />
-        </div>
         {loading ? (
           <Loading />
         ) : (

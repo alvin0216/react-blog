@@ -7,7 +7,7 @@ import rootReducer from './rootReducers'
 
 let storeEnhancers
 if (process.env.NODE_ENV === 'production') {
-  storeEnhancers = compose(thunk)
+  storeEnhancers = compose(applyMiddleware(thunk))
 } else {
   // storeEnhancers = compose(composeWithDevTools(applyMiddleware(thunk, logger)))
   storeEnhancers = compose(composeWithDevTools(applyMiddleware(thunk)))

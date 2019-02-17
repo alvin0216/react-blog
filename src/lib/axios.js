@@ -3,7 +3,7 @@ import { message } from 'antd'
 // import NProgress from 'nprogress'
 
 const instance = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:6060' : '', // api的base_url
+  baseURL: process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:6060' : 'http://127.0.0.1:6060', // api的base_url
   timeout: 20000 // 请求超时时间
 })
 
@@ -24,7 +24,7 @@ instance.interceptors.request.use(
 //拦截响应
 instance.interceptors.response.use(
   response => {
-    if (response.data.code === 401) message.warning(response.data.message) 
+    if (response.data.code === 401 && response.data.message) message.warning(response.data.message)
     return response.data
   },
   err => {
@@ -35,7 +35,7 @@ instance.interceptors.response.use(
           break
         case 401:
           localStorage.clear()
-          message.error('您未被授权，请重新登录！')
+          message.error('您暂无权限进行此操作，请联系管理员！')
           break
         case 403:
           message.error('拒绝访问！')
@@ -50,7 +50,6 @@ instance.interceptors.response.use(
           message.err(`连接错误 ${err.response.status}！`)
           break
       }
-      localStorage.clear()
     } else {
       message.error('服务器出了点小问题，请稍后再试！')
     }
