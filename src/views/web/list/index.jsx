@@ -55,8 +55,8 @@ class List extends Component {
   }
 
   onChange = page => {
-    const { name } = this.props.match.params
-    this.setState({ page }, this.fetchList({ page, name }))
+    const params = this.decodeQuery(this.props)
+    this.setState({ page }, this.fetchList({ page, ...params }))
   }
 
   render() {
