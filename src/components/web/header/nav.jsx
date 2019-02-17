@@ -18,7 +18,7 @@ class Nav extends Component {
   render() {
     const { navList, mode } = this.props
     return (
-      <Menu mode={mode} defaultSelectedKeys={[this.props.location.pathname]} className="header-nav">
+      <Menu mode={mode} selectedKeys={[this.props.location.pathname]} className="header-nav">
         {navList.map(nav => (
           <Menu.Item key={nav.link}>
             <Link to={nav.link}>

@@ -23,7 +23,6 @@ class About extends Component {
   setCommentList = commentList => this.setState({ commentList })
 
   render() {
-    console.log(this.state.commentList)
     return (
       <div className="content-inner-wrapper about">
         <AuthorAvatar />
@@ -33,7 +32,7 @@ class About extends Component {
         <p>本博客使用的技术为 react v16.8 + antd + koa2 + mysql</p>
         <p>
           源码地址为{' '}
-          <a target="_blank" rel="noreferrer noopener" href="https://github.com/gershonv/react-blognv">
+          <a target="_blank" rel="noreferrer noopener" href="https://github.com/gershonv/react-blog">
             github
           </a>
           ，仅供参考，不做商业用途！
