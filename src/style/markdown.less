@@ -42,7 +42,7 @@
     color: #555;
     background: none;
     text-shadow: none;
-    font-family: consolas, Menlo, "PingFang SC", "Microsoft YaHei", monospace;
+    font-family: consolas, Menlo, 'PingFang SC', 'Microsoft YaHei', monospace;
   }
   h2,
   h3,
@@ -78,5 +78,51 @@
   .hljs-comment,
   .hljs-quote {
     color: #575f6a;
+  }
+  blockquote {
+    margin: 1em 0;
+    border-left: 4px solid #ddd;
+    padding: 0 1em;
+    color: #666;
+    p {
+      margin: .5em 0;
+      line-height: 1.7em;
+    }
+  }
+
+  table {
+    font-size: 0.8em;
+    max-width: 100%;
+    overflow: auto;
+    border: 1px solid #f6f6f6;
+    border-collapse: collapse;
+    border-spacing: 0;
+    thead {
+      background: #f6f6f6;
+      color: #000;
+      text-align: left;
+    }
+    tr {
+      display: table-row;
+      vertical-align: inherit;
+      border-color: inherit;
+      &:nth-child(2n) {
+        background-color: #fcfcfc;
+      }
+    }
+    th {
+      padding: 0.8em 0.5em;
+      line-height: 1.5em;
+    }
+    tbody {
+      display: table-row-group;
+      vertical-align: middle;
+      border-color: inherit;
+      td {
+        min-width: 7.5em;
+        padding: 0.8em 0.5em;
+        line-height: 1.5em;
+      }
+    }
   }
 }
