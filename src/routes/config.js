@@ -4,13 +4,15 @@ import examplesRoute from '@/examples/routes'
 import adminRoutes from '@/views/admin/routes'
 import rootRoutes from './rootRoutes'
 
-const childRoutes = [
-  examplesRoute,
+let childRoutes = [
   adminRoutes,
   rootRoutes,
   homeRoutes
   //...
 ]
+
+const isDev = process.env.NODE_ENV === 'development'
+if (isDev) childRoutes.unshift(examplesRoute)
 
 // generator all the routes
 const routes = [

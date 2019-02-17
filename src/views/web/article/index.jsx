@@ -101,7 +101,7 @@ class ArticleDetail extends Component {
                   <Icon type="menu-o" className="nav-phone-icon" />
                 </div>
                 <Drawer
-                  title="导航"
+                  title={title}
                   placement="right"
                   closable={false}
                   onClose={this.props.closeDrawer}
