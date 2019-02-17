@@ -10,6 +10,7 @@ const AuthPage = lazy(() => import('./AuthPage'))
 const Write = lazy(() => import('./markdown/write'))
 const Show = lazy(() => import('./markdown/show'))
 const Hooks = lazy(() => import('./hooks'))
+const Test = lazy(() => import('./test'))
 
 export default {
   path: 'examples',
@@ -24,6 +25,7 @@ export default {
       path: 'markdown',
       childRoutes: [{ path: 'write', component: Write }, { path: 'show', component: Show }]
     },
-    { path: 'hooks', component: Hooks }
+    { path: 'hooks', component: Hooks },
+    { path: 'test', component: Test }
   ]
 }

@@ -9,8 +9,9 @@ export const login = ({ username, password }) => {
         localStorage.setItem('token', res.token)
         dispatch({ type: constants.USER_LOGIN, payload: { token: res.token } })
       } else {
-        message.error(res.message)
+        message.error(res.message)       
       }
+      return res
     })
 }
 
@@ -19,6 +20,7 @@ export const register = ({ username, password }) => {
     axios.post('/register', { username, password }).then(res => {
       if (res.code === 200) message.success(res.message)
       else message.error(res.message)
+      return res
     })
 }
 

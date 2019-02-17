@@ -2,21 +2,19 @@ import React, { Component, Fragment } from 'react'
 
 import { connect } from 'react-redux'
 import { register, logout } from '@/redux/user/actions'
-import { openAuthModal, closeAuthModal } from '@/redux/common/actions'
+import { openAuthModal } from '@/redux/common/actions'
 
 import { Button, Dropdown, Avatar, Menu } from 'antd'
 import AuthModal from '../authModal'
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = state => ({
   username: state.user.username,
-  avatarColor: state.user.avatarColor,
-  loginModalVisible: state.common.loginModalVisible,
-  registerModalVisible: state.common.registerModalVisible
+  avatarColor: state.user.avatarColor
 })
 
 @connect(
   mapStateToProps,
-  { register, logout, openAuthModal, closeAuthModal }
+  { register, logout, openAuthModal }
 )
 class UserInfo extends Component {
   renderAvatarDropdownMenu = () => {
@@ -32,8 +30,7 @@ class UserInfo extends Component {
   }
 
   render() {
-    // const { loginModalVisible, registerModalVisible } = this.state
-    const { username, avatarColor, loginModalVisible, registerModalVisible } = this.props
+    const { username, avatarColor } = this.props
     return (
       <div id="header-userInfo">
         {username ? (
@@ -61,20 +58,7 @@ class UserInfo extends Component {
           </Fragment>
         )}
 
-        {
-          <AuthModal
-            visible={loginModalVisible}
-            type="login"
-            handleClose={() => this.props.closeAuthModal('login')}
-          />
-        }
-        {
-          <AuthModal
-            visible={registerModalVisible}
-            type="register"
-            handleClose={() => this.props.closeAuthModal('register')}
-          />
-        }
+        <AuthModal />
       </div>
     )
   }

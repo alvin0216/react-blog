@@ -1,67 +1,96 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Input, Icon, message, Button } from 'antd'
 import { connect } from 'react-redux'
+
+import { Modal, Input, Icon, message, Button, Form } from 'antd'
 import { login, register } from '@/redux/user/actions'
+import { closeAuthModal } from '@/redux/common/actions'
+import FormBuilder from '@/components/helper/FormBuilder'
+
+const formMeta = {
+  elements: [
+    {
+      key: 'username',
+      widget: (
+        <Input placeholder="Username" prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} />
+      ),
+      rules: [{ required: true, message: 'Username is required' }]
+    },
+    {
+      key: 'password',
+      widget: (
+        <Input placeholder="Password" prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} />
+      ),
+      rules: [{ required: true, message: 'Password is required' }]
+    }
+  ]
+}
 
 @connect(
-  null,
-  { login, register }
+  state => ({
+    loginModalVisible: state.common.loginModalVisible,
+    registerModalVisible: state.common.registerModalVisible
+  }),
+  { login, register, closeAuthModal }
 )
 class LoginModel extends Component {
-  static propTypes = {
-    type: PropTypes.string.isRequired,
-    visible: PropTypes.bool.isRequired,
-    handleClose: PropTypes.func.isRequired
+  state = { type: 'login' } // 模态框类型
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.loginModalVisible) return { type: 'login' }
+    if (nextProps.registerModalVisible) return { type: 'register' }
+    return null
   }
 
-  state = {
-    username: '',
-    password: ''
+  handleSubmit = e => {
+    e.preventDefault()
+    this.props.form.validateFieldsAndScroll((errors, values) => {
+      if (errors) return
+      const { type } = this.state
+
+      this.props[type](values).then(res => {
+        if (res.code === 200) this.props.closeAuthModal(type)
+      })
+
+      // switch (this.state.type) {
+      //   case 'login':
+      //     this.props.login(values).then(res => {
+      //       if (res.code === 200) this.props.closeAuthModal('login')
+      //     })
+      //     break
+
+      //   case 'register':
+      //     this.props.register(values).then(res => {
+      //       if (res.code === 200) this.props.closeAuthModal('register')
+      //     })
+      //   default:
+      //     message.error('未知错误')
+      //     break
+      // }
+    })
   }
 
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value })
-  }
-
-  handleSubmit = () => {
-    const type = this.props.type
-    type === 'login' ? this.props.login(this.state) : this.props.register(this.state)
-    this.props.handleClose(type)
-  }
+  handleClose = () => this.props.closeAuthModal(this.state.type)
 
   render() {
-    const text = this.props.type === 'login' ? '登录' : '注册'
+    const { type } = this.state
+    const { loginModalVisible, registerModalVisible } = this.props
     return (
       <Modal
-        title={text}
+        title={type}
         width={320}
         footer={null}
-        visible={this.props.visible}
-        onCancel={this.props.handleClose}>
-        <Input
-          style={{ marginBottom: 20 }}
-          prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-          name="username"
-          placeholder="Username"
-          value={this.state.username}
-          onChange={this.handleChange}
-        />
-        <Input
-          style={{ marginBottom: 20 }}
-          prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={this.state.password}
-          onChange={this.handleChange}
-        />
-        <Button style={{ width: '100%' }} type="primary" onClick={this.handleSubmit}>
-          {text}
-        </Button>
+        onCancel={this.handleClose}
+        visible={loginModalVisible || registerModalVisible}>
+        <Form layout="horizontal">
+          <FormBuilder meta={formMeta} form={this.props.form} />
+          <Button type="primary" block htmlType="submit" onClick={this.handleSubmit}>
+            {type}
+          </Button>
+        </Form>
       </Modal>
     )
   }
 }
 
-export default LoginModel
+export default Form.create()(LoginModel)

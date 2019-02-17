@@ -63,11 +63,12 @@ class Manager extends Component {
       {
         title: '发布时间',
         dataIndex: 'createdAt',
-        // sorter: (a, b) => moment(a).isAfter(b)
+        sorter: (a, b) => moment(a.createdAt).isBefore(b.createdAt)? 1 : -1
       },
       {
         title: '修改时间',
-        dataIndex: 'updatedAt'
+        dataIndex: 'updatedAt',
+        sorter: (a, b) => moment(a.updatedAt).isBefore(b.updatedAt) ? 1 : -1
       },
       {
         title: '操作',

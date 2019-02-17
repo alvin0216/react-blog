@@ -6,7 +6,7 @@ let defaultState = {
   userId: 0,
   username: '',
   auth: 0,
-  avatarColor: '#52c41a'
+  avatarColor: '#52c41a' // 用户头像颜色
 }
 
 if (localStorage.token) {
