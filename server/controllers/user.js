@@ -1,6 +1,6 @@
-const { user: UserModel } = require('../models')
+const { user: UserModel, comment: CommentModel, reply: ReplyModel } = require('../models')
 const { encrypt, comparePassword } = require('../lib/bcrypt')
-const { createToken } = require('../lib/token')
+const { createToken, checkAuth } = require('../lib/token')
 
 module.exports = {
   async register(ctx) {
@@ -38,5 +38,37 @@ module.exports = {
       }
     }
     ctx.body = response
+  },
+
+  async getUserList(ctx) {
+    const isAuth = checkAuth(ctx)
+    if (isAuth) {
+      let { page = 1, pageSize = 10 } = ctx.query
+      const offset = (page - 1) * pageSize
+      pageSize = parseInt(pageSize)
+      const data = await UserModel.findAndCountAll({
+        attributes: ['id', 'username'],
+        where: { auth: 2 },
+        include: [{ model: CommentModel, attributes: ['id'], include: [{ model: ReplyModel, attributes: ['id'] }] }],
+        offset,
+        limit: pageSize,
+        row: true,
+        distinct: true
+      })
+      ctx.body = { code: 200, ...data }
+    }
+  },
+
+  async delete(ctx) {
+    const isAuth = checkAuth(ctx)
+    if (isAuth) {
+      const { userId } = ctx.query
+     
+      await UserModel.destroy({ where: { id: userId } })
+      await sequelize.query(
+        `delete comment, reply from comment left join reply on comment.id=reply.commentId where comment.userId=${userId}`
+      )
+      ctx.body = { code: 200, message: '成功删除用户' }
+    }
   }
 }

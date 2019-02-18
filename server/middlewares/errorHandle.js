@@ -4,7 +4,6 @@ module.exports = (ctx, next) => {
     if (err.status === 401) {
       ctx.status = 401
       ctx.body = { error: err.originalError ? err.originalError.message : err.message }
-      ctx.body = 1
     } else {
       throw err
     }
