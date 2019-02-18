@@ -11,6 +11,17 @@
       .content-inner-wrapper {
         position: relative;
         padding: 0 300px 40px 40px;
+        .loading {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, 20%);
+        }
+        @media screen and (max-width: 736px) {
+          .loading {
+            width: 100%;
+          }
+        }
       }
     }
   }

@@ -75,6 +75,7 @@ class Home extends Component {
   render() {
     const { list, total, loading } = this.state
     const { page, keyword } = decodeQuery(this.props.location.search)
+
     return (
       <div className="content-inner-wrapper home">
         {/* {this.props.windowWidth < 1100 && (
@@ -123,11 +124,7 @@ class Home extends Component {
               <Fragment>
                 {list.length < total && (
                   <div style={{ textAlign: 'right' }}>
-                    <Pagination
-                      current={parseInt(page) || 1}
-                      onChange={this.handlePageChange}
-                      total={total}
-                    />
+                    <Pagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} />
                   </div>
                 )}
 

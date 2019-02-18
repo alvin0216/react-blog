@@ -9,7 +9,7 @@ let defaultState = {
   avatarColor: '#52c41a' // 用户头像颜色
 }
 
-if (localStorage.token) {
+if (!!localStorage.getItem('token') && localStorage.getItem('token') !== "undefined") {
   const { userId, username, auth } = jwtDecode(localStorage.token)
   defaultState = Object.assign(defaultState, { userId, username, auth })
 }

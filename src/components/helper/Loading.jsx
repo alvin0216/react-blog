@@ -17,14 +17,7 @@ export const SpinLoading = () => {
   return ReactDOM.createPortal(<Spin indicator={antIcon} style={SpinStyle} />, loadingRoot)
 }
 
-const picStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, 20%)'
-}
-
 // 图片 loading
-const Loading = () => <img src={loadingPic} alt="" style={picStyle} />
+const Loading = () => <img src={loadingPic} alt="" className="loading" />
 
 export default Loading
