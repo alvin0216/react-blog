@@ -5,7 +5,7 @@ import PageNotFound from '@/components/404'
 import Home from './home'
 const Edit = lazy(() => import('./article/edit'))
 const Login = lazy(() => import('./login'))
-const ArticleManage = lazy(() => import('./manage'))
+const ArticleManage = lazy(() => import('./article/manage'))
 const UserManage = lazy(() => import('./user'))
 
 export default {
