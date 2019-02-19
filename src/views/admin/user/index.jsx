@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from '@/lib/axios'
 import { getCommentsCount } from '@/lib'
-import { Table, Button, Modal } from 'antd'
+import { Table, Button, Modal, message } from 'antd'
 
 class UserManage extends Component {
   state = {

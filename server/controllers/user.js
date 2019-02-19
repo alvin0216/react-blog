@@ -1,4 +1,4 @@
-const { user: UserModel, comment: CommentModel, reply: ReplyModel } = require('../models')
+const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } = require('../models')
 const { encrypt, comparePassword } = require('../lib/bcrypt')
 const { createToken, checkAuth } = require('../lib/token')
 
@@ -62,12 +62,12 @@ module.exports = {
   async delete(ctx) {
     const isAuth = checkAuth(ctx)
     if (isAuth) {
-      const { userId } = ctx.query
-     
-      await UserModel.destroy({ where: { id: userId } })
+      let { userId } = ctx.query
+      userId = parseInt(userId)
       await sequelize.query(
         `delete comment, reply from comment left join reply on comment.id=reply.commentId where comment.userId=${userId}`
       )
+      await UserModel.destroy({ where: { id: userId } })
       ctx.body = { code: 200, message: '成功删除用户' }
     }
   }

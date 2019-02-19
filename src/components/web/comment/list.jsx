@@ -127,7 +127,7 @@ class CommentList extends Component {
           className="user-avatar"
           size="default"
           style={{ backgroundColor: colorMap[item.userId] || '#ccc' }}>
-          {item.user.username}
+          {item.user && item.user.username}
         </Avatar>
       )
     }

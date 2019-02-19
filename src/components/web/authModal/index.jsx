@@ -19,7 +19,7 @@ const formMeta = {
     {
       key: 'password',
       widget: (
-        <Input placeholder="Password" prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} />
+        <Input placeholder="Password" type="password" prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} />
       ),
       rules: [{ required: true, message: 'Password is required' }]
     }

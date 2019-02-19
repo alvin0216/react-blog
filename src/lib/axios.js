@@ -7,6 +7,8 @@ const instance = axios.create({
   timeout: 20000 // 请求超时时间
 })
 
+let timer
+
 //拦截请求
 instance.interceptors.request.use(
   config => {
@@ -28,31 +30,35 @@ instance.interceptors.response.use(
     return response.data
   },
   err => {
-    if (err && err.response) {
-      switch (err.response.status) {
-        case 400:
-          message.error('错误请求')
-          break
-        case 401:
-          localStorage.clear()
-          message.error('您暂无权限进行此操作，请联系管理员！')
-          break
-        case 403:
-          message.error('拒绝访问！')
-          break
-        case 404:
-          message.error('请求错误,未找到该资源！')
-          break
-        case 500:
-          message.err('服务器出问题了，请稍后再试！')
-          break
-        default:
-          message.err(`连接错误 ${err.response.status}！`)
-          break
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      if (err && err.response) {
+        switch (err.response.status) {
+          case 400:
+            message.error('错误请求')
+            break
+          case 401:
+            localStorage.clear()
+            message.error('您暂无权限进行此操作，请联系管理员！')
+            break
+          case 403:
+            message.error('拒绝访问！')
+            break
+          case 404:
+            message.error('请求错误,未找到该资源！')
+            break
+          case 500:
+            message.err('服务器出问题了，请稍后再试！')
+            break
+          default:
+            message.err(`连接错误 ${err.response.status}！`)
+            break
+        }
+      } else {
+        message.error('服务器出了点小问题，请稍后再试！')
       }
-    } else {
-      message.error('服务器出了点小问题，请稍后再试！')
-    }
+    }, 200) // 200 毫秒内重复报错则只提示一次！
+
     return Promise.reject(err)
   }
 )
