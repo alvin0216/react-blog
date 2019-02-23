@@ -2,14 +2,14 @@ import React, { Component, Fragment } from 'react'
 import './index.less'
 import axios from '@/lib/axios'
 import { connect } from 'react-redux'
-import { translateMarkdown } from '@/lib/index'
+import { translateMarkdown, getCommentsCount } from '@/lib/index'
 import { openDrawer, closeDrawer } from '@/redux/common/actions'
 
 import Navigation from './navigation'
 import Loading from '@/components/helper/Loading'
 import Tags from '../Tags'
 import Comment from '@/components/web/comment'
-import { Drawer, Icon } from 'antd'
+import { Drawer, Icon, Divider } from 'antd'
 
 @connect(
   state => ({
@@ -83,6 +83,9 @@ class ArticleDetail extends Component {
                 <span>{postTime}</span>
                 <Tags type="tags" list={tags} />
                 <Tags type="categories" list={categories} />
+                <Divider type="vertical" />
+                <Icon type="message" style={{ marginRight: 7 }} />
+                {getCommentsCount(commentList)}
               </div>
             </div>
 

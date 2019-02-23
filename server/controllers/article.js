@@ -121,20 +121,24 @@ module.exports = {
     if (isAuth) {
       const { articleId } = ctx.query
       if (articleId) {
-        await TagModel.destroy({ where: { articleId } })
-        await ArticleModel.destroy({ where: { id: articleId } })
-        await sequelize.query(
-          // `
-          //   delete article, tag, category, comment, reply from article
-          //   inner join tag on article.id=tag.articleId
-          //   inner join category on article.id=category.articleId
-          //   inner join comment on article.id=comment.articleId
-          //   inner join reply on comment.id=reply.commentId
-          //   where article.id=${articleId}
-          // `
-          `delete comment, reply from comment left join reply on comment.id=reply.commentId where comment.articleId=${articleId}`
-        )
-        ctx.body = { code: 200, message: '成功删除文章' }
+        if (articleId !== -1) {
+          await TagModel.destroy({ where: { articleId } })
+          await ArticleModel.destroy({ where: { id: articleId } })
+          await sequelize.query(
+            // `
+            //   delete article, tag, category, comment, reply from article
+            //   inner join tag on article.id=tag.articleId
+            //   inner join category on article.id=category.articleId
+            //   inner join comment on article.id=comment.articleId
+            //   inner join reply on comment.id=reply.commentId
+            //   where article.id=${articleId}
+            // `
+            `delete comment, reply from comment left join reply on comment.id=reply.commentId where comment.articleId=${articleId}`
+          )
+          ctx.body = { code: 200, message: '成功删除文章' }
+        } else {
+          ctx.body = { code: 403, message: '禁止删除！ 此文章用于关于页面的留言。' }
+        }
       } else {
         ctx.body = { code: 403, message: '文章 id 不能为空' }
       }

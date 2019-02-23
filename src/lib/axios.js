@@ -38,8 +38,8 @@ instance.interceptors.response.use(
             message.error('错误请求')
             break
           case 401:
-            localStorage.clear()
-            message.error('您暂无权限进行此操作，请联系管理员！')
+            // localStorage.clear()
+            message.error('登录信息过期或未授权，请重新登录！')
             break
           case 403:
             message.error('拒绝访问！')
