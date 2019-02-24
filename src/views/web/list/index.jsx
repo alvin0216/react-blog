@@ -3,7 +3,7 @@ import './index.less'
 import axios from '@/lib/axios'
 
 import { Link } from 'react-router-dom'
-import { Timeline, Pagination } from 'antd'
+import { Timeline, Pagination, Spin } from 'antd'
 
 const TimeLineList = ({ list, name, type }) => {
   return (
@@ -28,7 +28,14 @@ const TimeLineList = ({ list, name, type }) => {
 }
 
 class List extends Component {
-  state = { list: [], page: 1, total: 0, type: 'categories', name: '' }
+  state = {
+    list: [],
+    page: 1,
+    total: 0,
+    type: 'categories',
+    name: '',
+    loading: false
+  }
 
   componentDidMount() {
     const params = this.decodeQuery(this.props)
@@ -49,9 +56,13 @@ class List extends Component {
   }
 
   fetchList = ({ page = 1, name, type }) => {
-    axios.get(`/${type}/getArticles`, { params: { page, pageSize: 15, name } }).then(res => {
-      this.setState({ list: res.rows, total: res.count })
-    })
+    this.setState({ loading: true })
+    axios
+      .get(`/${type}/getArticles`, { params: { page, pageSize: 15, name } })
+      .then(res => {
+        this.setState({ list: res.rows, total: res.count, loading: false })
+      })
+      .catch(e => this.setState({ loading: false }))
   }
 
   onChange = page => {
@@ -60,11 +71,13 @@ class List extends Component {
   }
 
   render() {
-    const { list, type, page, total } = this.state
+    const { list, type, page, total, loading } = this.state
     const { name } = this.props.match.params
     return (
       <div className="content-inner-wrapper list-page">
-        <TimeLineList list={list} name={name} type={type} />
+        <Spin tip="Loading..." spinning={loading}>
+          <TimeLineList list={list} name={name} type={type} />
+        </Spin>
 
         {total > 15 && (
           <div style={{ textAlign: 'right' }}>
