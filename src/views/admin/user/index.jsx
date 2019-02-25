@@ -32,10 +32,10 @@ class UserManage extends Component {
     ]
   }
 
-  fetchList = ({ page = 1, pageSize = 10 }) => {
-    axios.get('/user/getUserList', { params: { page, pageSize } }).then(res => {
+  fetchList = ({ current = 1, pageSize = 10 }) => {
+    axios.get('/user/getUserList', { params: { page: current, pageSize } }).then(res => {
       const pagination = {
-        page,
+        current,
         pageSize,
         total: res.count
       }
@@ -59,6 +59,7 @@ class UserManage extends Component {
   }
 
   handleChange = pagination => {
+    console.log(pagination)
     this.fetchList({ ...pagination, ...this.state.query })
   }
 
