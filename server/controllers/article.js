@@ -61,7 +61,7 @@ module.exports = {
           include: [
             {
               model: ReplyModel,
-              attributes: ['id', 'userId', 'content'],
+              attributes: ['id', 'userId', 'content', 'createdAt'],
               include: [{ model: UserModel, as: 'user', attributes: ['username'] }]
             },
             { model: UserModel, as: 'user', attributes: ['username'] }
