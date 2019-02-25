@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 23/02/2019 13:51:20
+ Date: 25/02/2019 13:49:17
 */
 
 SET NAMES utf8mb4;
@@ -28,7 +28,7 @@ CREATE TABLE `article` (
   `createdAt` datetime DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of article
@@ -116,7 +116,7 @@ CREATE TABLE `category` (
   PRIMARY KEY (`id`),
   KEY `articleId` (`articleId`),
   CONSTRAINT `category_ibfk_1` FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of category
@@ -209,16 +209,14 @@ CREATE TABLE `comment` (
   KEY `userId` (`userId`),
   CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of comment
 -- ----------------------------
 BEGIN;
-INSERT INTO `comment` VALUES (24, 69, '测试评论', '2019-02-23 05:12:29', '2019-02-23 05:12:29', 14);
-INSERT INTO `comment` VALUES (36, 1, 'news2', '2019-02-23 05:28:29', '2019-02-23 05:28:29', 1);
-INSERT INTO `comment` VALUES (39, 1, 'news2', '2019-02-23 05:30:09', '2019-02-23 05:30:09', 1);
-INSERT INTO `comment` VALUES (41, -1, '第一条留言', '2019-02-23 05:36:17', '2019-02-23 05:36:17', 1);
+INSERT INTO `comment` VALUES (50, -1, '留言测试', '2019-02-25 05:48:26', '2019-02-25 05:48:26', 1);
+INSERT INTO `comment` VALUES (51, 69, '```js\nvar a = 1\n```', '2019-02-25 05:48:47', '2019-02-25 05:48:47', 1);
 COMMIT;
 
 -- ----------------------------
@@ -232,7 +230,7 @@ CREATE TABLE `example` (
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for examples
@@ -262,14 +260,14 @@ CREATE TABLE `reply` (
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   CONSTRAINT `reply_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of reply
 -- ----------------------------
 BEGIN;
-INSERT INTO `reply` VALUES (12, '测试回复', '2019-02-23 05:12:37', '2019-02-23 05:12:37', 24, NULL, 14);
-INSERT INTO `reply` VALUES (13, '第一条回复', '2019-02-23 05:36:25', '2019-02-23 05:36:25', 41, NULL, 1);
+INSERT INTO `reply` VALUES (13, '第一条回复', '2019-02-23 05:36:25', '2019-02-23 05:36:25', 41, NULL, NULL);
+INSERT INTO `reply` VALUES (22, '回复测试', '2019-02-25 05:48:34', '2019-02-25 05:48:34', 50, NULL, 1);
 COMMIT;
 
 -- ----------------------------
@@ -283,7 +281,7 @@ CREATE TABLE `tag` (
   PRIMARY KEY (`id`),
   KEY `articleId` (`articleId`),
   CONSTRAINT `tag_ibfk_1` FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of tag
@@ -404,16 +402,17 @@ CREATE TABLE `user` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `auth` tinyint(4) DEFAULT '0',
+  `createdAt` datetime DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, 'admin', '$2b$10$8tAY5zFSHdZNvXASVGKklOjvpyAma2dYUVx.Ga.zKdJjEeBYKY/ce', 1);
-INSERT INTO `user` VALUES (14, '彭于晏', '$2b$10$XCZJgnRGgG0zmAcplboHE.7OOUK21PvNEoDCkChKT5QkgR81qYYBa', 2);
+INSERT INTO `user` VALUES (1, 'admin', '$2b$10$rIIL/G.YJS1/a73MdawcHeCXnQmf9BElyWbZ.yTn5kGm8HE.bPej2', 1, '2019-02-25 05:47:02', '2019-02-25 05:47:02');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

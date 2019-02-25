@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 module.exports = (sequelize, dataTypes) => {
   const User = sequelize.define(
     'user',
