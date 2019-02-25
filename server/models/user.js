@@ -23,10 +23,24 @@ module.exports = (sequelize, dataTypes) => {
         type: dataTypes.TINYINT,
         defaultValue: 2,
         comment: '用户权限：1 - admin, 2 - 普通用户'
+      },
+      createdAt: {
+        type: dataTypes.DATE,
+        defaultValue: dataTypes.NOW,
+        get() {
+          return moment(this.getDataValue('createdAt')).format('YYYY-MM-DD HH:mm:ss')
+        }
+      },
+      updatedAt: {
+        type: dataTypes.DATE,
+        defaultValue: dataTypes.NOW,
+        get() {
+          return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm:ss')
+        }
       }
     },
     {
-      timestamps: false // 不创建 createAt / updateAt 字段
+      timestamps: true
     }
   )
   
