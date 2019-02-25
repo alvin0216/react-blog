@@ -31,6 +31,7 @@ module.exports = (sequelize, dataTypes) => {
     Article.hasMany(models.tag)
     Article.hasMany(models.category)
     Article.hasMany(models.comment)
+    Article.hasMany(models.reply)
   }
 
   return Article
