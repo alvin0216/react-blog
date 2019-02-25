@@ -6,7 +6,7 @@ const { decodeToken, checkAuth } = require('../lib/token')
 const fetchCommentList = async articleId =>
   CommentModel.findAndCountAll({
     where: { articleId },
-    attributes: ['id', 'userId', 'content'],
+    attributes: ['id', 'userId', 'content', 'createdAt'],
     include: [
       {
         model: ReplyModel,
