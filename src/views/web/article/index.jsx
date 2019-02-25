@@ -3,7 +3,7 @@ import './index.less'
 import axios from '@/lib/axios'
 import { connect } from 'react-redux'
 import { translateMarkdown, getCommentsCount } from '@/lib/index'
-import { openDrawer, closeDrawer } from '@/redux/common/actions'
+import { openDrawer, closeDrawer, generateColorMap } from '@/redux/common/actions'
 
 import Navigation from './navigation'
 import Loading from '@/components/helper/Loading'
@@ -16,7 +16,7 @@ import { Drawer, Icon, Divider } from 'antd'
     windowWidth: state.common.windowWidth,
     drawerVisible: state.common.drawerVisible
   }),
-  { openDrawer, closeDrawer }
+  { openDrawer, closeDrawer, generateColorMap }
 )
 class ArticleDetail extends Component {
   state = {
@@ -48,6 +48,7 @@ class ArticleDetail extends Component {
       .then(res => {
         const content = translateMarkdown(res.data.content)
         const { title, createdAt, tags, categories, comments } = res.data
+        this.props.generateColorMap(comments)
         this.setState({
           tags,
           categories,

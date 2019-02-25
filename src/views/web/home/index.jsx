@@ -72,6 +72,11 @@ class Home extends Component {
     this.props.history.push(url)
   }
 
+  
+  componentWillUnmount() {
+    this.props.closeDrawer()
+  }
+  
   render() {
     const { list, total, loading } = this.state
     const { page, keyword } = decodeQuery(this.props.location.search)

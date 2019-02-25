@@ -84,7 +84,7 @@ const CommentItem = ({
   username: state.user.username,
   userId: state.user.userId,
   auth: state.user.auth,
-  colorList: state.common.colorList
+  colorMap: state.common.colorMap
 }))
 class CommentList extends Component {
   static propTypes = {
@@ -102,22 +102,8 @@ class CommentList extends Component {
     value: ''
   }
 
-  componentDidMount() {
-    const { commentList, colorList } = this.props
-    const list = groupBy(commentList, item => item.userId)
-    let colorMap = {}
-    list.forEach(item => {
-      colorMap[item[0].userId] = colorList[random(colorList)]
-      item[0]['replies'].forEach(d => {
-        if (!colorMap[d.userId]) colorMap[d.userId] = colorList[random(colorList)]
-      })
-    })
-    this.setState({ colorMap })
-  }
-
   renderAvatar = item => {
-    const { userId } = this.props
-    const { colorMap } = this.state
+    const { userId, colorMap } = this.props
     if (item.userId === 1) return <AuthorAvatar /> // userId = 1 博主~~~
     if (item.userId === userId) {
       return <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />

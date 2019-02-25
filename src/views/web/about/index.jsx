@@ -2,11 +2,17 @@ import React, { Component } from 'react'
 import './index.less'
 import AuthorAvatar from '@/components/web/AuthorAvatar'
 import axios from '@/lib/axios'
+import { connect } from 'react-redux'
+import { generateColorMap } from '@/redux/common/actions'
 
 import { Divider, Rate } from 'antd'
 
 import Comment from '@/components/web/comment'
 
+@connect(
+  null,
+  { generateColorMap }
+)
 class About extends Component {
   state = { commentList: [] }
 
@@ -16,6 +22,7 @@ class About extends Component {
 
   fetchList = () => {
     axios.get('/comment/getAboutComments').then(res => {
+      this.props.generateColorMap(res.rows) // 生成头像的颜色匹配
       this.setState({ commentList: res.rows })
     })
   }
@@ -48,10 +55,7 @@ class About extends Component {
               hexo 博客
             </a>
             <Divider type="vertical" />
-            <a
-              target="_blank"
-              rel="noreferrer noopener"
-              href="https://juejin.im/user/5acac6c4f265da2378408f92">
+            <a target="_blank" rel="noreferrer noopener" href="https://juejin.im/user/5acac6c4f265da2378408f92">
               掘金主页
             </a>
           </li>

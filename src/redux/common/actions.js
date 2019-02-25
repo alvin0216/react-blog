@@ -24,3 +24,8 @@ export const openDrawer = () => ({
 export const closeDrawer = () => ({
   type: constants.COMMON_CLOSE_DRAWER
 })
+
+export const generateColorMap = commentList => ({
+  type: constants.COMMON_COLOR_MAP,
+  payload: commentList // 生成头像的颜色匹配
+})
