@@ -5,7 +5,7 @@ import axios from '@/lib/axios'
 import { connect } from 'react-redux'
 import { generateColorMap } from '@/redux/common/actions'
 
-import { Divider, Rate } from 'antd'
+import { Divider, Rate, Icon } from 'antd'
 
 import Comment from '@/components/web/comment'
 
@@ -48,7 +48,14 @@ class About extends Component {
         <ul className="about-list">
           <li>姓名：郭少威</li>
           <li>学历专业：本科 软件工程</li>
-          <li>联系方式：wechat guo6059</li>
+          <li>
+            联系方式：
+            <Icon type="qq" /> 434358603
+            <Divider type="vertical" />
+            <i className="iconfont icon-email" />
+            <a href="mailto:gershonv@163.com">gershonv@163.com</a>
+          </li>
+          <li>坐标：广州市</li>
           <li>
             其他博客地址：
             <a target="_blank" rel="noreferrer noopener" href="https://gershonv.github.io/">
