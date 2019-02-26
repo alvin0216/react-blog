@@ -97,7 +97,7 @@ class List extends Component {
         )} */}
 
         {list.length < total && (
-          <BlogPagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} />
+          <BlogPagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} pageSize={15} />
         )}
       </div>
     )

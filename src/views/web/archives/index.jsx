@@ -71,7 +71,7 @@ class Archives extends Component {
           </Timeline>
 
           {list.length < total && (
-            <BlogPagination current={parseInt(current) || 1} onChange={this.handlePageChange} total={total} />
+            <BlogPagination current={parseInt(current) || 1} onChange={this.handlePageChange} total={total}  pageSize={15} />
           )}
         </Spin>
       </div>

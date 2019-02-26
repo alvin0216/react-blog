@@ -10,14 +10,20 @@ class BlogPagination extends Component {
   static propTypes = {
     total: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
-    current: PropTypes.number.isRequired
+    current: PropTypes.number.isRequired,
+    pageSize: PropTypes.number
   }
 
+  static defaultProps = {
+    pageSize: 10
+  }
+  
+
   render() {
-    const { total, current, onChange } = this.props
+    const { total, current, onChange, pageSize } = this.props
     return (
       <div className="pagination">
-        <Pagination current={current} onChange={onChange} total={total} simple={this.props.windowWidth < 736} />
+        <Pagination current={current} onChange={onChange} total={total}  pageSize={pageSize} simple={this.props.windowWidth < 736}/>
       </div>
     )
   }
