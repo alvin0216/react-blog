@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './index.less'
 import axios from '@/lib/axios'
+import { connect } from 'react-redux'
 
 import { Link } from 'react-router-dom'
 import { Timeline, Pagination, Spin } from 'antd'
@@ -27,6 +28,9 @@ const TimeLineList = ({ list, name, type }) => {
   )
 }
 
+@connect(state => ({
+  windowWidth: state.common.windowWidth
+}))
 class List extends Component {
   state = {
     list: [],
@@ -73,6 +77,7 @@ class List extends Component {
   render() {
     const { list, type, page, total, loading } = this.state
     const { name } = this.props.match.params
+    console.log(this.props.windowWidth)
     return (
       <div className="content-inner-wrapper list-page">
         <Spin tip="Loading..." spinning={loading}>
@@ -80,8 +85,8 @@ class List extends Component {
         </Spin>
 
         {total > 15 && (
-          <div style={{ textAlign: 'right' }}>
-            <Pagination pageSize={15} current={page} onChange={this.onChange} total={total} />
+          <div className='pagination'>
+            <Pagination pageSize={15} current={page} onChange={this.onChange} total={total} simple={this.props.windowWidth < 736} />
           </div>
         )}
       </div>

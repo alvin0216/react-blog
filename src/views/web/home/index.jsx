@@ -128,8 +128,8 @@ class Home extends Component {
             {list.length > 0 ? (
               <Fragment>
                 {list.length < total && (
-                  <div style={{ textAlign: 'right' }}>
-                    <Pagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} />
+                  <div className='pagination'>
+                    <Pagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} simple={this.props.windowWidth < 736} />
                   </div>
                 )}
 

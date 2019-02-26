@@ -1,11 +1,15 @@
 import React, { Component, Fragment } from 'react'
 import './index.less'
 import axios from '@/lib/axios'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { groupBy } from '@/lib'
 import { Timeline, Icon, Pagination, Spin } from 'antd'
 
+@connect(state => ({
+  windowWidth: state.common.windowWidth
+}))
 class Archives extends Component {
   state = {
     list: [],
@@ -71,8 +75,8 @@ class Archives extends Component {
             ))}
           </Timeline>
 
-          <div style={{ textAlign: 'right' }}>
-            <Pagination pageSize={15} current={this.state.current} onChange={this.onChange} total={total} />
+          <div className='pagination'>
+            <Pagination pageSize={15} current={this.state.current} onChange={this.onChange} total={total} simple={this.props.windowWidth < 736} />
           </div>
         </Spin>
       </div>
