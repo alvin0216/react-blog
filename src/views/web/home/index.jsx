@@ -21,7 +21,8 @@ const NoDataDesc = ({ keyword }) => (
 
 @connect(
   state => ({
-    drawerVisible: state.common.drawerVisible
+    drawerVisible: state.common.drawerVisible,
+    windowWidth: state.common.windowWidth
   }),
   { openDrawer, closeDrawer }
 )
