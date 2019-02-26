@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 
 import { Link } from 'react-router-dom'
 import { Timeline, Pagination, Spin } from 'antd'
+import BlogPagination from '@/components/web/pagination'
 
 const TimeLineList = ({ list, name, type }) => {
   return (
@@ -69,7 +70,7 @@ class List extends Component {
       .catch(e => this.setState({ loading: false }))
   }
 
-  onChange = page => {
+  handlePageChange = page => {
     const params = this.decodeQuery(this.props)
     this.setState({ page }, this.fetchList({ page, ...params }))
   }
@@ -77,17 +78,26 @@ class List extends Component {
   render() {
     const { list, type, page, total, loading } = this.state
     const { name } = this.props.match.params
-    console.log(this.props.windowWidth)
     return (
       <div className="content-inner-wrapper list-page">
         <Spin tip="Loading..." spinning={loading}>
           <TimeLineList list={list} name={name} type={type} />
         </Spin>
 
-        {total > 15 && (
-          <div className='pagination'>
-            <Pagination pageSize={15} current={page} onChange={this.onChange} total={total} simple={this.props.windowWidth < 736} />
+        {/* {total > 15 && (
+          <div className="pagination">
+            <Pagination
+              pageSize={15}
+              current={page}
+              onChange={this.onChange}
+              total={total}
+              simple={this.props.windowWidth < 736}
+            />
           </div>
+        )} */}
+
+        {list.length < total && (
+          <BlogPagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} />
         )}
       </div>
     )

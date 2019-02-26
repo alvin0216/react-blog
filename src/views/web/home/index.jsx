@@ -3,7 +3,7 @@ import './index.less'
 
 import { connect } from 'react-redux'
 
-import { Icon, Divider, Pagination, Empty, Drawer } from 'antd'
+import { Icon, Divider, Empty, Drawer } from 'antd'
 import axios from '@/lib/axios'
 import { translateMarkdown, decodeQuery, getCommentsCount } from '@/lib'
 import { openDrawer, closeDrawer } from '@/redux/common/actions'
@@ -11,6 +11,7 @@ import { openDrawer, closeDrawer } from '@/redux/common/actions'
 import Tags from '../Tags'
 import Preview from './preview'
 import Loading from '@/components/helper/Loading'
+import BlogPagination from '@/components/web/pagination'
 
 const NoDataDesc = ({ keyword }) => (
   <Fragment>
@@ -20,7 +21,6 @@ const NoDataDesc = ({ keyword }) => (
 
 @connect(
   state => ({
-    windowWidth: state.common.windowWidth,
     drawerVisible: state.common.drawerVisible
   }),
   { openDrawer, closeDrawer }
@@ -72,11 +72,10 @@ class Home extends Component {
     this.props.history.push(url)
   }
 
-  
   componentWillUnmount() {
     this.props.closeDrawer()
   }
-  
+
   render() {
     const { list, total, loading } = this.state
     const { page, keyword } = decodeQuery(this.props.location.search)
@@ -128,9 +127,7 @@ class Home extends Component {
             {list.length > 0 ? (
               <Fragment>
                 {list.length < total && (
-                  <div className='pagination'>
-                    <Pagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} simple={this.props.windowWidth < 736} />
-                  </div>
+                  <BlogPagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total} />
                 )}
 
                 {this.props.windowWidth > 1300 ? (

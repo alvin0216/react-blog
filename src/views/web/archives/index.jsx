@@ -1,15 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import './index.less'
 import axios from '@/lib/axios'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { groupBy } from '@/lib'
 import { Timeline, Icon, Pagination, Spin } from 'antd'
+import BlogPagination from '@/components/web/pagination'
 
-@connect(state => ({
-  windowWidth: state.common.windowWidth
-}))
 class Archives extends Component {
   state = {
     list: [],
@@ -34,13 +31,13 @@ class Archives extends Component {
       .catch(e => this.setState({ loading: false }))
   }
 
-  onChange = page => {
+  handlePageChange = page => {
     this.fetchList({ page: page })
     this.setState({ current: page })
   }
 
   render() {
-    const { list, total, loading } = this.state
+    const { list, total, loading, current } = this.state
     return (
       <div className="content-inner-wrapper archives">
         <Spin tip="Loading..." spinning={loading}>
@@ -65,9 +62,7 @@ class Archives extends Component {
 
                 {d.map(item => (
                   <Timeline.Item key={item.id}>
-                    <span style={{ fontSize: '13px', marginRight: '16px' }}>
-                      {item.createdAt.slice(5, 10)}
-                    </span>
+                    <span style={{ fontSize: '13px', marginRight: '16px' }}>{item.createdAt.slice(5, 10)}</span>
                     <Link to={`/article/${item.id}`}>{item.title}</Link>
                   </Timeline.Item>
                 ))}
@@ -75,9 +70,9 @@ class Archives extends Component {
             ))}
           </Timeline>
 
-          <div className='pagination'>
-            <Pagination pageSize={15} current={this.state.current} onChange={this.onChange} total={total} simple={this.props.windowWidth < 736} />
-          </div>
+          {list.length < total && (
+            <BlogPagination current={parseInt(current) || 1} onChange={this.handlePageChange} total={total} />
+          )}
         </Spin>
       </div>
     )
