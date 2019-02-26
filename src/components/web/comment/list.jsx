@@ -30,6 +30,8 @@ const CommentItem = ({
     if (level === 1) openReply(level, item.id)
     else openReply(level, item.id, fatherId)
   }
+  const content = translateMarkdown(item.content).replace(/\sonclick=(.*)">/g,'>') // 阻止点击事件！！！
+
   return (
     <Comment
       actions={[
@@ -51,7 +53,7 @@ const CommentItem = ({
       content={
         <div
           className="article-detail"
-          dangerouslySetInnerHTML={{ __html: translateMarkdown(item.content) }}
+          dangerouslySetInnerHTML={{ __html: content }}
         />
       }
       datetime={

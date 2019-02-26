@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import axios from '@/lib/axios'
 import { getCommentsCount } from '@/lib'
-import { Table, Button, Modal, message } from 'antd'
+import moment from 'moment'
 
+import { Table, Button, Modal, message } from 'antd'
 class UserManage extends Component {
   state = {
     list: [],
@@ -24,6 +25,11 @@ class UserManage extends Component {
         dataIndex: 'comments',
         render: text => getCommentsCount(text),
         sorter: (a, b) => getCommentsCount(a.comments) - getCommentsCount(b.comments)
+      },
+      {
+        title: '注册时间',
+        dataIndex: 'createdAt',
+        sorter: (a, b) => moment(a.createdAt).isBefore(b.createdAt)? 1 : -1
       },
       {
         title: '操作',

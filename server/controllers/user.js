@@ -47,7 +47,7 @@ module.exports = {
       const offset = (page - 1) * pageSize
       pageSize = parseInt(pageSize)
       const data = await UserModel.findAndCountAll({
-        attributes: ['id', 'username'],
+        attributes: ['id', 'username', 'createdAt'],
         where: { auth: 2 },
         include: [{ model: CommentModel, attributes: ['id'], include: [{ model: ReplyModel, attributes: ['id'] }] }],
         offset,
