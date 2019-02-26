@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import routes from '@/routes/config'
 import { connect } from 'react-redux'
 import { getTags, getCategories } from '@/redux/article/actions'
-import { getWindowHeight } from '@/redux/common/actions'
+import { getWindowWidth } from '@/redux/common/actions'
 
 @connect(
   state => state.user,
-  { getTags, getCategories, getWindowHeight }
+  { getTags, getCategories, getWindowWidth }
 )
 class Root extends Component {
   static defaultProps = {
@@ -18,7 +17,7 @@ class Root extends Component {
   componentDidMount() {
     this.props.getTags()
     this.props.getCategories()
-    this.props.getWindowHeight()
+    this.props.getWindowWidth()
   }
 
 

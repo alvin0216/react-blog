@@ -12,7 +12,7 @@ export const closeAuthModal = type => {
   return { type: constants.AUTH_CLOSE_AUTHMODAL, payload: type }
 }
 
-export const getWindowHeight = () => {
+export const getWindowWidth = () => {
   const body = document.getElementsByTagName('body')[0]
   return { type: constants.COMMON_GET_WINDOW_WIDTH, payload: body.clientWidth }
 }
