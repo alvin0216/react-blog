@@ -5,8 +5,8 @@ import './index.less'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { random } from '@/lib'
-import { Table, Divider, Tag, Modal, message } from 'antd'
+import { random, getCommentsCount } from '@/lib'
+import { Table, Divider, Tag, Modal, message, Badge } from 'antd'
 import QueryForm from './queryForm'
 import moment from 'moment'
 
@@ -19,7 +19,8 @@ class Manager extends Component {
     colorMap: {},
     list: [],
     pagination: {},
-    total: 0
+    total: 0,
+    loading: false
   }
 
   componentDidMount() {
@@ -61,14 +62,23 @@ class Manager extends Component {
         }
       },
       {
+        title: '评论数',
+        dataIndex: 'comments',
+        render: text => {
+          const count = getCommentsCount(text)
+          return count !== 0 ? <Badge count={count} style={{ backgroundColor: '#52c41a' }} /> : count
+        },
+        sorter: (a, b) => getCommentsCount(a.comments) - getCommentsCount(b.comments)
+      },
+      {
         title: '发布时间',
         dataIndex: 'createdAt',
-        sorter: (a, b) => moment(a.createdAt).isBefore(b.createdAt)? 1 : -1
+        sorter: (a, b) => (moment(a.createdAt).isBefore(b.createdAt) ? 1 : -1)
       },
       {
         title: '修改时间',
         dataIndex: 'updatedAt',
-        sorter: (a, b) => moment(a.updatedAt).isBefore(b.updatedAt) ? 1 : -1
+        sorter: (a, b) => (moment(a.updatedAt).isBefore(b.updatedAt) ? 1 : -1)
       },
       {
         title: '操作',
@@ -91,13 +101,15 @@ class Manager extends Component {
   }
 
   fetchList = ({ current = 1, pageSize = 10, ...query }) => {
+    this.setState({ loading: true })
+
     axios.get('/article/getList', { params: { page: current, pageSize, ...query } }).then(res => {
       const pagination = {
         current,
         pageSize,
         total: res.count
       }
-      this.setState({ list: res.rows, pagination })
+      this.setState({ list: res.rows, pagination, loading: false })
     })
   }
 
@@ -130,13 +142,14 @@ class Manager extends Component {
   }
 
   render() {
-    const { list, pagination } = this.state
+    const { list, pagination, loading } = this.state
     return (
       <div className="manager">
         <QueryForm getQuery={this.getQuery} />
         <Table
           rowKey="id"
           bordered
+          loading={loading}
           columns={this.getColumns()}
           dataSource={list}
           pagination={pagination}

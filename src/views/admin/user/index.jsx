@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import axios from '@/lib/axios'
 import { getCommentsCount } from '@/lib'
 import moment from 'moment'
+import QueryForm from './queryForm'
+import { Table, Button, Modal, message, Badge } from 'antd'
 
-import { Table, Button, Modal, message } from 'antd'
 class UserManage extends Component {
   state = {
     list: [],
-    pagination: {}
+    pagination: {},
+    loading: false
   }
 
   componentDidMount() {
@@ -23,29 +25,37 @@ class UserManage extends Component {
       {
         title: '评论数',
         dataIndex: 'comments',
-        render: text => getCommentsCount(text),
+        render: text => {
+          const count = getCommentsCount(text)
+          return count !== 0 ? <Badge count={count} style={{ backgroundColor: '#52c41a' }} /> : count
+        },
         sorter: (a, b) => getCommentsCount(a.comments) - getCommentsCount(b.comments)
       },
       {
         title: '注册时间',
         dataIndex: 'createdAt',
-        sorter: (a, b) => moment(a.createdAt).isBefore(b.createdAt)? 1 : -1
+        sorter: (a, b) => (moment(a.createdAt).isBefore(b.createdAt) ? 1 : -1)
       },
       {
         title: '操作',
-        render: (text, record) => <Button type="danger" onClick={() => this.handleDelete(record.id, record.username)}>删除</Button>
+        render: (text, record) => (
+          <Button type="danger" onClick={() => this.handleDelete(record.id, record.username)}>
+            删除
+          </Button>
+        )
       }
     ]
   }
 
-  fetchList = ({ current = 1, pageSize = 10 }) => {
-    axios.get('/user/getUserList', { params: { page: current, pageSize } }).then(res => {
+  fetchList = ({ current = 1, pageSize = 10, ...query }) => {
+    this.setState({ loading: true })
+    axios.get('/user/getUserList', { params: { page: current, pageSize, ...query } }).then(res => {
       const pagination = {
         current,
         pageSize,
         total: res.count
       }
-      this.setState({ list: res.rows, pagination })
+      this.setState({ list: res.rows, pagination, loading: false })
     })
   }
 
@@ -65,21 +75,29 @@ class UserManage extends Component {
   }
 
   handleChange = pagination => {
-    console.log(pagination)
     this.fetchList({ ...pagination, ...this.state.query })
   }
 
+  getQuery = query => {
+    this.setState({ query })
+    this.fetchList({ ...query, current: 1 })
+  }
+
   render() {
-    const { list, pagination } = this.state
+    const { list, pagination, loading } = this.state
     return (
-      <Table
-        rowKey="id"
-        bordered
-        columns={this.getColumns()}
-        dataSource={list}
-        pagination={pagination}
-        onChange={this.handleChange}
-      />
+      <div className="">
+        <QueryForm getQuery={this.getQuery} />
+        <Table
+          rowKey="id"
+          bordered
+          columns={this.getColumns()}
+          loading={loading}
+          dataSource={list}
+          pagination={pagination}
+          onChange={this.handleChange}
+        />
+      </div>
     )
   }
 }
