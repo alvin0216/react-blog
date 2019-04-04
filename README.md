@@ -1,6 +1,11 @@
 ## 前言
+
 使用 `react` 有一段时间了, 也想用 `react` 去写点什么，平时接触最多的就是 blog 了，于是乎借助 `antd` 这个 UI 框架设计出了一个极其简约风格的 `spa` 博客。
 目的也是将 `react` 的生态圈的工具梳理一遍，后端则采用了 `koa + sequelize + mysql` 的技术选型（我司用的就是这个技术栈啦，所以笔者也用这个了）
+
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
+[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
 ## 博客介绍
 
@@ -11,16 +16,15 @@
 - [博客地址](https://guodada.fun) - 联系我可以 email gershonv@163.com | QQ 434358603 | 博客关于页面留言~
 - [项目地址](https://github.com/gershonv/react-blog)
 - [预览地址](http://test.guodada.fun)
-    - 用户名 admin/admin 最高权限，求小伙伴不要乱删数据，乱删数据其他伙伴会没什么数据看的。
-    - 给最高权限是为了让大家看到博主的权限。体验博客完整的功能。
-    - 后台访问路径 /admin
-
+  - 用户名 admin/admin 最高权限，求小伙伴不要乱删数据，乱删数据其他伙伴会没什么数据看的。
+  - 给最高权限是为了让大家看到博主的权限。体验博客完整的功能。
+  - 后台访问路径 /admin
 
 ### 技术栈
 
 - 前端 （基于 `create-react-app eject` 后的配置）
-  - react v16.8.1 
-  - redux redux-thunk 
+  - react v16.8.1
+  - redux redux-thunk
   - react-router4
   - axios
   - marked highlight.js
@@ -44,16 +48,16 @@
 为了方便查看开发记录笔者分了几个分支
 
 1. [client-chore](https://github.com/gershonv/react-blog/tree/client-chore): 记录前端项目的构建过程
-   1. 配置 react + antd + less + babel-plugins-import 
+   1. 配置 react + antd + less + babel-plugins-import
    2. 配置 redux + redux-thunk + redux-logger (开发和生产环境)
    3. 配置 装饰器 + axios 封装 + 路由配置（主博客路由 和 admin 管理系统）
 2. [server-chore](https://github.com/gershonv/react-blog/tree/server-chore): 记录后端项目的构建过程
    1. 配置 koa + koa-router + 中间件
-   2. 项目结构划分（mvc结构）
+   2. 项目结构划分（mvc 结构）
    3. 配置 sequelize 以及数据库的设计
    4. ...
 3. [client-markdown](https://github.com/gershonv/react-blog/tree/client-markdown): 配置 markdown 语法高亮
-4. [dev](https://github.com/gershonv/react-blog/tree/dev): 开发分支 
+4. [dev](https://github.com/gershonv/react-blog/tree/dev): 开发分支
 
 ## 效果
 
@@ -76,7 +80,6 @@
 ![](https://user-gold-cdn.xitu.io/2019/2/24/1691e1627fe67721?w=1920&h=1048&f=png&s=140246)
 
 ## 表结构
-
 
 ![](https://user-gold-cdn.xitu.io/2019/2/26/16927aeb05f720a9?w=607&h=851&f=png&s=91713)
 
@@ -109,7 +112,7 @@ npm start
 
 从零开发个人博客，整个过程感受就是不动手就不知道自己还有多少知识没了解到或者说好好运用到。麻雀虽小五脏俱全吧。
 
-要点在于 
+要点在于
 
 - 前端
   - 如何组织项目架构。合适的项目架构可以提高开发效率和更好的后期维护。
@@ -136,7 +139,8 @@ npm start
 [项目地址](https://github.com/gershonv/react-blog)
 
 模块设计
-- 博主 auth = 1 具备最高权限 文章、评论和回复的增删改查权限（root用户只能在注册后在数据库改权限）
+
+- 博主 auth = 1 具备最高权限 文章、评论和回复的增删改查权限（root 用户只能在注册后在数据库改权限）
 - 普通用户 auth = 2 具备评论和回复的功能
 - 注意 关于页面引用 articleId = -1 新建文章后自改库吧
 
