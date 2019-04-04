@@ -1,9 +1,10 @@
 import marked from 'marked'
 import hljs from 'highlight.js'
+import xss from 'xss'
 
 // 转化 md 语法为 html
 export const translateMarkdown = plainText => {
-  return marked(plainText, {
+  return marked(xss(plainText), {
     renderer: new marked.Renderer(),
     gfm: true,
     pedantic: false,

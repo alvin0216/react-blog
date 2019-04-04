@@ -30,7 +30,7 @@ const CommentItem = ({
     if (level === 1) openReply(level, item.id)
     else openReply(level, item.id, fatherId)
   }
-  const content = translateMarkdown(item.content).replace(/\sonclick=(.*)">/g,'>') // 阻止点击事件！！！
+  const content = translateMarkdown(item.content)
 
   return (
     <Comment
