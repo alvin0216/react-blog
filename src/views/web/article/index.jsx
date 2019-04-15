@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react'
 import './index.less'
-import axios from '@/lib/axios'
 import { connect } from 'react-redux'
 import { translateMarkdown, getCommentsCount } from '@/lib/index'
 import { openDrawer, closeDrawer, generateColorMap } from '@/redux/common/actions'
@@ -43,7 +42,7 @@ class ArticleDetail extends Component {
 
   fetchData = id => {
     this.setState({ loading: true })
-    axios
+    this.axios
       .get(`/article/get/${id}`)
       .then(res => {
         const content = translateMarkdown(res.data.content)

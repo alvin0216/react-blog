@@ -5,7 +5,6 @@ import SimpleMDE from 'simplemde'
 import 'simplemde/dist/simplemde.min.css'
 import './index.less'
 import { translateMarkdown } from '@/lib/index'
-import axios from '@/lib/axios'
 
 import { Button, Input, Modal, BackTop } from 'antd'
 import SelectCate from './components/Cate'
@@ -30,7 +29,7 @@ class Edit extends Component {
 
     if (this.props.history.location.state) {
       const { articleId } = this.props.history.location.state
-      axios.get(`/article/get/${articleId}`).then(res => {
+      this.axios.get(`/article/get/${articleId}`).then(res => {
         const { title, tags, categories, content } = res.data
         this.smde.value(content)
         const tagList = tags.map(d => d.name)
@@ -61,14 +60,14 @@ class Edit extends Component {
       tags
     }
     if (this.state.isEdit) {
-      axios.put('/article/update', { ...params, articleId: this.state.articleId }).then(res => {
+      this.axios.put('/article/update', { ...params, articleId: this.state.articleId }).then(res => {
         Modal.confirm({
           title: '文章修改成功！是否查看详情？',
           onOk: () => this.props.history.push(`/article/${this.state.articleId}`)
         })
       })
     } else {
-      axios.post('/article/create', params).then(res => {
+      this.axios.post('/article/create', params).then(res => {
         Modal.confirm({
           title: '文章创建成功！是否立即查看？',
           onOk: () => this.props.history.push(`/article/${res.data.id}`)

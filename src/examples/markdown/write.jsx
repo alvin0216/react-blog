@@ -7,8 +7,6 @@ import marked from 'marked'
 import SimpleMDE from 'simplemde'
 import 'simplemde/dist/simplemde.min.css'
 
-import axios from '@/lib/axios'
-
 function translateMarkdown(plainText) {
   return marked(plainText, {
     renderer: new marked.Renderer(),

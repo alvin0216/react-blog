@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import AuthorAvatar from '@/components/web/AuthorAvatar'
 
-import axios from '@/lib/axios'
 import { random, groupBy, translateMarkdown } from '@/lib'
 import { Comment, Avatar, Button, Tooltip, Input, Icon, Popconfirm, message } from 'antd'
 import moment from 'moment'
@@ -143,7 +142,7 @@ class CommentList extends Component {
     const content = this.state.value.trim()
     if (!this.props.username) return message.warn('您未登陆，请登录后再试。')
     const { articleId } = this.props
-    axios
+    this.axios
       .post('/user/reply', {
         content,
         articleId,
@@ -157,14 +156,14 @@ class CommentList extends Component {
 
   delComment = (item, commentId) => {
     if (item.replies) {
-      axios.delete('/comment/del', { params: { commentId: item.id } }).then(res => {
+      this.axios.delete('/comment/del', { params: { commentId: item.id } }).then(res => {
         if (res.code !== 200) return message.error(res.message)
         const list = this.props.commentList.filter(d => d.id !== item.id)
         this.props.setCommentList(list)
         message.success(res.message)
       })
     } else {
-      axios.delete('/reply/del', { params: { replyId: item.id } }).then(res => {
+      this.axios.delete('/reply/del', { params: { replyId: item.id } }).then(res => {
         if (res.code !== 200) return message.error(res.message)
 
         const list = [...this.props.commentList]

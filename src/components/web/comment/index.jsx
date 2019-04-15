@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import './index.less'
 
-import axios from '@/lib/axios'
 import { connect } from 'react-redux'
 
 import AuthorAvatar from '@/components/web/AuthorAvatar'
@@ -59,7 +58,7 @@ class ArticleComment extends Component {
     if (!this.props.username) return message.warn('您未登陆，请登录后再试。')
 
     this.setState({ submitting: true })
-    axios
+    this.axios
       .post('/user/comment', { articleId: this.props.articleId, content: this.state.value })
       .then(res => {
         this.setState({ submitting: false, value: '' }, () => this.props.setCommentList(res.rows))

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './index.less'
-import axios from '@/lib/axios'
 import { connect } from 'react-redux'
 
 import { Link } from 'react-router-dom'
@@ -62,7 +61,7 @@ class List extends Component {
 
   fetchList = ({ page = 1, name, type }) => {
     this.setState({ loading: true })
-    axios
+    this.axios
       .get(`/${type}/getArticles`, { params: { page, pageSize: 15, name } })
       .then(res => {
         this.setState({ list: res.rows, total: res.count, loading: false })

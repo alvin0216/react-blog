@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './index.less'
 import AuthorAvatar from '@/components/web/AuthorAvatar'
-import axios from '@/lib/axios'
 import { connect } from 'react-redux'
 import { generateColorMap } from '@/redux/common/actions'
 
@@ -21,7 +20,7 @@ class About extends Component {
   }
 
   fetchList = () => {
-    axios.get('/comment/getAboutComments').then(res => {
+    this.axios.get('/comment/getAboutComments').then(res => {
       this.props.generateColorMap(res.rows) // 生成头像的颜色匹配
       this.setState({ commentList: res.rows })
     })

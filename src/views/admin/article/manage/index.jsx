@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from '@/lib/axios'
 import './index.less'
 
 import { connect } from 'react-redux'
@@ -103,7 +102,7 @@ class Manager extends Component {
   fetchList = ({ current = 1, pageSize = 10, ...query }) => {
     this.setState({ loading: true })
 
-    axios.get('/article/getList', { params: { page: current, pageSize, ...query } }).then(res => {
+    this.axios.get('/article/getList', { params: { page: current, pageSize, ...query } }).then(res => {
       const pagination = {
         current,
         pageSize,
@@ -125,7 +124,7 @@ class Manager extends Component {
       title: '您确认删除该文章?，此操作不可恢复！',
       content: `文章： ${title} `,
       onOk: () => {
-        axios.delete('/article/delete', { params: { articleId } }).then(res => {
+        this.axios.delete('/article/delete', { params: { articleId } }).then(res => {
           if (res.code === 200) {
             this.fetchList(this.state.pagination)
             message.success(res.message)

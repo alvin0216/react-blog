@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import axios from '@/lib/axios'
 import Navigation from './navigation'
 
 class Show extends Component {
   state = { markdownText: '', anchors: [] }
 
   componentDidMount() {
-    axios.get('/examples/md').then(res => {
+    this.axios.get('/examples/md').then(res => {
       this.setState({ markdownText: res.content })
     })
   }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from '@/lib/axios'
 import { getCommentsCount } from '@/lib'
 import moment from 'moment'
 import QueryForm from './queryForm'
@@ -49,7 +48,7 @@ class UserManage extends Component {
 
   fetchList = ({ current = 1, pageSize = 10, ...query }) => {
     this.setState({ loading: true })
-    axios.get('/user/getUserList', { params: { page: current, pageSize, ...query } }).then(res => {
+    this.axios.get('/user/getUserList', { params: { page: current, pageSize, ...query } }).then(res => {
       const pagination = {
         current,
         pageSize,
@@ -64,7 +63,7 @@ class UserManage extends Component {
       title: '您确认删除该用户?，此操作不可恢复！',
       content: `用户： ${username} `,
       onOk: () => {
-        axios.delete('/user/delete', { params: { userId } }).then(res => {
+        this.axios.delete('/user/delete', { params: { userId } }).then(res => {
           if (res.code === 200) {
             this.fetchList(this.state.pagination)
             message.success(res.message)

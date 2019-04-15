@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react'
 import './index.less'
-import axios from '@/lib/axios'
 import { Link } from 'react-router-dom'
 
 import { groupBy } from '@/lib'
@@ -22,7 +21,7 @@ class Archives extends Component {
   fetchList({ page = 1 }) {
     this.setState({ loading: true })
 
-    axios
+    this.axios
       .get('/article/getList', { params: { page, pageSize: 15 } })
       .then(res => {
         const list = groupBy(res.rows, item => item.createdAt.slice(0, 4))

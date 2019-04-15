@@ -4,7 +4,6 @@ import './index.less'
 import { connect } from 'react-redux'
 
 import { Icon, Divider, Empty, Drawer } from 'antd'
-import axios from '@/lib/axios'
 import { translateMarkdown, decodeQuery, getCommentsCount } from '@/lib'
 import { openDrawer, closeDrawer } from '@/redux/common/actions'
 
@@ -44,7 +43,7 @@ class Home extends Component {
 
   fetchList({ page, keyword }) {
     this.setState({ loading: true })
-    axios
+    this.axios
       .get('/article/getList', { params: { page, pageSize: 10, title: keyword } })
       .then(res => {
         const list = res.rows

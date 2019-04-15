@@ -3,7 +3,6 @@ import './index.less'
 import { connect } from 'react-redux'
 import avatar from '@/assets/author_avatar.png'
 import { Link } from 'react-router-dom'
-import axios from '@/lib/axios'
 import { Divider, Tag, Icon } from 'antd'
 
 function random(colorList) {
@@ -21,7 +20,7 @@ class BolgSider extends Component {
   state = { recentList: [] }
 
   componentDidMount() {
-    axios.get('/article/getList', { params: { page: 1, pageSize: 6 } }).then(res => {
+    this.axios.get('/article/getList', { params: { page: 1, pageSize: 6 } }).then(res => {
       this.setState({ recentList: res.rows })
     })
   }
