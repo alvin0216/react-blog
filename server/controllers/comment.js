@@ -2,7 +2,40 @@
 const { sequelize } = require('../models')
 const { comment: CommentModel, reply: ReplyModel, user: UserModel } = require('../models')
 const { decodeToken, checkAuth } = require('../lib/token')
+const sendEmail = require('../lib/sendEmail')
 
+/**
+ * 获取评论列表以及详情
+ * @param {Number} commentId - 评论 id
+ */
+const getCommentDetail = async commentId => {
+  res = await CommentModel.find({
+    where: { id: commentId },
+    include: [
+      {
+        model: ReplyModel,
+        attributes: ['content'],
+        include: [{ model: UserModel, as: 'user', attributes: ['email'] }]
+      },
+      { model: UserModel, as: 'user', attributes: ['email'] }
+    ]
+  })
+  let emailList = [],
+    contentList = []
+  res.user.email && emailList.push(res.user.email)
+  res.content && contentList.push(res.content)
+  res.replies.forEach(reply => {
+    const replyEmail = reply.user.email
+    contentList.push(reply.content)
+    replyEmail && !emailList.includes(replyEmail) && emailList.push(replyEmail)
+  })
+  return { emailList, contentList }
+}
+
+/**
+ * 获取评论列表
+ * @param {Number} articleId - 根据文章 id 获取评论列表
+ */
 const fetchCommentList = async articleId =>
   CommentModel.findAndCountAll({
     where: { articleId },
@@ -34,9 +67,15 @@ module.exports = {
   async reply(ctx) {
     const { userId } = decodeToken(ctx)
     const { articleId, content, commentId } = ctx.request.body
-    await ReplyModel.create({ userId, articleId, content, commentId })
-    const data = await fetchCommentList(articleId)
-    ctx.body = { code: 200, message: 'success', ...data }
+    // await ReplyModel.create({ userId, articleId, content, commentId })
+    const result = await fetchCommentList(articleId)
+    const list = await getCommentDetail(commentId)
+
+    // console.log('==========================')
+    // const emailList = getEmailList(result.rows, commentId)
+    // console.log(result.rows)
+    // console.log('==========================')
+    ctx.body = { code: 200, message: 'success', ...result, ...list }
   },
 
   // 删除评论
