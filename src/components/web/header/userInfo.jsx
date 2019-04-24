@@ -34,10 +34,7 @@ class UserInfo extends Component {
     return (
       <div id="header-userInfo">
         {username ? (
-          <Dropdown
-            placement="bottomCenter"
-            overlay={this.renderAvatarDropdownMenu()}
-            trigger={['click', 'hover']}>
+          <Dropdown placement="bottomCenter" overlay={this.renderAvatarDropdownMenu()} trigger={['click', 'hover']}>
             <Avatar className="user-avatar" size="large" style={{ backgroundColor: avatarColor }}>
               {username}
             </Avatar>
@@ -49,10 +46,10 @@ class UserInfo extends Component {
               type="primary"
               size="small"
               style={{ marginRight: 20 }}
-              onClick={() => this.props.openAuthModal('login')}>
+              onClick={() => this.props.openAuthModal({ type: 'login' })}>
               登录
             </Button>
-            <Button ghost type="danger" size="small" onClick={() => this.props.openAuthModal('register')}>
+            <Button ghost type="danger" size="small" onClick={() => this.props.openAuthModal({ type: 'register' })}>
               注册
             </Button>
           </Fragment>

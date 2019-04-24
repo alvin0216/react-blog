@@ -47,7 +47,7 @@ module.exports = {
         response = { code: 400, message: '密码不正确' }
       } else {
         const { id, auth } = user
-        const token = createToken({ username: user.username, userId: id, auth }) // 生成 token
+        const token = createToken({ username: user.username, userId: id, auth, email: user.email }) // 生成 token
         response = { code: 200, message: '登录成功', username: user.username, auth: user.auth, token }
       }
     }
