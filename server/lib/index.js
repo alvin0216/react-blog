@@ -26,6 +26,8 @@ exports.translateMarkdown = translateMarkdown
  * @param {Object} commentData - 评论以及回复的数据
  * @param {Object} article - 文章详情
  * @param {Boolean} onlyComment - 是否只新增了评论
+ * 
+ * @return { emailList, html, subject }
  */
 exports.getEmailData = (commentData, article, onlyComment = false) => {
   function prefix(origin) {
@@ -48,10 +50,11 @@ exports.getEmailData = (commentData, article, onlyComment = false) => {
   })
 
   // html 处理
-  let link = article.id !== -1 ? `${WEB_HOST}/article/${article.id}` : `${WEB_HOST}/about`
-  let title = article.id !== -1 ? article.title : '关于页面'
-  let pos = article.id !== -1 ? '文章' : ''
-  let content = contentList.join('')
+  let link = article.id !== -1 ? `${WEB_HOST}/article/${article.id}` : `${WEB_HOST}/about`,
+    title = article.id !== -1 ? article.title : '关于页面',
+    pos = article.id !== -1 ? '文章' : '',
+    content = contentList.join(''),
+    subject = !onlyComment ? `郭大大的博客 - 您在${pos}【${title}】中的评论得到了新的回复` : `郭大大的博客 - 您的${pos}【${title}】有了新的评论`
 
   let html = `
     您在${pos}【<a href="${link}">${title}</a>】中的评论得到了新的回复： 
@@ -70,5 +73,5 @@ exports.getEmailData = (commentData, article, onlyComment = false) => {
     `
   }
 
-  return { emailList, html }
+  return { emailList, html, subject }
 }

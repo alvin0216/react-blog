@@ -12,14 +12,16 @@ const { emailTransporterConfig } = require('../config')
 const fetchCommentDetail = commentId =>
   CommentModel.find({
     where: { id: commentId },
+    attributes: ['id', 'userId', 'content', 'createdAt'],
     include: [
       {
         model: ReplyModel,
-        attributes: ['content'],
+        attributes: ['content', 'createdAt'],
         include: [{ model: UserModel, as: 'user', attributes: ['username', 'email'] }]
       },
       { model: UserModel, as: 'user', attributes: ['username', 'email'] }
-    ]
+    ],
+    order: [['createdAt', 'DESC']]
   })
 
 /**
@@ -58,8 +60,8 @@ module.exports = {
       fetchCommentDetail(comment.id),
       fetchAritcleDetail(articleId)
     ])
-    const { html } = getEmailData(detailData, article, true)
-    sendEmail({ receiver: emailTransporterConfig.auth.user, html, subject: '郭大大的博客 - 您的有了一条新的评论！' })
+    const { html, subject } = getEmailData(detailData, article, true)
+    sendEmail({ receiver: emailTransporterConfig.auth.user, html, subject })
       .then(res => {
         console.log('发送成功')
       })
@@ -84,12 +86,12 @@ module.exports = {
       fetchAritcleDetail(articleId)
     ])
 
-    const { emailList, html } = getEmailData(detailData, article)
+    const { emailList, html, subject } = getEmailData(detailData, article)
 
     Promise.all(
       emailList.map(receiver => {
         console.log('send email to', receiver)
-        return sendEmail({ receiver, html })
+        return sendEmail({ receiver, html, subject })
       })
     )
       .then(res => {
