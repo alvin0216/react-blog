@@ -22,17 +22,18 @@ const transporter = nodemailer.createTransport(emailTransporterConfig)
  * @param {String} params.html - 发送的内容
  * @example sendMail({ receiver: 'gershonv@163.com', html: 'hellllll' })
  */
-const sendMail = async ({ receiver, html }) => {
+const sendMail = async ({ receiver, html, subject, text }) => {
   let info = await transporter.sendMail({
     from: emailTransporterConfig.auth.user, // sender address
     to: receiver, // list of receivers
-    subject: '郭大大的博客', // Subject line
-    text: '您的评论获得新的回复！', // plain text body
+    subject: subject || '郭大大的博客 - 您的评论获得新的回复！', // Subject line
+    text: text || '您的评论获得新的回复！', // plain text body
     html: html // html body
   })
 
-  console.log('Message sent: %s', info.messageId)
+  // console.log('Message sent: %s', info.messageId)
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  return info
 }
 
 module.exports = sendMail
