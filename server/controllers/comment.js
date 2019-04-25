@@ -4,7 +4,7 @@ const { comment: CommentModel, reply: ReplyModel, user: UserModel, article: Arti
 const { decodeToken, checkAuth } = require('../lib/token')
 const sendEmail = require('../lib/sendEmail')
 const { getEmailData } = require('../lib')
-const { emailTransporterConfig } = require('../config')
+const { emailTransporterConfig, ENABLE_EMAIL_NOTICE } = require('../config')
 /**
  * 获取评论列表以及详情
  * @param {Number} commentId - 评论 id
@@ -61,14 +61,15 @@ module.exports = {
       fetchAritcleDetail(articleId)
     ])
     const { html, subject } = getEmailData(detailData, article, true)
-    sendEmail({ receiver: emailTransporterConfig.auth.user, html, subject })
-      .then(res => {
-        console.log('发送成功')
-      })
-      .catch(err => {
-        console.log('发送通知失败，尝试再次发送')
-        sendEmail({ receiver: emailTransporterConfig.auth.user, html })
-      })
+    ENABLE_EMAIL_NOTICE &&
+      sendEmail({ receiver: emailTransporterConfig.auth.user, html, subject })
+        .then(res => {
+          console.log('发送成功')
+        })
+        .catch(err => {
+          console.log('发送通知失败，尝试再次发送')
+          sendEmail({ receiver: emailTransporterConfig.auth.user, html })
+        })
 
     ctx.body = { code: 200, message: 'success', ...result }
   },
@@ -88,16 +89,17 @@ module.exports = {
 
     const { emailList, html, subject } = getEmailData(detailData, article)
 
-    Promise.all(emailList.map(receiver => sendEmail({ receiver, html, subject })))
-      .then(res => {
-        console.log('发送成功', emailList)
-      })
-      .catch(err => {
-        console.error(err) // 输出日志
-        // 尝试再次发送
-        console.log('===== 尝试再次发送中')
-        emailList.forEach(receiver => sendEmail({ receiver, html }))
-      })
+    ENABLE_EMAIL_NOTICE &&
+      Promise.all(emailList.map(receiver => sendEmail({ receiver, html, subject })))
+        .then(res => {
+          console.log('发送成功', emailList)
+        })
+        .catch(err => {
+          console.error(err) // 输出日志
+          // 尝试再次发送
+          console.log('===== 尝试再次发送中')
+          emailList.forEach(receiver => sendEmail({ receiver, html }))
+        })
 
     ctx.body = { code: 200, message: 'success', ...result }
   },
