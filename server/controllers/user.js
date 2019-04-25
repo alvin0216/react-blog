@@ -54,6 +54,66 @@ module.exports = {
     ctx.body = response
   },
 
+  /**
+   * 更新账户信息
+   *
+   */
+  async updateUser(ctx) {
+    const userId = parseInt(ctx.params.id) // userId
+    const { username, oldPassword, password, email } = ctx.request.body
+    const user = await UserModel.findByPk(userId) // 为什么不直接用 update ==> 防止不法分子直接把博主的密码改了，或者其他...
+
+    let response = {},
+      token
+
+    if (!user.email) {
+      await UserModel.update({ email }, { where: { id: userId } })
+      response = { code: 200, message: `已成功绑定邮箱 ${email}` }
+    } else {
+      if (oldPassword) {
+        const isMatch = await comparePassword(oldPassword, user.password)
+        if (isMatch) {
+          if (!username && !password) {
+            response = { code: 400, message: '用户名/密码参数错误' }
+          } else if (username && !password) {
+            const result = await UserModel.findOne({ where: { username } })
+            if (result) {
+              response = { code: 400, message: '用户名已被占用' }
+            } else {
+              await UserModel.update({ username }, { where: { id: userId } })
+              response = { code: 200, message: '用户名修改成功' }
+            }
+          } else if (!username && password) {
+            const saltPassword = await encrypt(password)
+            await UserModel.update({ password: saltPassword }, { where: { id: userId } })
+            response = { code: 200, message: '密码修改成功' }
+          } else if (username && password) {
+            const result = await UserModel.findOne({ where: { username } })
+            if (result) {
+              response = { code: 400, message: '用户名已被占用' }
+            } else {
+              const saltPassword = await encrypt(password)
+              await UserModel.update({ username, password: saltPassword }, { where: { id: userId } })
+              response = { code: 200, message: '用户名/密码修改成功' }
+            }
+          }
+        } else {
+          response = { code: 400, message: '密码不正确' }
+        }
+      } else {
+        response = { code: 400, message: '请输入原密码验证您的身份' }
+      }
+    }
+
+    if (response.code === 200) {
+      const result = await UserModel.findById(userId)
+      const { username, id, email, auth } = result
+      token = createToken({ username, userId: id, auth, email }) // 生成 token
+      response.token = token
+    }
+    ctx.body = response
+  },
+
   async getUserList(ctx) {
     const isAuth = checkAuth(ctx)
     if (isAuth) {
