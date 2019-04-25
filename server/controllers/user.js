@@ -67,8 +67,13 @@ module.exports = {
       token
 
     if (!user.email) {
-      await UserModel.update({ email }, { where: { id: userId } })
-      response = { code: 200, message: `已成功绑定邮箱 ${email}` }
+      const result = await UserModel.findOne({ where: { email } })
+      if (result) {
+        response = { code: 400, message: '该邮箱已被注册' }
+      } else {
+        await UserModel.update({ email }, { where: { id: userId } })
+        response = { code: 200, message: `已成功绑定邮箱 ${email}` }
+      }
     } else {
       if (oldPassword) {
         const isMatch = await comparePassword(oldPassword, user.password)
@@ -89,7 +94,7 @@ module.exports = {
             response = { code: 200, message: '密码修改成功' }
           } else if (username && password) {
             const result = await UserModel.findOne({ where: { username } })
-            if (result) {
+            if (result && result.username !== username) {
               response = { code: 400, message: '用户名已被占用' }
             } else {
               const saltPassword = await encrypt(password)

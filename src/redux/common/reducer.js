@@ -19,7 +19,7 @@ export const commonReducer = (state = defaultState, action) => {
       return { ...state, authModalVisible: true, authModalType: payload.type }
 
     case constants.AUTH_CLOSE_AUTHMODAL:
-      return { ...state, authModalVisible: false }
+      return { ...state, authModalVisible: false, authModalType: '' }
 
     case constants.COMMON_GET_WINDOW_WIDTH:
       return { ...state, windowWidth: payload }

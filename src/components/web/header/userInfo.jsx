@@ -21,6 +21,11 @@ class UserInfo extends Component {
     return (
       <Menu>
         <Menu.Item>
+          <span className="user-logout" onClick={() => this.props.openAuthModal({ type: 'updateUser' })}>
+            修改账户信息
+          </span>
+        </Menu.Item>
+        <Menu.Item>
           <span className="user-logout" onClick={this.props.logout}>
             退出登录
           </span>
