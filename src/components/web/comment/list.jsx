@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import AuthorAvatar from '@/components/web/AuthorAvatar'
 
 import { random, groupBy, translateMarkdown } from '@/lib'
-import { Comment, Avatar, Button, Tooltip, Input, Icon, Popconfirm, message } from 'antd'
+import { Comment, Avatar, Button, Tooltip, Input, Icon, Popconfirm, message,  Modal } from 'antd'
 import moment from 'moment'
 
 const { TextArea } = Input
@@ -49,12 +49,7 @@ const CommentItem = ({
       ]}
       author={<span>{item.user && item.user.username}</span>}
       avatar={renderAvatar(item)}
-      content={
-        <div
-          className="article-detail"
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
-      }
+      content={<div className="article-detail" dangerouslySetInnerHTML={{ __html: content }} />}
       datetime={
         <Tooltip title={item.createdAt}>
           <span>{moment(item.createdAt).fromNow()}</span>
@@ -84,6 +79,7 @@ const CommentItem = ({
 @connect(state => ({
   username: state.user.username,
   userId: state.user.userId,
+  email: state.user.email,
   auth: state.user.auth,
   colorMap: state.common.colorMap
 }))
@@ -110,10 +106,7 @@ class CommentList extends Component {
       return <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
     } else {
       return (
-        <Avatar
-          className="user-avatar"
-          size="default"
-          style={{ backgroundColor: colorMap[item.userId] || '#ccc' }}>
+        <Avatar className="user-avatar" size="default" style={{ backgroundColor: colorMap[item.userId] || '#ccc' }}>
           {item.user && item.user.username}
         </Avatar>
       )
@@ -141,6 +134,15 @@ class CommentList extends Component {
   onSubmit = () => {
     const content = this.state.value.trim()
     if (!this.props.username) return message.warn('您未登陆，请登录后再试。')
+    if (!this.props.email) {
+      Modal.confirm({
+        title: '温馨提示',
+        content: `您未绑定邮箱，是否要绑定邮箱来获取回复的最新动态的通知？`,
+        onOk: () => {
+          this.props.openAuthModal('updateUser')
+        }
+      })
+    }
     const { articleId } = this.props
     this.axios
       .post('/user/reply', {
@@ -196,13 +198,7 @@ class CommentList extends Component {
         {commentList.map(comment => (
           <CommentItem key={comment.id} item={comment} levelOneId={levelOneId} {...commonProps}>
             {comment.replies.map(reply => (
-              <CommentItem
-                key={reply.id}
-                item={reply}
-                levelTwoId={levelTwoId}
-                fatherId={comment.id}
-                {...commonProps}
-              />
+              <CommentItem key={reply.id} item={reply} levelTwoId={levelTwoId} fatherId={comment.id} {...commonProps} />
             ))}
           </CommentItem>
         ))}

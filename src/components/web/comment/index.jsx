@@ -9,7 +9,7 @@ import { getCommentsCount } from '@/lib'
 import { openAuthModal } from '@/redux/common/actions'
 import { logout } from '@/redux/user/actions'
 
-import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown, message } from 'antd'
+import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown, message, Modal } from 'antd'
 import CommentList from './list'
 
 const { TextArea } = Input
@@ -56,8 +56,17 @@ class ArticleComment extends Component {
   handleSubmit = () => {
     if (!this.state.value) return
     if (!this.props.username) return message.warn('您未登陆，请登录后再试。')
-
+    if (!this.props.email) {
+      Modal.confirm({
+        title: '温馨提示',
+        content: `您未绑定邮箱，是否要绑定邮箱来获取回复的最新动态的通知？`,
+        onOk: () => {
+          this.props.openAuthModal('updateUser')
+        }
+      })
+    }
     this.setState({ submitting: true })
+    
     this.axios
       .post('/user/comment', { articleId: this.props.articleId, content: this.state.value })
       .then(res => {
