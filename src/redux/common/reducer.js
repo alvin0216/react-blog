@@ -16,7 +16,7 @@ export const commonReducer = (state = defaultState, action) => {
   const { type, payload } = action
   switch (type) {
     case constants.AUTH_OPEN_AUTHMODAL:
-      return { ...state, authModalVisible: true, authModalType: payload.type }
+      return { ...state, authModalVisible: true, authModalType: payload }
 
     case constants.AUTH_CLOSE_AUTHMODAL:
       return { ...state, authModalVisible: false, authModalType: '' }

@@ -21,7 +21,7 @@ class UserInfo extends Component {
     return (
       <Menu>
         <Menu.Item>
-          <span className="user-logout" onClick={() => this.props.openAuthModal({ type: 'updateUser' })}>
+          <span className="user-logout" onClick={() => this.props.openAuthModal('updateUser')}>
             修改账户信息
           </span>
         </Menu.Item>
@@ -51,10 +51,10 @@ class UserInfo extends Component {
               type="primary"
               size="small"
               style={{ marginRight: 20 }}
-              onClick={() => this.props.openAuthModal({ type: 'login' })}>
+              onClick={() => this.props.openAuthModal('login')}>
               登录
             </Button>
-            <Button ghost type="danger" size="small" onClick={() => this.props.openAuthModal({ type: 'register' })}>
+            <Button ghost type="danger" size="small" onClick={() => this.props.openAuthModal('register')}>
               注册
             </Button>
           </Fragment>

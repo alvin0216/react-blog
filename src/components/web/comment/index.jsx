@@ -78,6 +78,9 @@ class ArticleComment extends Component {
       case 'register':
         this.props.openAuthModal('register')
         break
+      case 'updateUser':
+        this.props.openAuthModal('updateUser')
+        break
       case 'logout':
         this.props.logout()
         break
@@ -90,6 +93,7 @@ class ArticleComment extends Component {
     const { username } = this.props
     return username ? (
       <Menu onClick={this.handleMenuClick}>
+        <Menu.Item key="updateUser">修改账户信息</Menu.Item>
         <Menu.Item key="logout">注销</Menu.Item>
       </Menu>
     ) : (
@@ -107,8 +111,7 @@ class ArticleComment extends Component {
     return (
       <div className="comment-wrapper">
         <div className="comment-header">
-          <span className="count">{getCommentsCount(commentList)}</span>{' '}
-          {articleId !== -1 ? '条评论' : '条留言'}
+          <span className="count">{getCommentsCount(commentList)}</span> {articleId !== -1 ? '条评论' : '条留言'}
           <span className="menu-wrap">
             <Dropdown overlay={this.renderDropdownMenu()} trigger={['click', 'hover']}>
               <span>
@@ -143,11 +146,7 @@ class ArticleComment extends Component {
             />
           }
         />
-        <CommentList
-          commentList={commentList}
-          articleId={articleId}
-          setCommentList={this.props.setCommentList}
-        />
+        <CommentList commentList={commentList} articleId={articleId} setCommentList={this.props.setCommentList} />
       </div>
     )
   }

@@ -88,14 +88,9 @@ module.exports = {
 
     const { emailList, html, subject } = getEmailData(detailData, article)
 
-    Promise.all(
-      emailList.map(receiver => {
-        console.log('send email to', receiver)
-        return sendEmail({ receiver, html, subject })
-      })
-    )
+    Promise.all(emailList.map(receiver => sendEmail({ receiver, html, subject })))
       .then(res => {
-        console.log('发送成功')
+        console.log('发送成功', emailList)
       })
       .catch(err => {
         console.error(err) // 输出日志
