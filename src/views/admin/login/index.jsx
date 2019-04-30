@@ -13,7 +13,7 @@ import logo from '@/assets/logo.svg'
 )
 class Login extends Component {
   state = {
-    username: '',
+    account: '',
     password: ''
   }
 
@@ -40,9 +40,9 @@ class Login extends Component {
             size="large"
             style={{ marginBottom: 25 }}
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            name="username"
+            name="account"
             placeholder="Username"
-            value={this.state.username}
+            value={this.state.account}
             onChange={this.handleChange}
           />
           <Input

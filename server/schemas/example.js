@@ -55,10 +55,11 @@ const loginSchema = Joi.object().keys({
 const testSchema = Joi.object().keys({
   username: Joi.string()
     .required()
-    .description('用户名')
+    .description('用户名'),
+  aa: Joi.string().allow('')
 })
 
-const validator = Joi.validate({ username: '22', aa: 1 }, testSchema, {
+const validator = Joi.validate({ username: '22', aa: '' }, testSchema, {
   allowUnknown: true, // 允许其他参数 如 aa
   abortEarly: true, // 如果为true，则停止对第一个错误的验证，否则返回找到的所有错误。 默认为 true
   convert: true // 如果为true，则尝试将值强制转换为所需类型（例如，将字符串转换为数字）。 默认为true

@@ -26,7 +26,11 @@ instance.interceptors.request.use(
 //拦截响应
 instance.interceptors.response.use(
   response => {
-    if (response.data.code === 401 && response.data.message) message.warning(response.data.message)
+    if (response.data.code !== 200) {
+      response.data.message && message.warning(response.data.message)
+      console.log(response.data)
+      return Promise.reject(response.data)
+    }
     return response.data
   },
   err => {
