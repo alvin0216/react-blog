@@ -5,6 +5,10 @@ const { decodeToken, checkAuth } = require('../lib/token')
 const sendEmail = require('../lib/sendEmail')
 const { getEmailData } = require('../lib')
 const { emailTransporterConfig, ENABLE_EMAIL_NOTICE } = require('../config')
+
+const Joi = require('joi')
+const CommentSchema = require('../schemas/comment')
+
 /**
  * 获取评论列表以及详情
  * @param {Number} commentId - 评论 id
@@ -54,54 +58,65 @@ module.exports = {
   async comment(ctx) {
     const { userId } = decodeToken(ctx)
     const { articleId, content } = ctx.request.body
-    const comment = await CommentModel.create({ userId, articleId, content })
-    const [result, detailData, article] = await Promise.all([
-      fetchCommentList(articleId),
-      fetchCommentDetail(comment.id),
-      fetchAritcleDetail(articleId)
-    ])
-    const { html, subject } = getEmailData(detailData, article, true)
-    ENABLE_EMAIL_NOTICE &&
-      sendEmail({ receiver: emailTransporterConfig.auth.user, html, subject })
-        .then(res => {
-          console.log('发送成功')
-        })
-        .catch(err => {
-          console.log('发送通知失败，尝试再次发送')
-          sendEmail({ receiver: emailTransporterConfig.auth.user, html })
-        })
+    const validator = Joi.validate({ userId, articleId, content }, CommentSchema.createComment)
+    if (validator.error) {
+      ctx.body = { code: 400, message: validator.error.message }
+    } else {
+      const comment = await CommentModel.create({ userId, articleId, content })
+      const [result, detailData, article] = await Promise.all([
+        fetchCommentList(articleId),
+        fetchCommentDetail(comment.id),
+        fetchAritcleDetail(articleId)
+      ])
+      const { html, subject } = getEmailData(detailData, article, true)
+      ENABLE_EMAIL_NOTICE &&
+        sendEmail({ receiver: emailTransporterConfig.auth.user, html, subject })
+          .then(res => {
+            console.log('发送成功')
+          })
+          .catch(err => {
+            console.log('发送通知失败，尝试再次发送')
+            sendEmail({ receiver: emailTransporterConfig.auth.user, html })
+          })
 
-    ctx.body = { code: 200, message: 'success', ...result }
+      ctx.body = { code: 200, message: 'success', ...result }
+    }
   },
 
   // 创建回复
   async reply(ctx) {
     const { userId } = decodeToken(ctx)
     const { articleId, content, commentId } = ctx.request.body
-    await ReplyModel.create({ userId, articleId, content, commentId })
 
-    // 获取评论列表 和 评论详情（含个人 email，为保证个人隐私而设计）
-    const [result, detailData, article] = await Promise.all([
-      fetchCommentList(articleId),
-      fetchCommentDetail(commentId),
-      fetchAritcleDetail(articleId)
-    ])
+    const validator = Joi.validate({ userId, articleId, content, commentId }, CommentSchema.createReply)
+    if (validator.error) {
+      ctx.body = { code: 400, message: validator.error.message }
+    } else {
+      await ReplyModel.create({ userId, articleId, content, commentId })
 
-    const { emailList, html, subject } = getEmailData(detailData, article)
+      // 获取评论列表 和 评论详情（含个人 email，为保证个人隐私而设计）
+      const [result, detailData, article] = await Promise.all([
+        fetchCommentList(articleId),
+        fetchCommentDetail(commentId),
+        fetchAritcleDetail(articleId)
+      ])
 
-    ENABLE_EMAIL_NOTICE &&
-      Promise.all(emailList.map(receiver => sendEmail({ receiver, html, subject })))
-        .then(res => {
-          console.log('发送成功', emailList)
-        })
-        .catch(err => {
-          console.error(err) // 输出日志
-          // 尝试再次发送
-          console.log('===== 尝试再次发送中')
-          emailList.forEach(receiver => sendEmail({ receiver, html }))
-        })
+      const { emailList, html, subject } = getEmailData(detailData, article)
 
-    ctx.body = { code: 200, message: 'success', ...result }
+      ENABLE_EMAIL_NOTICE &&
+        Promise.all(emailList.map(receiver => sendEmail({ receiver, html, subject })))
+          .then(res => {
+            console.log('发送成功', emailList)
+          })
+          .catch(err => {
+            console.error(err) // 输出日志
+            // 尝试再次发送
+            console.log('===== 尝试再次发送中')
+            emailList.forEach(receiver => sendEmail({ receiver, html }))
+          })
+
+      ctx.body = { code: 200, message: 'success', ...result }
+    }
   },
 
   // 删除评论
