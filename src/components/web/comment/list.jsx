@@ -29,7 +29,7 @@ const CommentItem = ({
     if (level === 1) openReply(level, item.id)
     else openReply(level, item.id, fatherId)
   }
-  const content = translateMarkdown(item.content)
+  const content = translateMarkdown(item.content, true)
 
   return (
     <Comment
