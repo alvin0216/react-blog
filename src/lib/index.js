@@ -1,5 +1,5 @@
 import marked from 'marked'
-import hljs from 'highlight.js'
+// import hljs from 'highlight.js'
 import xss from 'xss'
 
 // 转化 md 语法为 html

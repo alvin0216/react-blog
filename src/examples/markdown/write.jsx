@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import hljs from 'highlight.js'
+// import hljs from 'highlight.js'
 
 import marked from 'marked'
 

@@ -11,13 +11,14 @@ import '@/style/reset.less'
 import '@/assets/iconfont/iconfont.css'
 
 // markdown 高亮
-import hljs from 'highlight.js'
-import javascript from 'highlight.js/lib/languages/javascript'
-import 'highlight.js/styles/atom-one-light.css'
+// import hljs from 'highlight.js'
+// import javascript from 'highlight.js/lib/languages/javascript'
+// import 'highlight.js/styles/atom-one-light.css'
 
 import '@/style/index.less'
 
-hljs.registerLanguage('javascript', javascript)
+// hljs.registerLanguage('javascript', javaScript)
+
 
 // 绑定 全局方法 axios
 React.Component.prototype.axios = axios
