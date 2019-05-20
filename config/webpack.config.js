@@ -251,7 +251,7 @@ module.exports = function(webpackEnv) {
             minChunks: 2
           },
           'react-vendor': {
-            test: /[\\/]node_modules[\\/](react|react-dom|redux)[\\/]/,
+            test: /[\\/]node_modules[\\/](react|react-dom|redux|react-router-dom)[\\/]/,
             name: 'react-vendor',
             priority: 3,
             reuseExistingChunk: false
