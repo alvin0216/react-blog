@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { Button, Form, Input, Select, DatePicker } from 'antd'
+import { Button, Form, Input, Select, DatePicker, Checkbox, Radio } from 'antd'
 import FormBuilder from '@/components/helper/FormBuilder'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -49,6 +49,14 @@ class QueryForm extends Component {
               ))}
             </Select>
           )
+        },
+        {
+          key: 'fetchTop',
+          label: '置顶文章',
+          labelCol: 20,
+          wrapperCol: 4,
+          formItemProps: { className: 'form-checkbox-wrap' },
+          widget: <Checkbox />
         }
         // {
         //   key: 'rangTime',

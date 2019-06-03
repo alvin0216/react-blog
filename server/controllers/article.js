@@ -38,20 +38,27 @@ module.exports = {
   async update(ctx) {
     const isAuth = checkAuth(ctx)
     if (isAuth) {
-      const { articleId, title, content, categories, tags } = ctx.request.body
-      const validator = Joi.validate(ctx.request.body, ArticleSchema.update)
-      if (validator.error) {
-        ctx.body = { code: 400, message: validator.error.message }
-      } else {
-        const tagList = tags.map(tag => ({ name: tag, articleId }))
-        const categoryList = categories.map(cate => ({ name: cate, articleId }))
-        await ArticleModel.update({ title, content }, { where: { id: articleId } })
-        await TagModel.destroy({ where: { articleId } })
-        await TagModel.bulkCreate(tagList)
-        await CategoryModel.destroy({ where: { articleId } })
-        await CategoryModel.bulkCreate(categoryList)
+      const { articleId, title, content, categories, tags, showOrder } = ctx.request.body
 
-        ctx.body = { code: 200, message: '文章修改成功' }
+      if (showOrder !== undefined) {
+        // 文章设置置顶
+        await ArticleModel.update({ showOrder }, { where: { id: articleId } })
+        ctx.body = { code: 200, message: '文章置顶设置成功' }
+      } else {
+        const validator = Joi.validate(ctx.request.body, ArticleSchema.update)
+        if (validator.error) {
+          ctx.body = { code: 400, message: validator.error.message }
+        } else {
+          const tagList = tags.map(tag => ({ name: tag, articleId }))
+          const categoryList = categories.map(cate => ({ name: cate, articleId }))
+          await ArticleModel.update({ title, content }, { where: { id: articleId } })
+          await TagModel.destroy({ where: { articleId } })
+          await TagModel.bulkCreate(tagList)
+          await CategoryModel.destroy({ where: { articleId } })
+          await CategoryModel.bulkCreate(categoryList)
+
+          ctx.body = { code: 200, message: '文章修改成功' }
+        }
       }
     }
   },
@@ -92,19 +99,24 @@ module.exports = {
    * ...
    */
   async getArticleList(ctx) {
-    let { page = 1, pageSize = 10, title, tag, category, rangTime } = ctx.query,
+    let { page = 1, pageSize = 10, title, tag, category, rangTime, fetchTop } = ctx.query,
       offset = (page - 1) * pageSize,
-      where = title ? { title: { $like: `%${title}%` } } : {}
+      queryParams = {},
+      order = [['createdAt', 'DESC']]
 
-    // const tagFilter = tag ? { name: { $like: `%${tag}%` } } : {}
-    // const categoryFilter = category ? { name: { $like: category } } : {}
+    if (title) queryParams.title = { $like: `%${title}%` }
+    if (fetchTop === 'true') {
+      queryParams.showOrder = 1
+      order = [['updatedAt', 'DESC']]
+    }
+
     const tagFilter = tag ? { name: tag } : {}
     const categoryFilter = category ? { name: category } : {}
 
     pageSize = parseInt(pageSize) // 处理 pageSize
 
     const data = await ArticleModel.findAndCountAll({
-      where,
+      where: queryParams,
       include: [
         { model: TagModel, attributes: ['name'], where: tagFilter },
         { model: CategoryModel, attributes: ['name'], where: categoryFilter },
@@ -116,7 +128,7 @@ module.exports = {
       ],
       offset,
       limit: pageSize,
-      order: [['createdAt', 'DESC']],
+      order,
       row: true,
       distinct: true
     })

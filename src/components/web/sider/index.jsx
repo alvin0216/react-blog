@@ -17,17 +17,32 @@ const mapStateToProps = state => ({
 
 @connect(mapStateToProps)
 class BolgSider extends Component {
-  state = { recentList: [] }
+  state = { showList: [] }
 
-  componentDidMount() {
-    this.axios.get('/article/getList', { params: { page: 1, pageSize: 6 } }).then(res => {
-      this.setState({ recentList: res.rows })
-    })
+  async componentDidMount() {
+    let showList = []
+    const list = await this.fetchList(2)
+    showList = list.length > 0 ? list : await this.fetchList(1)
+    this.setState({ showList })
+  }
+
+  /**
+   * mode 1 获取最近的列表
+   * mode 2 获取置顶文章列表
+   * @memberof BolgSider
+   */
+  fetchList = async mode => {
+    const queryParams =
+      mode === 1 ? { params: { page: 1, pageSize: 6 } } : { params: { page: 1, pageSize: 100, fetchTop: true } }
+    const result = await this.axios.get('/article/getList', queryParams)
+    return result.rows
   }
 
   render() {
     const { tagList, colorList } = this.props
-    const { recentList } = this.state
+    const { showList } = this.state
+    let title = showList[0] && showList[0].showOrder ? '热门文章' : '最近文章'
+
     return (
       <div className="sider-wrapper">
         <img src={avatar} className="sider-avatar" alt="" />
@@ -48,9 +63,9 @@ class BolgSider extends Component {
           </li>
         </ul>
 
-        <Divider orientation="left">最近文章</Divider>
-        <ul className="recent-list">
-          {recentList.map(d => (
+        <Divider orientation="left">{title}</Divider>
+        <ul className="show-list">
+          {showList.map(d => (
             <li key={d.id}>
               <Link to={`/article/${d.id}`}>{d.title}</Link>
             </li>

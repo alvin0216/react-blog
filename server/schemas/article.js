@@ -11,12 +11,11 @@ const create = Joi.object().keys({
 
 const update = Joi.object().keys({
   articleId: Joi.number(),
-  title: Joi.string()
-    .required()
-    .error(new Error('标题不能为空')),
+  title: Joi.string(),
   content: Joi.string(),
   categories: Joi.array(),
-  tags: Joi.array()
+  tags: Joi.array(),
+  showOrder: Joi.number()
 })
 
 const getArticleList = Joi.object().keys({

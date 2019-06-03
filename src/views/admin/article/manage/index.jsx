@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { random, getCommentsCount } from '@/lib'
-import { Table, Divider, Tag, Modal, message, Badge } from 'antd'
+import { Table, Divider, Tag, Modal, message, Badge, Button } from 'antd'
 import QueryForm from './queryForm'
 import moment from 'moment'
 
@@ -80,6 +80,20 @@ class Manager extends Component {
         sorter: (a, b) => (moment(a.updatedAt).isBefore(b.updatedAt) ? 1 : -1)
       },
       {
+        title: '置顶',
+        dataIndex: 'showOrder',
+        render: (text, record) =>
+          text ? (
+            <Button size="small" type="danger" onClick={() => this.setTop(record)}>
+              取消置顶
+            </Button>
+          ) : (
+            <Button size="small" type="dashed" onClick={() => this.setTop(record)}>
+              置顶文章
+            </Button>
+          )
+      },
+      {
         title: '操作',
         render: (text, record) => {
           return (
@@ -97,6 +111,24 @@ class Manager extends Component {
         }
       }
     ]
+  }
+
+  /**
+   * 设置置顶文章
+   *
+   * @memberof Manager
+   */
+  setTop = record => {
+    const showOrder = record.showOrder ? 0 : 1
+    this.axios.put('/article/update', {
+      articleId: record.id,
+      showOrder
+    }).then(() => {
+      const list = this.state.list
+      const target = list.find(d => d.id === record.id)
+      target.showOrder = showOrder
+      this.setState({ list })
+    })
   }
 
   fetchList = ({ current = 1, pageSize = 10, ...query }) => {
