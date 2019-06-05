@@ -5,11 +5,38 @@
 
 ## 版本更新记录
 
+## 2019-06-05 hooks 重写
+
+- 以 `react hooks` 写法重构组件
+
+## 2019-05-20
+
+- `webpack` 配置优化打包，对依赖进行拆分以减小打包后的文件体积
+- `cdn` 方式引入 `highlight.js`
+
+更多 [webpack-perf](https://github.com/gershonv/react-blog/tree/webpack-perf)
+
+### 2019-04-25 添加邮箱、用户名登录
+
 - 登录功能：用户名/邮箱 均可登录
 - 个人信息：用户的相关信息均可修改
 - 邮件功能：**评论回复（绑定了邮箱的账户）如果有更新 都会自动通过邮件通知！**
 
-更新时间 **2019-04-25** 相关信息可以查看 [email-notice](https://github.com/gershonv/react-blog/tree/email-notice) 这个分支
+更多 [email-notice](https://github.com/gershonv/react-blog/tree/email-notice)
+
+## 2019-02-01
+
+- 构建后端项目 -`koa + koa-router + sequelize + jwt`
+
+更多 [server-chore](https://github.com/gershonv/react-blog/tree/server-chore)
+
+## 2019-01-23
+
+- 构建前端项目
+  - `npm run eject`
+  - `less + antd + redux + react-router + lazyload`...
+
+更多 [client-chore](https://github.com/gershonv/react-blog/tree/client-chore)
 
 ## 博客介绍
 
@@ -48,7 +75,6 @@
   - sequelize + mysql
   - jwt + bcrypt
   - nodemailer
-
 
 ### 分支
 
