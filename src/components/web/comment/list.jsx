@@ -202,67 +202,6 @@ class CommentList extends Component {
             ))}
           </CommentItem>
         ))}
-
-        {/* {commentList.map(comment => (
-          <Comment
-            key={comment.id}
-            actions={[<span onClick={() => this.openReply(1, comment.id)}>Reply to</span>]}
-            author={<span>{comment.user && comment.user.username}</span>}
-            avatar={this.renderAvatar(comment)}
-            content={
-              <div
-                className="article-detail"
-                dangerouslySetInnerHTML={{ __html: translateMarkdown(comment.content) }}
-              />
-            }>
-            {levelOneId === comment.id && (
-              <div className="reply-form">
-                <TextArea
-                  placeholder={`回复${comment.user.username}...`}
-                  value={value}
-                  onChange={this.handleChange}
-                  onKeyUp={this.handleKeyUp}
-                />
-                <div className="reply-form-controls">
-                  <span className="tip">Ctrl or ⌘ + Enter</span>
-                  <Button htmlType="submit" type="primary" disabled={!value.trim()} onClick={this.onSubmit}>
-                    回复
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {comment.replies.map(reply => (
-              <Comment
-                key={reply.id}
-                actions={[<span onClick={() => this.openReply(2, reply.id, comment.id)}>Reply to</span>]}
-                author={<span>{reply.user && reply.user.username}</span>}
-                avatar={this.renderAvatar(reply)}
-                content={<p>{reply.content}</p>}>
-                {levelTwoId === reply.id && (
-                  <div className="reply-form">
-                    <TextArea
-                      placeholder={`回复${reply.user.username}...`}
-                      value={value}
-                      onChange={this.handleChange}
-                      onKeyUp={this.handleKeyUp}
-                    />
-                    <div className="reply-form-controls">
-                      <span className="tip">Ctrl or ⌘ + Enter</span>
-                      <Button
-                        htmlType="submit"
-                        type="primary"
-                        disabled={!value.trim()}
-                        onClick={this.onSubmit}>
-                        回复
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </Comment>
-            ))}
-          </Comment>
-        ))} */}
       </div>
     )
   }
