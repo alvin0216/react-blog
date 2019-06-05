@@ -5,11 +5,11 @@
 
 ## 版本更新记录
 
-## 2019-06-05 hooks 重写
+### 2019-06-05 hooks 重写
 
 - 以 `react hooks` 写法重构组件
 
-## 2019-05-20
+### 2019-05-20 `webpack` 配置优化打包
 
 - `webpack` 配置优化打包，对依赖进行拆分以减小打包后的文件体积
 - `cdn` 方式引入 `highlight.js`
@@ -24,13 +24,13 @@
 
 更多 [email-notice](https://github.com/gershonv/react-blog/tree/email-notice)
 
-## 2019-02-01
+### 2019-02-01 构建后端项目
 
 - 构建后端项目 -`koa + koa-router + sequelize + jwt`
 
 更多 [server-chore](https://github.com/gershonv/react-blog/tree/server-chore)
 
-## 2019-01-23
+### 2019-01-23 构建前端项目
 
 - 构建前端项目
   - `npm run eject`
