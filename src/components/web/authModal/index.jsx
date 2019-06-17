@@ -36,7 +36,7 @@ function AuthModal(props) {
    * @memberof AuthModal
    */
   function compareToFirstPassword(rule, value, callback) {
-    const form = this.props.form
+    const form = props.form
     if (value && value !== form.getFieldValue('password')) {
       callback('Two passwords that you enter is inconsistent!')
     } else {
@@ -141,7 +141,7 @@ function AuthModal(props) {
     return meta
   }
 
-  function handleSubmit() {
+  function handleSubmit(e) {
     e.preventDefault()
     props.form.validateFieldsAndScroll((errors, values) => {
       if (errors) return
