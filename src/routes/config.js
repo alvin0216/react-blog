@@ -1,6 +1,5 @@
 // import PageNotFound from '@/components/NotFound'
 import homeRoutes from '@/views/web/routes'
-import examplesRoute from '@/examples/routes'
 import adminRoutes from '@/views/admin/routes'
 import rootRoutes from './rootRoutes'
 
@@ -10,9 +9,6 @@ let childRoutes = [
   homeRoutes
   //...
 ]
-
-const isDev = process.env.NODE_ENV === 'development'
-if (isDev) childRoutes.unshift(examplesRoute)
 
 // generator all the routes
 const routes = [

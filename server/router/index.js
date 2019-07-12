@@ -1,5 +1,4 @@
 const router = require('koa-router')()
-const examplesRouter = require('./examples')
 const ArticleRouter = require('./article')
 const UserRouter = require('./user')
 const TagController = require('../controllers/tag')
@@ -7,7 +6,6 @@ const CategoryController = require('../controllers/category')
 const UserController = require('../controllers/user')
 const CommentController = require('../controllers/comment')
 
-router.use('/examples', examplesRouter.routes())
 router.use('/article', ArticleRouter.routes())
 router.use('/user', UserRouter.routes())
 
