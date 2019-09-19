@@ -50,7 +50,7 @@ class DiscussController {
           await ReplyModel.create({ userId, articleId, content, commentId })
         }
 
-        const list = await this.fetchCommentList(articleId)
+        const list = await DiscussController.fetchCommentList(articleId)
 
         EMAIL_NOTICE.enable && sendingEmail(articleId, list, commentId)
         ctx.client(200, 'success', list)

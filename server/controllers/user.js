@@ -41,17 +41,17 @@ class UserController {
   // ===== utils methods
 
   // 登录
-  static login = async ctx => {
+  static async login(ctx) {
     const { code } = ctx.request.body
     if (code) {
-      await this.githubLogin(ctx, code)
+      await UserController.githubLogin(ctx, code)
     } else {
-      await this.defaultLogin(ctx)
+      await UserController.defaultLogin(ctx)
     }
   }
 
   // 站内用户登录
-  static defaultLogin = async ctx => {
+  static async defaultLogin(ctx) {
     const validator = ctx.validate(ctx.request.body, {
       account: Joi.string().required(),
       password: Joi.string()
@@ -88,7 +88,7 @@ class UserController {
   }
 
   // github 登录
-  static githubLogin = async (ctx, code) => {
+  static async githubLogin(ctx, code) {
     try {
       const result = await axios.post(GITHUB.access_token_url, {
         client_id: GITHUB.client_id,
@@ -103,7 +103,7 @@ class UserController {
         const result2 = await axios.get(`${GITHUB.fetch_user_url}?access_token=${access_token}`)
         const githubInfo = result2.data
 
-        let target = await this.find({ id: githubInfo.id }) // 在数据库中查找该用户是否存在
+        let target = await UserController.find({ id: githubInfo.id }) // 在数据库中查找该用户是否存在
 
         if (!target) {
           target = await UserModel.create({
@@ -122,7 +122,7 @@ class UserController {
               email,
               github: JSON.stringify(githubInfo)
             }
-            await this.updateUserById(id, data)
+            await UserController.updateUserById(id, data)
           }
         }
         // username: user.username, role, userId: id, token
@@ -219,7 +219,7 @@ class UserController {
   /**
    * 更新用户
    */
-  static updateUser = async ctx => {
+  static async updateUser(ctx) {
     const validator = ctx.validate(
       {
         ...ctx.params,
@@ -234,7 +234,7 @@ class UserController {
     if (validator) {
       const { userId } = ctx.params
       const { notice } = ctx.request.body
-      await this.updateUserById(userId, { notice })
+      await UserController.updateUserById(userId, { notice })
       ctx.client(200)
     }
   }
@@ -243,18 +243,18 @@ class UserController {
    * 初始化用户
    * @param {String} githubName - github name
    */
-  static initGithubUser = async githubName => {
-    const temp = await this.find({ username: githubName })
+  static async initGithubUser(githubName) {
+    const temp = await UserController.find({ username: githubName })
     if (!temp) {
       const result = await getGithubInfo(githubName)
-      this.createGithubUser(result, 1)
+      UserController.createGithubUser(result, 1)
     }
 
-    // const tempList = await Promise.all(list.map(username => this.find({ username }))) // 查找库里是否有这个用户
+    // const tempList = await Promise.all(list.map(username => UserController.find({ username }))) // 查找库里是否有这个用户
     // list.forEach(async (username, i) => {
     //   if (!tempList[i]) {
     //     const result = await getGithubInfo(username)
-    //     this.createGithubUser(result, 1)
+    //     UserController.createGithubUser(result, 1)
     //   }
     // })
   }
