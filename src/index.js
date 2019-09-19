@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import store from '@/redux'
 
 // styles
+import '@/assets/icons/iconfont'
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import '@/styles/index.less'
 
