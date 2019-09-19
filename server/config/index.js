@@ -1,4 +1,4 @@
-const envMode = process.env.NODE_ENV === 'production'
+const devMode = process.env.NODE_ENV === 'development'
 
 const config = {
   PORT: 6060, // 启动端口
@@ -54,7 +54,7 @@ const config = {
 }
 
 // 部署的环境变量设置
-if (envMode) {
+if (!devMode) {
   console.log('env production....')
 
   // ==== 配置数据库
