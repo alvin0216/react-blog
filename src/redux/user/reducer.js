@@ -1,34 +1,36 @@
-import * as constants from '@/redux/constants'
-import jwtDecode from 'jwt-decode'
+import * as TYPES from '@/redux/types'
+import { save, get, remove } from '@/utils/storage'
 
 // state
 let defaultState = {
-  userId: 0,
   username: '',
-  auth: 0,
-  email: '',
-  avatarColor: '#52c41a' // 用户头像颜色
+  role: 2,
+  userId: 0,
+  github: null
 }
 
-if (!!localStorage.getItem('token') && localStorage.getItem('token') !== 'undefined') {
-  const { userId, username, auth, email } = jwtDecode(localStorage.token)
-  defaultState = Object.assign(defaultState, { userId, username, auth, email })
+const userInfo = get('userInfo')
+
+if (userInfo) {
+  defaultState = { ...defaultState, ...userInfo }
 }
 
 // reducer
-export const demoReducer = (state = defaultState, action) => {
+export const UserReducer = (state = defaultState, action) => {
   const { type, payload } = action
   switch (type) {
-    case constants.USER_LOGIN:
-      const { userId, username, auth, email } = jwtDecode(payload.token)
-      return { ...state, userId, username, auth, email }
+    case TYPES.USER_LOGIN:
+      const { username, userId, role, github = null, token } = payload
+      save('userInfo', { username, userId, role, github, token })
+      return { ...state, username, userId, role, github }
 
-    case constants.USER_LOGINOUT:
-      return { id: 0, username: '', auth: 0, avatarColor: '#52c41a', email: '' }
+    case TYPES.USER_LOGIN_OUT:
+      remove('userInfo')
+      return { ...state, username: '', userId: 0, role: 2, github: null }
 
     default:
       return state
   }
 }
 
-export default demoReducer
+export default UserReducer

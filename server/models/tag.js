@@ -15,8 +15,10 @@ module.exports = (sequelize, dataTypes) => {
 
   Tag.associate = models => {
     Tag.belongsTo(models.article, {
+      as: 'article',
       foreignKey: 'articleId',
-      targetKey: 'id'
+      targetKey: 'id',
+      constraints: false
     })
   }
 

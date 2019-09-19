@@ -1,55 +1,44 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { Button, Form, Input } from 'antd'
+import FormBuilder from '@/components/FormBuilder'
 
-import { Button, Form, Input, Select, DatePicker } from 'antd'
-import FormBuilder from '@/components/helper/FormBuilder'
-import { connect } from 'react-redux'
-import moment from 'moment'
-
-const RangePicker = DatePicker.RangePicker
-const Option = Select.Option
-
-@connect(state => state.article)
-class QueryForm extends Component {
-  static propTypes = {
-    getQuery: PropTypes.func.isRequired
+function QueryForm(props) {
+  const formMeta = {
+    colon: true,
+    elements: [
+      {
+        key: 'username',
+        label: '姓名',
+        widget: <Input placeholder='请输入姓名' allowClear />
+      }
+    ]
   }
 
-  getFormMeta = () => {
-    return {
-      colon: true,
-      elements: [
-        {
-          key: 'username',
-          label: '姓名',
-          widget: <Input placeholder="请输入姓名" />
-        }
-      ]
-    }
-  }
-
-  handleSubmit = e => {
+  function handleSubmit(e) {
     e.preventDefault()
-    this.props.form.validateFieldsAndScroll((errors, values) => {
+    props.form.validateFieldsAndScroll((errors, values) => {
       if (errors) return
-      console.log('submit form: ', values)
-      this.props.getQuery(values)
+      const params = {}
+      Object.keys(values).forEach(key => {
+        if (values[key]) {
+          params[key] = values[key]
+        }
+      })
+      props.onQuery(params)
     })
   }
 
-  render() {
-    return (
-      <div className="query-form">
-        <Form layout="inline" onSubmit={this.handleSubmit}>
-          <FormBuilder meta={this.getFormMeta()} form={this.props.form}>
-            <Button type="primary" htmlType="submit">
-              检索
-            </Button>
-          </FormBuilder>
-        </Form>
-      </div>
-    )
-  }
+  return (
+    <div className='query-form'>
+      <Form layout='inline' onSubmit={handleSubmit}>
+        <FormBuilder meta={formMeta} form={props.form}>
+          <Button type='primary' htmlType='submit'>
+            检索
+          </Button>
+        </FormBuilder>
+      </Form>
+    </div>
+  )
 }
 
 export default Form.create()(QueryForm)

@@ -1,17 +1,18 @@
-import * as constants from '@/redux/constants'
-import axios from '@/lib/axios'
+import * as TYPES from '@/redux/types'
+import axios from '@/utils/axios'
 
-export const getTags = () => {
-  return dispatch =>
-    axios.get('/tags/getList').then(res => {
-      dispatch({ type: constants.TAG_GETLIST, payload: res.data })
+export const getTagList = () => dispatch =>
+  axios.get('/tag/list').then(list => {
+    dispatch({
+      type: TYPES.ARTICLE_GET_TAG_LIST,
+      payload: list
     })
-}
+  })
 
-export const getCategories = () => {
-  return dispatch =>
-    axios.get('/categories/getList').then(res => {
-      dispatch({ type: constants.CATEGORY_GETLIST, payload: res.data })
+export const getCategoryList = () => dispatch =>
+  axios.get('/category/list').then(list => {
+    dispatch({
+      type: TYPES.ARTICLE_GET_CATEGORY_LIST,
+      payload: list
     })
-}
-
+  })

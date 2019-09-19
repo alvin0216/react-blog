@@ -1,13 +1,11 @@
 import { combineReducers } from 'redux'
 
-import demo from './demo/reducer'
-import common from './common/reducer'
+import app from './app/reducer'
 import article from './article/reducer'
 import user from './user/reducer'
 
 export default combineReducers({
-  demo,
-  common,
+  app,
   article,
   user
 })

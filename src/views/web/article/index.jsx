@@ -1,106 +1,111 @@
 import React, { Component, Fragment, useState, useEffect } from 'react'
 import './index.less'
+
 import { connect } from 'react-redux'
-import { translateMarkdown, getCommentsCount } from '@/lib/index'
-import { openDrawer, closeDrawer, generateColorMap } from '@/redux/common/actions'
 
-import Navigation from './navigation'
-import Loading from '@/components/helper/Loading'
-import Tags from '../Tags'
-import Comment from '@/components/web/comment'
-import { Drawer, Icon, Divider } from 'antd'
-import axios from '@/lib/axios'
+// methods
+import axios from '@/utils/axios'
+import { translateMarkdown, calcCommentsCount } from '@/utils'
 
-function ArticleDetail(props) {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [tags, setTags] = useState([])
-  const [categories, setCategories] = useState([])
-  const [postTime, setPostTime] = useState('')
-  const [commentList, setCommentList] = useState([])
+// components
+import { Drawer, Icon, Divider, Tag, Spin } from 'antd'
+import ArticleTag from '@/components/ArticleTag'
+import SvgIcon from '@/components/SvgIcon'
+import Navigation from './Navigation'
+import Discuss from '@/components/Discuss'
+
+function Article(props) {
   const [loading, setLoading] = useState(true)
+  const [article, setArticle] = useState({
+    title: '',
+    content: '',
+    tags: [],
+    categories: [],
+    comments: [],
+    createdAt: '',
+    viewCount: 0
+  })
+  const [drawerVisible, setDrawerVisible] = useState(false)
 
   useEffect(() => {
     const fetchData = id => {
       setLoading(true)
       axios
-        .get(`/article/get/${id}`)
+        .get(`/article/${id}`)
         .then(res => {
-          const content = translateMarkdown(res.data.content)
-          const { title, createdAt, tags, categories, comments } = res.data
-          props.generateColorMap(comments)
-          setTags(tags)
-          setCategories(categories)
-          setTitle(title)
-          setContent(content)
-          setPostTime(postTime)
-          setCommentList(comments)
+          res.content = translateMarkdown(res.content)
+          setArticle(res)
           setLoading(false)
         })
-        .catch(err => {
+        .catch(e => {
           props.history.push('/404')
         })
     }
     fetchData(props.match.params.id)
+    /*eslint react-hooks/exhaustive-deps: "off"*/
   }, [props.match.params.id])
 
+  function setCommentList(list) {
+    setArticle({ ...article, comments: list })
+  }
+
+  const { title, content, tags, categories, comments, createdAt, viewCount } = article
   const articleId = parseInt(props.match.params.id)
+  const isFoldNavigation = props.windowWidth < 1300
   return (
-    <div className="content-inner-wrapper article">
-      {loading ? (
-        <Loading />
-      ) : (
-        <React.Fragment>
-          <div className="post-header">
-            <h1 className="post-title">{title}</h1>
+    <Spin tip='Loading...' spinning={loading} delay={100}>
+      <div className='app-article' style={{ paddingRight: isFoldNavigation ? 0 : 265 }}>
+        <div className='post-header'>
+          <h1 className='post-title'>{title}</h1>
 
-            <div className="others">
-              <i className="iconfont icon-post" />
+          <div className='article-desc'>
+            <span className='post-time'>
+              <SvgIcon type='iconpost' />
               &nbsp; Posted on &nbsp;
-              <span>{postTime}</span>
-              <Tags type="tags" list={tags} />
-              <Tags type="categories" list={categories} />
-              <Divider type="vertical" />
-              <Icon type="message" style={{ marginRight: 7 }} />
-              {getCommentsCount(commentList)}
-            </div>
+              <span>{createdAt.slice(0, 10)}</span>
+            </span>
+            <ArticleTag tagList={tags} categoryList={categories} />
+            <Divider type='vertical' />
+            <a className='comment-count' href='#discuss' style={{ color: 'inherit' }}>
+              <SvgIcon type='iconcomment' />
+              <span style={{ marginRight: 5 }}> {calcCommentsCount(comments)}</span>
+            </a>
+            <SvgIcon type='iconview' style={{ marginRight: 2 }} />
+            <span>{viewCount}</span>
           </div>
+        </div>
 
-          <div className="article-detail" dangerouslySetInnerHTML={{ __html: content }} />
+        <div className='article-detail' dangerouslySetInnerHTML={{ __html: content }} />
 
-          {props.windowWidth > 1300 ? (
-            <div className="right-navigation">
-              <Navigation content={content} />
+        {isFoldNavigation ? (
+          <>
+            <div className='drawer-btn' onClick={e => setDrawerVisible(true)}>
+              <Icon type='menu-o' className='nav-phone-icon' />
             </div>
-          ) : (
-            <Fragment>
-              <div className="drawer-btn" onClick={props.openDrawer}>
-                <Icon type="menu-o" className="nav-phone-icon" />
+            <Drawer
+              title={title}
+              placement='right'
+              closable={false}
+              onClose={e => setDrawerVisible(false)}
+              visible={drawerVisible}
+              getContainer={() => document.querySelector('.app-article')}>
+              <div className='right-navigation'>
+                <Navigation content={content} />
               </div>
-              <Drawer
-                title={title}
-                placement="right"
-                closable={false}
-                onClose={props.closeDrawer}
-                visible={props.drawerVisible}>
-                <div className="right-navigation">
-                  <Navigation content={content} />
-                </div>
-              </Drawer>
-            </Fragment>
-          )}
+            </Drawer>
+          </>
+        ) : (
+          <div className='article-navigation'>
+            <Navigation content={content} />
+          </div>
+        )}
 
-          <Comment articleId={articleId} commentList={commentList} setCommentList={setCommentList} />
-        </React.Fragment>
-      )}
-    </div>
+        <Discuss articleId={articleId} commentList={comments} setCommentList={setCommentList} />
+      </div>
+    </Spin>
   )
 }
 
-export default connect(
-  state => ({
-    windowWidth: state.common.windowWidth,
-    drawerVisible: state.common.drawerVisible
-  }),
-  { openDrawer, closeDrawer, generateColorMap }
-)(ArticleDetail)
+export default connect(state => ({
+  windowWidth: state.app.windowWidth
+}))(Article)

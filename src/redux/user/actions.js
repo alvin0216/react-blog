@@ -1,16 +1,19 @@
-import * as constants from '@/redux/constants'
-import axios from '@/lib/axios'
+import * as TYPES from '@/redux/types'
+import axios from '@/utils/axios'
 import { message } from 'antd'
 
 export const login = params => {
   return dispatch =>
     axios.post('/login', params).then(res => {
-      if (res.code === 200) {
-        localStorage.setItem('token', res.token)
-        dispatch({ type: constants.USER_LOGIN, payload: { token: res.token } })
-      } else {
-        message.error(res.message)
-      }
+      dispatch({
+        type: TYPES.APP_SWITCH_SIGN_MODAL,
+        payload: { type: 'login', visible: false }
+      }) // 关闭 sign modal
+      dispatch({
+        type: TYPES.USER_LOGIN,
+        payload: res
+      })
+      message.success(`登录成功, 欢迎您 ${res.username}`)
       return res
     })
 }
@@ -18,25 +21,14 @@ export const login = params => {
 export const register = params => {
   return dispatch =>
     axios.post('/register', params).then(res => {
-      if (res.code === 200) message.success(res.message)
-      else message.error(res.message)
-      return res
+      dispatch({
+        type: TYPES.APP_SWITCH_SIGN_MODAL,
+        payload: { type: 'register', visible: false }
+      })
+      message.success('注册成功，请重新登录您的账号！')
     })
 }
 
-export const updateUser = params => {
-  return dispatch =>
-    axios.put(`/user/${params.userId}`, params).then(res => {
-      if (res.code === 200) {
-        message.success(res.message)
-        localStorage.setItem('token', res.token)
-        dispatch({ type: constants.USER_LOGIN, payload: { token: res.token } })
-      } else message.error(res.message)
-      return res
-    })
-}
-
-export const logout = () => {
-  localStorage.removeItem('token')
-  return { type: constants.USER_LOGINOUT }
-}
+export const loginout = () => ({
+  type: TYPES.USER_LOGIN_OUT
+})

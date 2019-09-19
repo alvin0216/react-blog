@@ -1,56 +1,59 @@
-import React, { Component, Fragment, useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import './index.less'
-import { Link } from 'react-router-dom'
 
-import { groupBy } from '@/lib'
-import { Timeline, Icon, Pagination, Spin } from 'antd'
-import BlogPagination from '@/components/web/pagination'
-import axios from '@/lib/axios'
+import { ARCHIVES_PAGESIZE } from '@/utils/config'
+
+// methods
+import { groupBy } from '@/utils'
+import axios from '@/utils/axios'
+
+// components
+import { Timeline, Icon, Spin } from 'antd'
+import { Link } from 'react-router-dom'
+import Pagination from '@/components/Pagination'
 
 function Archives(props) {
   const [list, setList] = useState([])
   const [total, setTotal] = useState(0)
-  const [current, setCurrent] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     fetchList(1)
+    // component did mout
   }, [])
 
-  function fetchList(page = 1) {
+  function fetchList(page) {
     setLoading(true)
-    axios
-      .get('/article/getList', { params: { page, pageSize: 15 } })
-      .then(res => {
-        const list = groupBy(res.rows, item => item.createdAt.slice(0, 4))
-        setList(list)
-        setTotal(res.count)
-        setLoading(false)
-      })
-      .catch(e => setLoading(false))
+    axios.get('/article/list', { params: { page, pageSize: ARCHIVES_PAGESIZE } }).then(res => {
+      const list = groupBy(res.rows, item => item.createdAt.slice(0, 4)) // 按年份排序
+      setList(list)
+      setTotal(res.count)
+      setLoading(false)
+    })
   }
 
   function handlePageChange(page) {
     fetchList(page)
-    setCurrent(page)
+    setCurrentPage(page)
   }
 
   return (
-    <div className="content-inner-wrapper archives">
-      <Spin tip="Loading..." spinning={loading}>
+    <div className='app-archives'>
+      <Spin tip='Loading...' spinning={loading} delay={500}>
         <Timeline>
           {list.map((d, i) => (
             <Fragment key={i}>
               {i === 0 && (
                 <Timeline.Item>
-                  <span className="desc">{`Nice! ${total} posts in total. Keep on posting.`}</span>
+                  <span className='desc'>{`Nice! ${total} posts in total. Keep on posting.`}</span>
                   <br />
                   <br />
                 </Timeline.Item>
               )}
 
-              <Timeline.Item dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />} color="red">
-                <div className="year">
+              <Timeline.Item dot={<Icon type='clock-circle-o' style={{ fontSize: '16px' }} />} color='red'>
+                <div className='year'>
                   {d[0]['createdAt'].slice(0, 4)}
                   ...
                 </div>
@@ -67,14 +70,7 @@ function Archives(props) {
           ))}
         </Timeline>
 
-        {list.length < total && (
-          <BlogPagination
-            current={parseInt(current) || 1}
-            onChange={handlePageChange}
-            total={total}
-            pageSize={15}
-          />
-        )}
+        <Pagination current={currentPage} total={total} pageSize={ARCHIVES_PAGESIZE} onChange={handlePageChange} />
       </Spin>
     </div>
   )

@@ -1,4 +1,4 @@
-.article {
+.app-article {
   .post-header {
     text-align: center;
     padding-bottom: 20px;
@@ -7,6 +7,7 @@
       color: #0d1a26;
       font-size: 1.7em;
       font-weight: 400;
+      margin-top: 0;
     }
     .others {
       a {
@@ -18,17 +19,45 @@
     }
   }
 
-  .right-navigation {
+  .article-navigation {
     position: fixed;
     width: 260px;
     top: 104px;
     right: 20px;
+    .ant-anchor {
+      padding-left: 0;
+      .ant-anchor-link-active::before {
+        display: block;
+        content: '';
+        height: 18px;
+        width: 2px;
+        background-color: #1890ff;
+        position: absolute;
+        left: 0px;
+      }
+    }
   }
 
-  .article-loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 20%);
+  .drawer-btn {
+    position: fixed;
+    width: 41px;
+    height: 41px;
+    top: 100px;
+    right: 0;
+    cursor: pointer;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    border-radius: 4px 0 0 4px;
+    text-align: center;
+    line-height: 41px;
+    z-index: 999;
+    background: #fff;
+  }
+
+  .right-navigation {
+    margin-left: -20px;
+    .ant-anchor-ink::before {
+      content: '';
+      display: none;
+    }
   }
 }

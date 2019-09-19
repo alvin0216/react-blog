@@ -12,25 +12,27 @@ module.exports = (sequelize, dataTypes) => {
       },
       username: {
         type: dataTypes.STRING(50),
-        // primaryKey: true,
-        allowNull: false,
-        unique: true
+        allowNull: false
+        // unique: true
       },
       password: {
         type: dataTypes.STRING,
-        allowNull: false,
-        comment: '通过 bcrypt 加密后的密码'
+        comment: '通过 bcrypt 加密后的密码' // 仅限站内注册用户
       },
       email: {
-        type: dataTypes.STRING(50),
-        // primaryKey: true,
-        allowNull: false,
-        unique: true
+        type: dataTypes.STRING(50)
       },
-      auth: {
+      notice: {
+        type: dataTypes.BOOLEAN, // 是否开启邮件通知
+        defaultValue: true
+      },
+      role: {
         type: dataTypes.TINYINT,
         defaultValue: 2,
         comment: '用户权限：1 - admin, 2 - 普通用户'
+      },
+      github: {
+        type: dataTypes.TEXT // github 登录用户 直接绑定在 user 表
       },
       createdAt: {
         type: dataTypes.DATE,
@@ -51,7 +53,7 @@ module.exports = (sequelize, dataTypes) => {
       timestamps: true
     }
   )
-  
+
   User.associate = models => {
     User.hasMany(models.comment)
     User.hasMany(models.reply)

@@ -1,32 +1,54 @@
-const router = require('koa-router')()
-const ArticleRouter = require('./article')
-const UserRouter = require('./user')
-const TagController = require('../controllers/tag')
-const CategoryController = require('../controllers/category')
+const Router = require('koa-router')
+const router = new Router()
+
+// controllers
 const UserController = require('../controllers/user')
-const CommentController = require('../controllers/comment')
+const ArticleController = require('../controllers/article')
+const DiscussController = require('../controllers/discuss')
+const TagController = require('../controllers/tag')
 
-router.use('/article', ArticleRouter.routes())
-router.use('/user', UserRouter.routes())
+// ==== article router
+const articleRouter = new Router()
 
-// 登录注册
-router.post('/login', UserController.login)
-router.post('/register', UserController.register)
+articleRouter
+  .post('/', ArticleController.create) // 创建文章
+  .get('/list', ArticleController.getList) // 获取文章列表
+  .get('/:id', ArticleController.findById) // 获取文章
+  .put('/:id', ArticleController.update) // 修改文章
+  .delete('/:id', ArticleController.delete) // 删除指定文章
 
-// 获取所有标签以及每个标签的总数
-router.get('/tags/getList', TagController.getTags)
-//根据标签的名字获取文章
-router.get('/tags/getArticles', TagController.getArticlesByTag)
+router.use('/article', articleRouter.routes())
 
-// 获取所有分类以及分类的总数
-router.get('/categories/getList', CategoryController.getCategories)
-router.get('/categories/getArticles', CategoryController.getArticlesByCate)
+// ==== discuss router
+const discussRouter = new Router()
 
-// 删除评论
-router.delete('/comment/del', CommentController.del)
-router.delete('/reply/del', CommentController.del)
-router.get('/comment/getAboutComments', CommentController.getAboutComments)
+discussRouter
+  .post('/', DiscussController.create) // 创建评论或者回复 articleId 文章 id
+  .delete('/comment/:commentId', DiscussController.deleteComment) // 删除一级评论
+  .delete('/reply/:replyId', DiscussController.deleteReply) // 删除回复
 
+router.use('/discuss', discussRouter.routes())
+
+// tag category
+router.get('/tag/list', TagController.getTagList) // 获取所有的 tag 列表
+router.get('/category/list', TagController.getCategoryList) // 获取 category 列表
+
+// root
+router.post('/login', UserController.login) // 登录
+router.post('/register', UserController.register) // 注册
+
+// user
+const userRouter = new Router()
+
+userRouter
+  // ..
+  .get('/list', UserController.getList) // 获取列表
+  .put('/:userId', UserController.updateUser) // 更新用户信息
+  .delete('/:userId', UserController.delete) // 删除用户
+
+router.use('/user', userRouter.routes())
+
+// ...
 router.get('/', async ctx => {
   ctx.body = 'hello koa2'
 })

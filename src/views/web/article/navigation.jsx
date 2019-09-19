@@ -5,7 +5,7 @@ const { Link } = Anchor
 // 根据 article 来生成锚点列表
 function getAnchorList(str) {
   const pattern = /<(h[1-6])[\s\S]+?(?=<\/\1>)/g
-  let list = []
+  const list = []
   function pushItem(arr, item) {
     const len = arr.length
     const matchItem = arr[len - 1]
@@ -18,9 +18,9 @@ function getAnchorList(str) {
   }
   str.replace(pattern, ($0, $1) => {
     const title = $0.replace(/.*?>/, '')
-    let startIndex = $0.indexOf('"')
-    let endIndex = $0.indexOf('">')
-    
+    const startIndex = $0.indexOf('"')
+    const endIndex = $0.indexOf('">')
+
     const href = `#${$0.slice(startIndex + 1, endIndex)}`
     const currentItem = {
       tag: $1, // 标签类型
