@@ -28,7 +28,7 @@ async function sendingEmail(articleId, commentList, commentId) {
 }
 
 class DiscussController {
-  static create = async ctx => {
+  static async create(ctx) {
     const validator = ctx.validate(ctx.request.body, {
       articleId: Joi.number().required(), // 文章 id
       userId: Joi.number().required(), // 用户 id
