@@ -20,10 +20,10 @@ async function sendingEmail(articleId, commentList, commentId) {
 
   Promise.all(emailList.map(receiver => sendEmail({ receiver, html })))
     .then(res => {
-      console.log('success')
+      console.log('success to send email')
     })
     .catch(e => {
-      console.log('fail')
+      console.log('fail to send email')
     })
 }
 
@@ -55,7 +55,7 @@ class DiscussController {
         EMAIL_NOTICE.enable && sendingEmail(articleId, list, commentId)
         ctx.client(200, 'success', list)
       } catch (error) {
-        ctx.client(500, 'fail', error)
+        ctx.client(500, '请检查输入内容', error)
       }
     }
   }
