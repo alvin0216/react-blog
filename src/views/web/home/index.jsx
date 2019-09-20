@@ -18,7 +18,7 @@ import SvgIcon from '@/components/SvgIcon'
 function Preview({ list, showTitle = true }) {
   return (
     <ul className='preview'>
-      {showTitle && <Divider>文章导航</Divider>}
+      {showTitle && <Divider>文章列表</Divider>}
       {list.map(item => (
         <li key={item.id}>
           <Link to={`/article/${item.id}`}>{item.title}</Link>
@@ -143,7 +143,7 @@ function Home(props) {
                   <Icon type='menu-o' className='nav-phone-icon' />
                 </div>
                 <Drawer
-                  title='文章导航'
+                  title='文章列表'
                   placement='right'
                   closable={false}
                   onClose={e => setDrawerVisible(false)}

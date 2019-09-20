@@ -27,7 +27,7 @@ const Editor = ({ onChange, onSubmit, submitting, value, articleId }) => (
       <div className='controls'>
         <Icon type='info-circle' className='controls-tip-icon' />
         <span className='controls-tip'>支持 Markdown 语法</span>
-        <Button className='' htmlType='submit' loading={submitting} onClick={onSubmit} type='primary'>
+        <Button className='disscus-btn' htmlType='submit' loading={submitting} onClick={onSubmit} type='primary'>
           {articleId !== -1 ? '添加评论' : '留言'}
         </Button>
       </div>

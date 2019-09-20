@@ -15,11 +15,7 @@ function AvatarComponent({ username, github, role }) {
   let avatarSrc = ''
   if (github && github.avatar_url) avatarSrc = github.avatar_url
   if (role === 1) avatarSrc = DISCUSS_AVATAR
-  return (
-    <Avatar src={avatarSrc} style={{ background: '#2db7f5' }}>
-      {username}
-    </Avatar>
-  )
+  return <Avatar src={avatarSrc}>{username}</Avatar>
 }
 //
 function AppAvatar(props) {
