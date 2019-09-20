@@ -1,8 +1,10 @@
-.home {
-  .ul-list {
-    width: 100%;
-    .ul-list-item {
-      // background: #f9f9f9;
+.app-home {
+  padding-bottom: 40px;
+  @previewWidth: 280px;
+  .app-home-list {
+    width: calc(100% - @previewWidth);
+
+    &-item {
       position: relative;
       border: 1px solid #ebedf0;
       padding: 16px 24px;
@@ -23,17 +25,16 @@
           color: #48b2ff;
         }
       }
-      .description {
-        // padding: 15px 10px;
+      .posted-time {
+        font-size: 0.5em;
+        padding-left: 20px;
+      }
+      .content {
         cursor: pointer;
         max-height: 260px;
         overflow: hidden;
       }
-      .create-time {
-        font-size: 0.5em;
-        padding-left: 20px;
-      }
-      .list-item-action {
+      .list-item-others {
         vertical-align: middle;
         margin-top: 10px;
         color: rgba(0, 0, 0, 0.45);
@@ -43,10 +44,11 @@
       }
     }
   }
+
   .preview {
     position: fixed;
     width: 260px;
-    top: 104px;
+    top: 90px;
     right: 20px;
     list-style-type: circle;
     .title {
@@ -54,8 +56,10 @@
       font-size: 22px;
     }
     li {
+      cursor: pointer;
       a {
         color: #8590a6;
+        display: block;
       }
       // padding-left: 16px;
       display: block;
@@ -74,12 +78,60 @@
       }
     }
   }
-  .no-data {
-    margin-top: 26%;
+
+  .app-pagination {
+    margin-right: @previewWidth;
   }
-  .keyword {
-    font-size: 18px;
-    font-weight: bold;
-    color: #f00;
+
+  .ant-drawer-body {
+    padding: 0;
+    width: 256px;
+    height: 100%;
+    .preview {
+      position: static;
+      margin: 0;
+      margin-top: 10px;
+      li {
+        padding-left: 20px;
+        a {
+          line-height: 26px;
+        }
+      }
+    }
+  }
+
+  .drawer-btn {
+    position: fixed;
+    width: 41px;
+    height: 41px;
+    top: 20vh;
+    right: 0;
+    cursor: pointer;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    border-radius: 4px 0 0 4px;
+    text-align: center;
+    line-height: 41px;
+    z-index: 999;
+    background: #fff;
+  }
+
+  .no-data {
+    margin-top: 24%;
+    .keyword {
+      font-size: 18px;
+      font-weight: bold;
+      color: #f00;
+    }
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .app-home {
+    .app-home-list {
+      width: 100%;
+    }
+    .app-pagination {
+      margin-right: 0;
+    }
   }
 }

@@ -1,0 +1,41 @@
+.admin-container {
+  height: 100vh;
+  .admin-header {
+    height: 64px;
+    background: #fff;
+    padding: 0 16px;
+    .trigger {
+      font-size: 18px;
+      line-height: 64px;
+      cursor: pointer;
+    }
+    .trigger:hover {
+      color: #1890ff;
+    }
+    .header-right {
+      float: right;
+      line-height: 64px;
+      margin-right: 10px;
+    }
+  }
+
+  .admin-main {
+    overflow-y: scroll;
+    padding: 24px;
+    // background-color: #fff;
+    .query-form {
+      margin-bottom: 20px;
+      .form-select {
+        min-width: 140px;
+      }
+    }
+    .delete-text {
+      cursor: pointer;
+      color: red;
+    }
+    .app-pagination {
+      float: right;
+      margin: 20px 0;
+    }
+  }
+}

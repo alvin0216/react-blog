@@ -1,104 +1,129 @@
-import React, { Component } from 'react'
-import { getCommentsCount } from '@/lib'
+import React, { Component, useState, useEffect } from 'react'
+import { Table, Divider, Tag, Modal, message, Switch, Button, Popconfirm, Icon } from 'antd'
+
+import axios from '@/utils/axios'
 import moment from 'moment'
-import QueryForm from './queryForm'
-import { Table, Button, Modal, message, Badge } from 'antd'
+import QueryForm from './QueryForm'
+import AppPagination from '@/components/Pagination'
 
-class UserManage extends Component {
-  state = {
-    list: [],
-    pagination: {},
-    loading: false
-  }
+function AdminUser(props) {
+  const [loading, setLoading] = useState(false)
+  const [list, setList] = useState([])
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 1,
+    total: 0
+  })
+  const [query, setQuery] = useState({})
+  const [switchId, setSwitchId] = useState(0)
 
-  componentDidMount() {
-    this.fetchList({ page: 1 })
-  }
+  useEffect(() => {
+    //
+    fetchList({ current: 1 })
+  }, [])
 
-  getColumns = () => {
-    return [
-      {
-        title: '用户名',
-        dataIndex: 'username'
-      },
-      {
-        title: '评论数',
-        dataIndex: 'comments',
-        render: text => {
-          const count = getCommentsCount(text)
-          return count !== 0 ? <Badge count={count} style={{ backgroundColor: '#52c41a' }} /> : count
-        },
-        sorter: (a, b) => getCommentsCount(a.comments) - getCommentsCount(b.comments)
-      },
-      {
-        title: '注册时间',
-        dataIndex: 'createdAt',
-        sorter: (a, b) => (moment(a.createdAt).isBefore(b.createdAt) ? 1 : -1)
-      },
-      {
-        title: '操作',
-        render: (text, record) => (
-          <Button type="danger" onClick={() => this.handleDelete(record.id, record.username)}>
-            删除
-          </Button>
-        )
-      }
-    ]
-  }
-
-  fetchList = ({ current = 1, pageSize = 10, ...query }) => {
-    this.setState({ loading: true })
-    this.axios.get('/user/getUserList', { params: { page: current, pageSize, ...query } }).then(res => {
-      const pagination = {
-        current,
-        pageSize,
-        total: res.count
-      }
-      this.setState({ list: res.rows, pagination, loading: false })
-    })
-  }
-
-  handleDelete = (userId, username) => {
-    Modal.confirm({
-      title: '您确认删除该用户?，此操作不可恢复！',
-      content: `用户： ${username} `,
-      onOk: () => {
-        this.axios.delete('/user/delete', { params: { userId } }).then(res => {
-          if (res.code === 200) {
-            this.fetchList(this.state.pagination)
-            message.success(res.message)
-          }
+  function fetchList({ current = 1, pageSize = 10, ...query }) {
+    setLoading(true)
+    axios
+      .get('/user/list', {
+        params: { page: current, pageSize, ...query }
+      })
+      .then(res => {
+        setList(res.rows)
+        setPagination({
+          current,
+          pageSize,
+          total: res.count
         })
-      }
+        setLoading(false)
+      })
+  }
+
+  function onQuery(values) {
+    setQuery(query)
+    fetchList({ ...values, current: 1 })
+  }
+
+  function onDelete(userId) {
+    axios.delete(`/user/${userId}`).then(res => {
+      fetchList(pagination)
     })
   }
 
-  handleChange = pagination => {
-    this.fetchList({ ...pagination, ...this.state.query })
+  function handlePageChange(page) {
+    pagination.current = page
+    setPagination(pagination)
+    fetchList({ ...pagination, ...query })
   }
 
-  getQuery = query => {
-    this.setState({ query })
-    this.fetchList({ ...query, current: 1 })
+  function switchNotice(checked, userId) {
+    setSwitchId(userId)
+    axios
+      .put(`/user/${userId}`, {
+        notice: checked
+      })
+      .then(res => {
+        const target = list.find(l => l.id === userId)
+        target.notice = checked
+        setList(list)
+        setSwitchId(0)
+      })
+      .catch(res => {
+        setSwitchId(0)
+      })
   }
 
-  render() {
-    const { list, pagination, loading } = this.state
-    return (
-      <div className="">
-        <QueryForm getQuery={this.getQuery} />
-        <Table
-          rowKey="id"
-          bordered
-          columns={this.getColumns()}
-          loading={loading}
-          dataSource={list}
-          pagination={pagination}
-          onChange={this.handleChange}
+  const columns = [
+    {
+      title: '用户名',
+      dataIndex: 'username'
+    },
+    {
+      title: '邮箱',
+      dataIndex: 'email'
+    },
+    {
+      title: '邮件通知',
+      dataIndex: 'notice',
+      render: (text, record) => (
+        <Switch
+          defaultChecked={text}
+          onChange={checked => switchNotice(checked, record.id)}
+          loading={switchId === record.id}
         />
-      </div>
-    )
-  }
+      )
+    },
+    {
+      title: '用户类型',
+      dataIndex: 'type',
+      render: (text, record) => {
+        return record.github ? <Tag color='#1890ff'>github 用户</Tag> : <Tag color='magenta'>站内用户</Tag>
+      }
+    },
+    {
+      title: '注册时间',
+      dataIndex: 'createdAt',
+      sorter: (a, b) => (moment(a.createdAt).isBefore(b.createdAt) ? 1 : -1)
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Popconfirm
+          title='Are you sure？'
+          icon={<Icon type='question-circle-o' style={{ color: 'red' }} />}
+          onConfirm={e => onDelete(record.id)}>
+          <span className='delete-text'>Delete</span>
+        </Popconfirm>
+      )
+    }
+  ]
+  return (
+    <>
+      <QueryForm onQuery={onQuery} />
+      <Table rowKey='id' bordered loading={loading} columns={columns} dataSource={list} pagination={false} />
+      <AppPagination {...pagination} onChange={handlePageChange} />
+    </>
+  )
 }
 
-export default UserManage
+export default AdminUser

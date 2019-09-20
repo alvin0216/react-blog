@@ -1,27 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
 import App from './App'
+import { AppContainer } from 'react-hot-loader'
+
+// redux
 import { Provider } from 'react-redux'
 import store from '@/redux'
-import axios from '@/lib/axios'
 
-// 样式重置
-import '@/style/reset.less'
-import '@/assets/iconfont/iconfont.css'
-
-// markdown 高亮
-// import hljs from 'highlight.js'
-// import javascript from 'highlight.js/lib/languages/javascript'
-// import 'highlight.js/styles/atom-one-light.css'
-
-import '@/style/index.less'
-
-// hljs.registerLanguage('javascript', javaScript)
-
-
-// 绑定 全局方法 axios
-React.Component.prototype.axios = axios
+// styles
+import '@/assets/icons/iconfont'
+import 'normalize.css/normalize.css' // a modern alternative to CSS resets
+import '@/styles/index.less'
 
 const render = Component => {
   ReactDOM.render(
@@ -35,8 +24,6 @@ const render = Component => {
 }
 
 render(App)
-
-// ReactDOM.render(<App />, document.getElementById('root'))
 
 if (module.hot) {
   module.hot.accept('./App', () => {

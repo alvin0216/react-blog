@@ -1,124 +1,145 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-
-import SimpleMDE from 'simplemde'
-import 'simplemde/dist/simplemde.min.css'
 import './index.less'
-import { translateMarkdown } from '@/lib/index'
 
-import { Button, Input, Modal, BackTop } from 'antd'
-import SelectCate from './components/Cate'
+import axios from '@/utils/axios'
+import { Button, Input, Modal, BackTop, message } from 'antd'
+import MdEditor from '@/components/MdEditor'
+import List from './Tag'
 
-@connect(state => state.article)
-class Edit extends Component {
-  state = {
-    value: '',
-    title: '',
-    tagList: [],
-    categoryList: [],
-    isEdit: false // 组件状态 更新或创建
-  }
+function Edit(props) {
+  const [content, setContent] = useState('')
+  const [title, setTitle] = useState('')
+  const [tagList, setTagList] = useState([])
+  const [categoryList, setCategoryList] = useState([])
+  const [tagSelectedList, setTagSelectedList] = useState([])
+  const [cateSelectedList, setCateSelectedList] = useState([])
 
-  componentDidMount() {
-    this.smde = new SimpleMDE({
-      element: document.getElementById('editor').childElementCount,
-      autofocus: true,
-      autosave: true,
-      previewRender: translateMarkdown
-    })
+  const editId = parseInt(props.match.params.id)
 
-    if (this.props.history.location.state) {
-      const { articleId } = this.props.history.location.state
-      this.axios.get(`/article/get/${articleId}`).then(res => {
-        const { title, tags, categories, content } = res.data
-        this.smde.value(content)
-        const tagList = tags.map(d => d.name)
-        const categoryList = categories.map(d => d.name)
-        this.setState({ title, tagList, categoryList, isEdit: true, articleId })
-      })
-    }
-  }
-
-  /**
-   * 获取常用的分类、标签列表
-   *
-   * @param {Array} list - 列表数据
-   * @param {Number} num - 获取的数量
-   */
-  getCommonlyList = (list, num = 10) => {
-    const sortList = list.sort((a, b) => b.count - a.count)
-    return sortList.slice(0, num)
-  }
-
-  handleSubmit = () => {
-    const tags = this.$tagRef.getResult()
-    const categories = this.$categoryRef.getResult()
-    let params = {
-      title: this.state.title,
-      content: this.smde.value(),
-      categories,
-      tags
-    }
-    if (this.state.isEdit) {
-      this.axios.put('/article/update', { ...params, articleId: this.state.articleId }).then(res => {
-        Modal.confirm({
-          title: '文章修改成功！是否查看详情？',
-          onOk: () => this.props.history.push(`/article/${this.state.articleId}`)
-        })
-      })
+  useEffect(() => {
+    // did mounted
+    if (editId) {
+      fetchArticle(editId)
     } else {
-      this.axios.post('/article/create', params).then(res => {
+    }
+  }, [props.match.params])
+
+  useEffect(() => {
+    // mounted
+    if (!editId) {
+      const tags = props.tagList.map(d => d.name).slice(0, 10)
+      const cates = props.categoryList.map(d => d.name).slice(0, 10)
+      setTagList(tags)
+      setCategoryList(cates)
+      tags[0] && setTagSelectedList([tags[0]])
+      cates[0] && setCateSelectedList([cates[0]])
+    }
+  }, [props.tagList, props.categoryList])
+
+  function fetchArticle(id) {
+    axios.get(`/article/${id}?type=0`).then(res => {
+      setTitle(res.title)
+      setContent(res.content)
+      const tags = res.tags.map(d => d.name)
+      const categories = res.categories.map(d => d.name)
+      setTagList(tags)
+      setCategoryList(categories)
+      setTagSelectedList(tags)
+      setCateSelectedList(categories)
+    })
+  }
+
+  function add() {
+    if (!title) return message.warning('标题不能为空！')
+    axios
+      .post('/article', {
+        title,
+        content,
+        tagList: tagSelectedList,
+        categoryList: cateSelectedList,
+        authorId: props.authorId
+      })
+      .then(res => {
         Modal.confirm({
           title: '文章创建成功！是否立即查看？',
-          onOk: () => this.props.history.push(`/article/${res.data.id}`)
+          onOk: () => props.history.push(`/article/${res.id}`)
         })
       })
-    }
   }
 
-  handleUpdate = () => {}
-
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value })
+  function update() {
+    axios
+      .put(`/article/${editId}`, {
+        title,
+        content,
+        tags: tagSelectedList,
+        categories: cateSelectedList
+      })
+      .then(() => {
+        message.success('更新成功')
+      })
   }
 
-  render() {
-    const { title, value, categoryList, tagList, isEdit } = this.state
-    return (
-      <div className="edit">
-        <div className="blog-formItem">
-          <span className="label">标题：</span>
-          <Input
-            placeholder="请输入文章标题"
-            className="title-input"
-            name="title"
-            value={title}
-            onChange={this.handleChange}
-          />
-        </div>
-        <SelectCate
-          type="category"
-          showNum={10}
-          onRef={el => (this.$categoryRef = el)}
-          list={categoryList}
-          isEdit={isEdit}
-        />
-        <SelectCate
-          type="tag"
-          showNum={12}
-          onRef={el => (this.$tagRef = el)}
-          list={tagList}
-          isEdit={isEdit}
-        />
-        <br />
-        <textarea id="editor" defaultValue={value} />
-        <Button onClick={this.handleSubmit} type="primary">
-          {isEdit ? '更新' : '创建'}
-        </Button>
-        <BackTop />
-      </div>
-    )
-  }
+  return (
+    <div className='admin-edit-article'>
+      <ul className='form-list'>
+        <li>
+          <span className='label'>标题：</span>
+          <span style={{ flex: 1 }}>
+            <Input
+              placeholder='请输入文章标题'
+              className='title-input'
+              name='title'
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+            />
+          </span>
+        </li>
+        <li>
+          <span className='label'>标签：</span>
+          <span>
+            <List
+              list={tagList}
+              setList={setTagList}
+              selectedList={tagSelectedList}
+              setSelectedList={setTagSelectedList}
+            />
+          </span>
+        </li>
+        <li>
+          <span className='label'>分类：</span>
+          <span>
+            <List
+              list={categoryList}
+              setList={setCategoryList}
+              selectedList={cateSelectedList}
+              setSelectedList={setCateSelectedList}
+            />
+          </span>
+        </li>
+      </ul>
+      <MdEditor value={content} onChange={setContent} />
+      <Button
+        type='primary'
+        shape='circle'
+        size='large'
+        disabled={!title}
+        className='action-icon'
+        title={editId ? '更新' : '新增'}
+        icon={editId ? 'sync' : 'plus'}
+        onClick={() => {
+          editId ? update() : add()
+        }}
+      />
+
+      <BackTop target={() => document.querySelector('.admin-main')} />
+    </div>
+  )
 }
 
-export default Edit
+export default connect(state => ({
+  tagList: state.article.tagList,
+  categoryList: state.article.categoryList,
+  authorId: state.user.userId
+}))(Edit)

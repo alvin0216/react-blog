@@ -8,8 +8,10 @@ module.exports = (sequelize, dataTypes) => {
 
   Category.associate = models => {
     Category.belongsTo(models.article, {
+      as: 'article',
       foreignKey: 'articleId',
-      targetKey: 'id'
+      targetKey: 'id',
+      constraints: false
     })
   }
 

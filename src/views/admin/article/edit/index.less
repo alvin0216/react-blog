@@ -1,19 +1,19 @@
-.blog-formItem {
-  line-height: 36px;
-  .label {
-    display: inline-block;
-    width: 80px;
-    text-align: right;
-    padding-right: 5px;
-    text-transform: capitalize; // 首字母大写
-    font-weight: bold;
+.admin-edit-article {
+  .form-list {
+    li {
+      display: flex;
+      line-height: 36px;
+      .label {
+        width: 50px;
+        font-weight: bold;
+      }
+    }
   }
-  .title-input {
-    display: inline-block;
-    width: calc(100% - 80px);
-  }
-}
 
-.CodeMirror-scroll {
-  min-height: 500px;
+  .action-icon {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    z-index: 2;
+  }
 }
