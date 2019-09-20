@@ -6,7 +6,7 @@ const { checkToken } = require('../utils/token')
  */
 const verifyList1 = [
   { regexp: /\/article/, required: 'post, put, delete' }, // 普通用户 禁止修改或者删除、添加文章
-  { regexp: /\/discuss/, required: 'delete' }, // 普通用户 禁止删除评论
+  { regexp: /\/discuss/, required: 'delete, post' }, // 普通用户 禁止删除评论
   { regexp: /\/user/, required: 'get, put, delete' } // 普通用户 禁止获取用户、修改用户、以及删除用户
 ]
 
@@ -15,6 +15,11 @@ const verifyList2 = [
   { regexp: /\/discuss/, required: 'post' } // 未登录用户 禁止评论
 ]
 
+/**
+ * 检查路由是否需要权限，返回一个权限列表
+ *
+ * @return {Array} 返回 roleList
+ */
 function checkAuth(method, url) {
   function _verify(list, role) {
     const target = list.find(v => {
@@ -23,21 +28,22 @@ function checkAuth(method, url) {
       }
     })
 
-    return target ? { role, auth: true } : null
+    return !!target
   }
 
-  const temp = [_verify(verifyList1, 1), _verify(verifyList2, 2)].filter(Boolean)
+  const roleList = []
+  _verify(verifyList1, 1) && roleList.push(1)
+  _verify(verifyList2, 2) && roleList.push(2)
 
-  return temp
+  return roleList
 }
 
 // auth example token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoyLCJpZCI6MSwiaWF0IjoxNTY3MDcyOTE4LCJleHAiOjE1Njk2NjQ5MTh9.-V71bEfuUczUt_TgK0AWUJTbAZhDAN5wAv8RjmxfDKI
 module.exports = async (ctx, next) => {
-  const authList = checkAuth(ctx.method, ctx.url)
+  const roleList = checkAuth(ctx.method, ctx.url)
   //  该路由需要验证
-  if (authList.length > 0) {
-    const isAuth = authList.every(item => checkToken(ctx, item.role)) // 每一项都通过
-    if (isAuth) {
+  if (roleList.length > 0) {
+    if (checkToken(ctx, roleList)) {
       await next()
     } else {
       ctx.status = 401

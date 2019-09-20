@@ -11,11 +11,11 @@ exports.createToken = info => {
 
 /**
  * @param {Object} ctx - app.context
- * @param {Number} role - 需要具备的权限
+ * @param {Array} roleList - 需要具备的权限 [1, 2] 代表权限 1， 2
  *
  * @return {Boolean} 是否验证通过
  */
-exports.checkToken = (ctx, role = 1) => {
+exports.checkToken = (ctx, roleList = [1]) => {
   const authorizationHeader = ctx.headers['authorization']
   if (!authorizationHeader) {
     return false
@@ -26,7 +26,7 @@ exports.checkToken = (ctx, role = 1) => {
     if (err) {
       return false
     } else if (decoded) {
-      return decoded.role === role
+      return roleList.includes(decoded.role)
     }
     return false
   })
