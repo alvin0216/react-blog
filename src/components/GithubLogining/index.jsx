@@ -11,7 +11,7 @@ function AppLoading(props) {
   const [loading, setLoading] = useState('')
 
   function jumpToBefore() {
-    const url = get('prevRouter')
+    const url = get('prevRouter') || '/'
     if (url.includes('?code=')) {
       props.history.push('/')
     } else {

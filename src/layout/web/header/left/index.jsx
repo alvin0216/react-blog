@@ -38,10 +38,13 @@ const HeaderLeft = props => {
   )
 
   function handleChange(e) {
+    e.preventDefault()
     setKeyword(e.target.value)
   }
 
-  function onPressEnter(e) {}
+  function onPressEnter(e) {
+    e.target.blur()
+  }
 
   function onSubmit() {
     props.history.push(`/?page=1&keyword=${keyword}`)

@@ -58,3 +58,11 @@ export const groupBy = (arr, f) => {
   })
   return Object.keys(groups).map(group => groups[group])
 }
+
+/**
+ * @param {string} path
+ * @returns {Boolean}
+ */
+export function isExternal(path) {
+  return /^(https?:|mailto:|tel:|http:)/.test(path)
+}
