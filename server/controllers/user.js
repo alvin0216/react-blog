@@ -185,7 +185,7 @@ class UserController {
       const { page = 1, pageSize = 10, username } = ctx.query
       const where = {
         role: {
-          $not: -1
+          $not: 1
         }
       }
       if (username) {
