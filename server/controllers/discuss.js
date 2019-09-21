@@ -12,11 +12,15 @@ const {
   sequelize
 } = require('../models')
 
-async function sendingEmail(articleId, commentList, commentId) {
+/**
+ * 邮件通知
+ * userId - 添加评论的用户id
+ */
+async function sendingEmail(articleId, commentList, commentId, userId) {
   const article = await ArticleModel.findOne({ where: { id: articleId }, attributes: ['id', 'title'] })
   const target = commentList.rows.find(d => d.id === parseInt(commentId))
 
-  const { emailList, html } = getEmailData(article, target)
+  const { emailList, html } = getEmailData(article, target, userId)
 
   Promise.all(emailList.map(receiver => sendEmail({ receiver, html })))
     .then(res => {
@@ -52,7 +56,7 @@ class DiscussController {
 
         const list = await DiscussController.fetchCommentList(articleId)
 
-        EMAIL_NOTICE.enable && sendingEmail(articleId, list, commentId)
+        EMAIL_NOTICE.enable && sendingEmail(articleId, list, commentId, userId)
         ctx.client(200, 'success', list)
       } catch (error) {
         ctx.client(500, '请检查输入内容', error)

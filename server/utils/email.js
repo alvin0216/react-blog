@@ -28,11 +28,12 @@ exports.sendEmail = async ({ receiver, html, subject, text }) => {
 /**
  * 获取 email 列表
  * @param {Objec} target - comment { replies: [....] }
+ * @param {Number} userId - 发送评论的用户 id
  */
-function getEmailList(target) {
+function getEmailList(target, userId) {
   const temp = [EMAIL_NOTICE.transporterConfig.auth.user]
   const loop = item => {
-    if (item.user.notice && item.user.email) {
+    if (item.user.id !== userId && item.user.notice && item.user.email) {
       temp.push(item.user.email)
     }
   }
@@ -42,7 +43,7 @@ function getEmailList(target) {
   return [...new Set(temp)]
 }
 
-exports.getEmailData = (article, disscussData) => {
+exports.getEmailData = (article, disscussData, userId) => {
   const { WEB_HOST } = EMAIL_NOTICE
   const link = article.id !== -1 ? `${WEB_HOST}/article/${article.id}` : `${WEB_HOST}/about`
 
@@ -91,5 +92,5 @@ exports.getEmailData = (article, disscussData) => {
     ${HTML_FOOTER}
   `
 
-  return { html, emailList: getEmailList(disscussData) }
+  return { html, emailList: getEmailList(disscussData, userId) }
 }
