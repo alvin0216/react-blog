@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const axios = require('axios')
-const { GITHUB, ADMIN_GITHUB_LOGIN_NAME } = require('../config')
+const { GITHUB } = require('../config')
 const { decodeQuery } = require('../utils')
 const { comparePassword, encrypt } = require('../utils/bcrypt')
 const { createToken } = require('../utils/token')
@@ -184,8 +184,8 @@ class UserController {
     if (validator) {
       const { page = 1, pageSize = 10, username } = ctx.query
       const where = {
-        username: {
-          $not: ADMIN_GITHUB_LOGIN_NAME
+        role: {
+          $not: -1
         }
       }
       if (username) {

@@ -1,17 +1,17 @@
 ## react hooks + koa + mysql
 
-一个及其简洁的个人博客系统、即插即用，如果你想使用这个博客、动动手改改配置即可使用！！
+> 一个及其简洁的个人博客系统、即插即用，如果你想使用这个博客、动动手改改配置即可使用！！
 
 - 前后台分离式开发（项目中也包含博客的后台管理系统），为了方便记录后端开发过程，笔者将后端也一起放在同个项目文件夹中。
 - 博客样式几乎借助于 `antd` 这个优秀的 UI 框架，主打简约风格，是笔者借鉴了 `antd` 官方的风格所设计。
 - 具备了代码高亮、权限管理、第三方 `github` 登录、评论与通知、以及邮件通知功能的个人博客...
 
+* 我的博客地址: [郭大大的博客](https://guodada.fun)
+* 测试博客地址: [测试使用的郭大大的博客](http://test.guodada.fun) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！
+
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
-
-- 我的博客地址: [郭大大的博客](https://guodada.fun)
-- 测试博客地址: [郭大大的博客](http://test.guodada.fun) `admin/admin` 为博主账号
 
 ### 实现功能
 
@@ -38,7 +38,11 @@
 
 ## 博客预览
 
+### pc 端
+
 ![](https://user-gold-cdn.xitu.io/2019/9/20/16d4df55cdda44f7)
+
+### 移动端
 
 ![](https://user-gold-cdn.xitu.io/2019/9/20/16d4df6fb00c0abf?w=370&h=789&f=png&s=144230)
 
@@ -79,7 +83,7 @@
 
 ```
 
-### 数据库
+### 数据库模型
 
 ![](https://user-gold-cdn.xitu.io/2019/9/20/16d4e0f97411e6cb?w=660&h=655&f=png&s=340072)
 
@@ -190,7 +194,7 @@ export const ABOUT = {
 }
 ```
 
-### 后端 `sersrc/config.js`
+### 后端 `server/config.js`
 
 ```js
 const devMode = process.env.NODE_ENV === 'development'
@@ -289,7 +293,7 @@ module.exports = config
 ## 使用这个项目
 
 ```bash
-git clone ![](https://user-gold-cdn.xitu.io/2019/9/20/16d4e0f97411e6cb?w=660&h=655&f=png&s=340072)
+git clone https://github.com/gershonv/react-blog.git
 
 ## 安装依赖以及开启开发模式
 cd react-blog
@@ -297,6 +301,7 @@ yarn
 yarn dev
 
 ## 安装依赖以及开启开发模式 注意必须先配置好数据库、个人github账户登录名，配置文件在 server/config/index.js
+## 笔者采用的数据库字符集为 utf8mb4 排序规则 utf8mb4_general_ci
 cd server
 yarn
 yarn dev
