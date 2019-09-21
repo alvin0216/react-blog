@@ -195,7 +195,8 @@ class UserController {
         where,
         offset: (page - 1) * pageSize,
         limit: parseInt(pageSize),
-        row: true
+        row: true,
+        order: [['createdAt', 'DESC']]
       })
 
       ctx.client(200, 'success', result)
