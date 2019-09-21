@@ -53,7 +53,7 @@ function Article(props) {
   const articleId = parseInt(props.match.params.id)
   const isFoldNavigation = props.windowWidth < 1300
   return (
-    <Spin tip='Loading...' spinning={loading} delay={100}>
+    <Spin tip='Loading...' spinning={loading}>
       <div className='app-article' style={{ paddingRight: isFoldNavigation ? 0 : 265 }}>
         <div className='post-header'>
           <h1 className='post-title'>{title}</h1>
