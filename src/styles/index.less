@@ -44,3 +44,45 @@ ul {
     margin-top: 10px;
   }
 }
+
+.confirm-modal {
+}
+
+.result-modal {
+  min-width: 500px;
+  .ant-modal-confirm-body > .anticon + .ant-modal-confirm-title + .ant-modal-confirm-content {
+    margin: 0;
+  }
+  .ant-modal-body {
+    .ant-result {
+      padding-bottom: 12px;
+    }
+
+    .list {
+      li {
+        display: flex;
+        align-items: center;
+        .anticon-check-circle {
+          margin-right: 8px;
+        }
+        a {
+          flex: 1;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-size: 14px;
+          line-height: 32px;
+          color: #8590a6;
+          cursor: pointer;
+        }
+        &:hover {
+          background: #f0f2f5;
+          border-radius: 4px;
+          a {
+            color: #40a9ff;
+          }
+        }
+      }
+    }
+  }
+}

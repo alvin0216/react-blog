@@ -5,7 +5,7 @@ module.exports = (sequelize, dataTypes) => {
     'article',
     {
       id: { type: dataTypes.INTEGER(11), primaryKey: true, autoIncrement: true },
-      title: { type: dataTypes.STRING(255), allowNull: false },
+      title: { type: dataTypes.STRING(255), allowNull: false, unique: true },
       content: { type: dataTypes.TEXT },
       viewCount: { type: dataTypes.INTEGER(11), defaultValue: 0 }, // 阅读数
       createdAt: {

@@ -7,6 +7,13 @@ const defaultState = {
   signModal: {
     visible: false,
     type: 'login'
+  },
+  uploadModal: {
+    visible: false
+  },
+  resultModal: {
+    visible: false,
+    result: null
   }
 }
 
@@ -22,6 +29,12 @@ export const appReducer = (state = defaultState, action) => {
 
     case TYPES.APP_SWITCH_SIGN_MODAL:
       return { ...state, signModal: payload }
+
+    case TYPES.APP_SWITCH_UPLOAD_MODAL:
+      return { ...state, uploadModal: payload }
+
+    case TYPES.APP_UPDATE_RESULT_MODAL:
+      return { ...state, resultModal: payload }
 
     default:
       return state

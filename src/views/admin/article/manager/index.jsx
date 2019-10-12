@@ -64,6 +64,21 @@ function ArticleManager(props) {
     fetchList({ ...pagination, ...query })
   }
 
+  function output(articleId) {
+    axios.post(`/article/output/${articleId}`).then(response => {
+      console.log(response)
+      const blob = new Blob([response], { type: 'application/octet-stream' })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'aa.md'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+    })
+  }
+
   const columns = [
     {
       title: '标题',
@@ -111,15 +126,25 @@ function ArticleManager(props) {
       render: (text, record) => {
         return (
           <div className='action'>
-            <Link to={`/article/${record.id}`}>查看</Link>
-            <Divider type='vertical' />
-            <Link to={{ pathname: `/admin/article/edit/${record.id}`, state: { articleId: record.id } }}>编辑</Link>
-            <Divider type='vertical' />
+            <Button type='link' size='small'>
+              <Link to={`/article/${record.id}`}>查看</Link>
+            </Button>
+
+            <Button type='link' size='small'>
+              <Link to={{ pathname: `/admin/article/edit/${record.id}`, state: { articleId: record.id } }}>编辑</Link>
+            </Button>
+
+            <Button type='primary' size='small' style={{ marginRight: 10 }} onClick={e => output(record.id)}>
+              导出
+            </Button>
+
             <Popconfirm
               title='Are you sure？'
               icon={<Icon type='question-circle-o' style={{ color: 'red' }} />}
               onConfirm={e => onDelete(record.id)}>
-              <span className='delete-text'>Delete</span>
+              <Button type='danger' size='small'>
+                删除
+              </Button>
             </Popconfirm>
           </div>
         )

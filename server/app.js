@@ -1,5 +1,5 @@
 const Koa = require('koa')
-const bodyParser = require('koa-bodyparser')
+const koaBody = require('koa-body')
 const cors = require('koa2-cors')
 const logger = require('koa-logger')
 
@@ -20,10 +20,20 @@ Object.keys(context).forEach(key => {
 
 // moddlewares
 const authHandler = require('./middlewares/authHandler')
+const path = require('path')
 
 app
   .use(cors())
-  .use(bodyParser())
+  .use(
+    koaBody({
+      multipart: true,
+      formidable: {
+        // uploadDir: path.resolve(__dirname, './upload'),
+        keepExtensions: true, // 保持文件的后缀
+        maxFileSize: 2000 * 1024 * 1024 // 设置上传文件大小最大限制，默认20M
+      }
+    })
+  )
   .use(authHandler)
   .use(logger())
 
