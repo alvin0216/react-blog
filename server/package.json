@@ -17,6 +17,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
+    "koa-send": "^5.0.0",
     "koa2-cors": "^2.0.6",
     "mysql2": "^1.7.0",
     "nodemailer": "^6.3.0",

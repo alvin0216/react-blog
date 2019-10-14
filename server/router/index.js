@@ -17,8 +17,8 @@ articleRouter
   .post('/upload', ArticleController.upload) // 上传文章
   .post('/checkExist', ArticleController.checkExist) // 确认文章是否存在
   .post('/upload/confirm', ArticleController.uploadConfirm) // 确认上传的文章 读取 upload 文件文章 插入数据库
-  .post('/outputAll', ArticleController.outputAll) // 导出所有文章
-  .post('/output/:id', ArticleController.output) // 导出文章
+  .get('/output/all', ArticleController.outputAll) // 导出所有文章
+  .get('/output/:id', ArticleController.output) // 导出文章
   .get('/:id', ArticleController.findById) // 获取文章
   .put('/:id', ArticleController.update) // 修改文章
   .delete('/:id', ArticleController.delete) // 删除指定文章

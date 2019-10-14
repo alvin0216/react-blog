@@ -7,18 +7,11 @@ import { API_BASE_URL } from '@/config'
 // methods
 import { switchUploadModal, updateResultModal } from '@/redux/app/actions'
 import axios from '@/utils/axios'
-import { get } from '@/utils/storage'
+import { getToken } from '@/utils'
 
 const { Dragger } = Upload
 const { confirm } = Modal
 const { Paragraph, Text } = Typography
-
-let token = ''
-const userInfo = get('userInfo')
-
-if (userInfo && userInfo.token) {
-  token = 'Bearer ' + userInfo.token
-}
 
 function UploadModal(props) {
   const { visible, switchUploadModal } = props
@@ -117,7 +110,7 @@ function UploadModal(props) {
           multiple
           action={`${API_BASE_URL}/article/upload`}
           onChange={handleFileChange}
-          headers={{ Authorization: token }}
+          headers={{ Authorization: getToken() }}
           accept='text/markdown'>
           <p className='ant-upload-drag-icon'>
             <Icon type='inbox' />

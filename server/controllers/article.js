@@ -14,6 +14,7 @@ const {
 const fs = require('fs')
 const { uploadPath, outputPath, findOrCreateFilePath, decodeFile, generateFile } = require('../utils/file')
 const archiver = require('archiver') // 打包 zip
+const send = require('koa-send') // 文件下载
 
 class ArticleController {
   // 初始化数据 关于页面（用于评论关联）
@@ -368,14 +369,19 @@ class ArticleController {
           ]
         })
 
-        const filePath = await generateFile(article)
+        const { filePath, fileName } = await generateFile(article)
 
-        const reader = fs.createReadStream(filePath)
+        // ctx.set('Content-type', 'application/md')
+        // ctx.set('Content-type', 'application/md')
 
-        ctx.set('Content-disposition', 'attachment; filename=' + 'aaa' + '.md')
-        ctx.set('Content-type', 'application/md')
+        ctx.attachment(decodeURI(fileName))
+        await send(ctx, fileName, { root: outputPath })
 
-        ctx.client(200, null, reader)
+        // const reader = fs.createReadStream(filePath)
+
+        // ctx.set('Content-disposition', 'attachment; filename=' + 'aaa' + '.md')
+
+        // ctx.client(200, null, reader)
       } catch (error) {
         ctx.client(500, 'md 文件导出失败')
       }
@@ -412,7 +418,8 @@ class ArticleController {
       })
       await zip.finalize()
 
-      ctx.client(200, 'success', null)
+      ctx.attachment(decodeURI(zipName))
+      await send(ctx, zipName, { root: outputPath })
     } catch (error) {
       ctx.client(500, null, error)
     }

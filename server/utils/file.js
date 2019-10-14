@@ -150,7 +150,8 @@ function createFileContent({ title, content, createdAt, categories, tags }) {
 async function generateFile(article) {
   return new Promise((resolve, reject) => {
     findOrCreateFilePath(outputPath).then(() => {
-      const writeFilePath = `${outputPath}/${article.title}.md`
+      const fileName = `${article.title}.md`
+      const writeFilePath = `${outputPath}/${fileName}`
       const fileContent = createFileContent(article)
       fs.writeFile(writeFilePath, fileContent, function(err) {
         if (err) {
@@ -161,7 +162,7 @@ async function generateFile(article) {
           if (err) {
             throw err
           }
-          resolve(writeFilePath)
+          resolve({ filePath: writeFilePath, fileName })
         })
       })
     })

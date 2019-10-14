@@ -5,6 +5,7 @@ import { message } from 'antd'
 import { clear, get } from '@/utils/storage'
 import store from '@/redux'
 import { USER_LOGIN_OUT } from '@/redux/types'
+import { getToken } from '@/utils'
 
 // create an axios instance
 const service = axios.create({
@@ -18,9 +19,9 @@ let timer
 // 拦截请求
 service.interceptors.request.use(
   config => {
-    const userInfo = get('userInfo')
-    if (userInfo && userInfo.token) {
-      config.headers.common['Authorization'] = 'Bearer ' + userInfo.token
+    const token = getToken()
+    if (token) {
+      config.headers.common['Authorization'] = token
     }
     return config
   },
@@ -33,11 +34,15 @@ service.interceptors.request.use(
 // 拦截响应
 service.interceptors.response.use(
   response => {
+    if (response.headers['content-type'] && response.headers['content-type'].includes('text/markdown')) {
+      return response.data.data || response.data
+    }
     if (response.data.code !== 200) {
       response.data.message && message.warning(response.data.message)
       return Promise.reject(response.data)
+    } else {
+      return response.data.data || response.data
     }
-    return response.data.data || response.data
   },
   err => {
     clearTimeout(timer)
@@ -45,7 +50,7 @@ service.interceptors.response.use(
       if (err.response) {
         switch (err.response.status) {
           case 401:
-            store.dispatch({ type: USER_LOGIN_OUT })
+            // store.dispatch({ type: USER_LOGIN_OUT })
             message.error('登录信息过期或未授权，请重新登录！')
             break
 

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import moment from 'moment'
 import QueryForm from './QueryForm'
 import AppPagination from '@/components/Pagination'
+import download from '@/utils/download'
 
 function ArticleManager(props) {
   const { tagList, categoryList } = props
@@ -65,18 +66,7 @@ function ArticleManager(props) {
   }
 
   function output(articleId) {
-    axios.post(`/article/output/${articleId}`).then(response => {
-      console.log(response)
-      const blob = new Blob([response], { type: 'application/octet-stream' })
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'aa.md'
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-    })
+    download(`/article/output/${articleId}`)
   }
 
   const columns = [
@@ -134,7 +124,11 @@ function ArticleManager(props) {
               <Link to={{ pathname: `/admin/article/edit/${record.id}`, state: { articleId: record.id } }}>编辑</Link>
             </Button>
 
-            <Button type='primary' size='small' style={{ marginRight: 10 }} onClick={e => output(record.id)}>
+            <Button
+              type='primary'
+              size='small'
+              style={{ marginRight: 10 }}
+              onClick={e => output(record.id, record.title)}>
               导出
             </Button>
 
