@@ -322,6 +322,30 @@ cd server
 pm2 start app.js
 ```
 
+### 导入功能说明
+
+导入 `md` 文件是按照 hexo 生成的前缀去解析的， 比如
+
+```bash
+---
+title: ES6 - Class
+date: 2018-07-16 22:19:09
+categories: Javascript
+tags:
+  - Javascript
+  - ES6
+---
+```
+
+对应会解析为
+
+- 标题：`ES6 - Class`
+- 创建日期：`2018-07-16 22:19:09`
+- 分类：`Javascript`
+- 标签：`Javascript` `ES6`
+
+如果导入标题一样的文件，可以确认是否覆盖原来的文章！
+
 由于太多小伙伴私聊 QQ，故本人建了个群方便交流技术答疑源码，无商业用途，感兴趣的伙伴可以加群 855655742。请勿广告，谢谢。
 
 PS : 觉得不错的伙伴可以给个 star ~~~ 或者 fork 下来看看哦。如果有什么建议，也可以提 issue 哦
