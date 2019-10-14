@@ -34,9 +34,6 @@ service.interceptors.request.use(
 // 拦截响应
 service.interceptors.response.use(
   response => {
-    if (response.headers['content-type'] && response.headers['content-type'].includes('text/markdown')) {
-      return response.data.data || response.data
-    }
     if (response.data.code !== 200) {
       response.data.message && message.warning(response.data.message)
       return Promise.reject(response.data)
@@ -50,7 +47,7 @@ service.interceptors.response.use(
       if (err.response) {
         switch (err.response.status) {
           case 401:
-            // store.dispatch({ type: USER_LOGIN_OUT })
+            store.dispatch({ type: USER_LOGIN_OUT })
             message.error('登录信息过期或未授权，请重新登录！')
             break
 
