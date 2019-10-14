@@ -7,6 +7,10 @@ import { loginout } from '@/redux/user/actions'
 
 import { Button, Icon, Dropdown, Menu } from 'antd'
 import AppAvatar from '@/components/Avatar'
+import UploadModal from '@/components/UploadModal'
+import ResultModal from '@/components/UploadModal/result'
+
+import { switchSignModal, switchUploadModal } from '@/redux/app/actions'
 
 function AdminHeader(props) {
   const { collapsed, onToggle, userInfo } = props
@@ -20,6 +24,11 @@ function AdminHeader(props) {
       <Menu.Item>
         <span onClick={backToHome}>返回主页</span>
       </Menu.Item>
+
+      <Menu.Item>
+        <span onClick={e => props.switchUploadModal(true)}>导入文章</span>
+      </Menu.Item>
+
       <Menu.Item>
         <span
           onClick={e => {
@@ -42,6 +51,8 @@ function AdminHeader(props) {
           </span>
         </Dropdown>
       </div>
+      <UploadModal />
+      <ResultModal />
     </>
   )
 }
@@ -56,6 +67,7 @@ export default connect(
     userInfo: state.user
   }),
   {
-    loginout
+    loginout,
+    switchUploadModal
   }
 )(withRouter(AdminHeader))

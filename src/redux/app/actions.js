@@ -17,3 +17,17 @@ export const switchSignModal = (type, visible) => ({
     visible
   }
 })
+
+// 切换上传 md 文件框
+export const switchUploadModal = visible => ({
+  type: TYPES.APP_SWITCH_UPLOAD_MODAL,
+  payload: {
+    visible
+  }
+})
+
+// 切换上传 md 文件框
+export const updateResultModal = payload => ({
+  type: TYPES.APP_UPDATE_RESULT_MODAL,
+  payload
+})

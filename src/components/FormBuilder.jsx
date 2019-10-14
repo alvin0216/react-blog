@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Col, Form, Icon, Row, Tooltip } from 'antd'
+import { RandomId } from '@/utils'
 
 const FormItem = Form.Item
 
@@ -165,9 +166,20 @@ function FormBuilder(props) {
         </FormItem>
 
         {props.children && index === elements.length - 1 && (
-          <FormItem wrapperCol={wrapperCol} key={new Date().getTime()}>
-            {props.children}
-          </FormItem>
+          <>
+            {Array.isArray(props.children) ? (
+              props.children.map(item => (
+                <FormItem wrapperCol={wrapperCol} key={RandomId(10)}>
+                  {item}
+                </FormItem>
+              ))
+            ) : (
+              <FormItem wrapperCol={wrapperCol} key={RandomId(10)}>
+                {props.children}
+              </FormItem>
+            )}
+            }
+          </>
         )}
       </Fragment>
     )

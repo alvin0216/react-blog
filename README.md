@@ -5,6 +5,7 @@
 - 前后台分离式开发（项目中也包含博客的后台管理系统），为了方便记录后端开发过程，笔者将后端也一起放在同个项目文件夹中。
 - 博客样式几乎借助于 `antd` 这个优秀的 UI 框架，主打简约风格，是笔者借鉴了 `antd` 官方的风格所设计。
 - 具备了代码高亮、权限管理、第三方 `github` 登录、评论与通知、以及邮件通知功能的个人博客...
+- 具备文件导入导出功能，假如你之前用 `hexo` 博客, 那么你可以直接通过导入 `md` 文件迁移你的文章。
 
 * 我的博客地址: [郭大大的博客](https://guodada.fun)
 * 测试博客地址: [测试使用的郭大大的博客](http://test.guodada.fun) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！
@@ -20,6 +21,7 @@
 - [x] 响应式、文章锚点导航、回到顶部、`markdown` 代码高亮
 - [x] 用户：站内用户、`github` 第三方授权登录的用户
 - [x] 用户可以评论与回复、以及**邮件通知**回复的状态
+- [x] `md` 文件导入导出功能！可以直接上传 `md` 文件生成文章
 
 ### 技术栈
 
@@ -35,12 +37,13 @@
   - `sequelize` + `mysql`
   - `jwt` + `bcrypt`
   - `nodemailer`
+  - `koa-send` `archiver`
 
 ## 博客预览
 
 ### pc 端
 
-![](https://user-gold-cdn.xitu.io/2019/9/20/16d4df55cdda44f7)
+![](https://user-gold-cdn.xitu.io/2019/10/14/16dc944b4cdc4409?w=1908&h=1056&f=png&s=385734)
 
 ### 移动端
 
@@ -100,6 +103,7 @@ const { checkToken } = require('../utils/token')
  * @required 'all': get post put delete 均需要权限。
  */
 const verifyList1 = [
+  { regexp: /\/article\/output/, required: 'get', verifyTokenBy: 'url' }, // 导出文章 verifyTokenBy 从哪里验证 token
   { regexp: /\/article/, required: 'post, put, delete' }, // 普通用户 禁止修改或者删除、添加文章
   { regexp: /\/discuss/, required: 'delete, post' }, // 普通用户 禁止删除评论
   { regexp: /\/user/, required: 'get, put, delete' } // 普通用户 禁止获取用户、修改用户、以及删除用户
@@ -118,21 +122,23 @@ const verifyList2 = [
 function checkAuth(method, url) {
   function _verify(list, role) {
     const target = list.find(v => {
-      if (v.regexp.test(url)) {
-        return v.required === 'all' || v.required.toUpperCase().includes(method)
-      }
+      return v.regexp.test(url) && (v.required === 'all' || v.required.toUpperCase().includes(method))
     })
 
-    return !!target
+    return target
   }
 
   const roleList = []
-  _verify(verifyList1, 1) && roleList.push(1)
-  _verify(verifyList2, 2) && roleList.push(2)
+  const result1 = _verify(verifyList1)
+  const result2 = _verify(verifyList2)
+
+  result1 && roleList.push({ role: 1, verifyTokenBy: result1.verifyTokenBy || 'headers' })
+  result2 && roleList.push({ role: 2, verifyTokenBy: result1.verifyTokenBy || 'headers' })
 
   return roleList
 }
 
+// auth example token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoyLCJpZCI6MSwiaWF0IjoxNTY3MDcyOTE4LCJleHAiOjE1Njk2NjQ5MTh9.-V71bEfuUczUt_TgK0AWUJTbAZhDAN5wAv8RjmxfDKI
 module.exports = async (ctx, next) => {
   const roleList = checkAuth(ctx.method, ctx.url)
   //  该路由需要验证
@@ -315,5 +321,31 @@ yarn build
 cd server
 pm2 start app.js
 ```
+
+### 导入功能说明
+
+导入 `md` 文件是按照 hexo 生成的前缀去解析的， 比如
+
+```bash
+---
+title: ES6 - Class
+date: 2018-07-16 22:19:09
+categories: Javascript
+tags:
+  - Javascript
+  - ES6
+---
+```
+
+对应会解析为
+
+- 标题：`ES6 - Class`
+- 创建日期：`2018-07-16 22:19:09`
+- 分类：`Javascript`
+- 标签：`Javascript` `ES6`
+
+如果导入标题一样的文件，可以确认是否覆盖原来的文章！
+
+由于太多小伙伴私聊 QQ，故本人建了个群方便交流技术答疑源码，无商业用途，感兴趣的伙伴可以加群 855655742。请勿广告，谢谢。
 
 PS : 觉得不错的伙伴可以给个 star ~~~ 或者 fork 下来看看哦。如果有什么建议，也可以提 issue 哦
