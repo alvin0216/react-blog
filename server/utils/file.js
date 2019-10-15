@@ -80,7 +80,7 @@ function decodeFile(filePath) {
 
     _decodePrefix(prefixData)
 
-    result.content = fileData.slice(lastIndex + 3).trim()
+    result.content = fileData.slice(lastIndex + 4).trim()
     return result
   } else {
     return { content: fileData }
