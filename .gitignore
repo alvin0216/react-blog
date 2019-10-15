@@ -22,6 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# upload
 /server/upload/*
 /server/output/*
+server/config/index.js
+
