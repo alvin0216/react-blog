@@ -3,18 +3,25 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 // methods
-import { switchSignModal } from '@/redux/app/actions'
+import { switchSignModal, switchUploadModal } from '@/redux/app/actions'
 import { loginout } from '@/redux/user/actions'
 
 // components
 import { Button, Dropdown, Menu, Avatar } from 'antd'
 import SignModal from '@/components/SignModal'
+import UploadModal from '@/components/UploadModal'
+import ResultModal from '@/components/UploadModal/result'
 import AppAvatar from '@/components/Avatar'
 
 function UserInfo(props) {
   const { username, github, role } = props.userInfo
   const MenuOverLay = (
     <Menu>
+      {role === 1 && (
+        <Menu.Item>
+          <span onClick={e => props.switchUploadModal(true)}>导入文章</span>
+        </Menu.Item>
+      )}
       {role === 1 && (
         <Menu.Item>
           <span onClick={e => props.history.push('/admin')}>后台管理</span>
@@ -51,6 +58,8 @@ function UserInfo(props) {
         </>
       )}
       <SignModal />
+      <UploadModal />
+      <ResultModal />
     </div>
   )
 }
@@ -59,5 +68,5 @@ export default connect(
   state => ({
     userInfo: state.user
   }),
-  { switchSignModal, loginout }
+  { switchSignModal, switchUploadModal, loginout }
 )(withRouter(UserInfo))

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import moment from 'moment'
 import QueryForm from './QueryForm'
 import AppPagination from '@/components/Pagination'
+import download from '@/utils/download'
 
 function ArticleManager(props) {
   const { tagList, categoryList } = props
@@ -64,6 +65,10 @@ function ArticleManager(props) {
     fetchList({ ...pagination, ...query })
   }
 
+  function output(articleId) {
+    download(`/article/output/${articleId}`)
+  }
+
   const columns = [
     {
       title: '标题',
@@ -111,15 +116,29 @@ function ArticleManager(props) {
       render: (text, record) => {
         return (
           <div className='action'>
-            <Link to={`/article/${record.id}`}>查看</Link>
-            <Divider type='vertical' />
-            <Link to={{ pathname: `/admin/article/edit/${record.id}`, state: { articleId: record.id } }}>编辑</Link>
-            <Divider type='vertical' />
+            <Button type='link' size='small'>
+              <Link to={`/article/${record.id}`}>查看</Link>
+            </Button>
+
+            <Button type='link' size='small'>
+              <Link to={{ pathname: `/admin/article/edit/${record.id}`, state: { articleId: record.id } }}>编辑</Link>
+            </Button>
+
+            <Button
+              type='primary'
+              size='small'
+              style={{ marginRight: 10 }}
+              onClick={e => output(record.id, record.title)}>
+              导出
+            </Button>
+
             <Popconfirm
               title='Are you sure？'
               icon={<Icon type='question-circle-o' style={{ color: 'red' }} />}
               onConfirm={e => onDelete(record.id)}>
-              <span className='delete-text'>Delete</span>
+              <Button type='danger' size='small'>
+                删除
+              </Button>
             </Popconfirm>
           </div>
         )

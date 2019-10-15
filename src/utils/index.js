@@ -1,6 +1,7 @@
 import marked from 'marked'
 // import hljs from 'highlight.js'
 import xss from 'xss'
+import { clear, get } from '@/utils/storage'
 
 // 转化 md 语法为 html
 export const translateMarkdown = (plainText, isGuardXss = false) => {
@@ -65,4 +66,26 @@ export const groupBy = (arr, f) => {
  */
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:|http:)/.test(path)
+}
+
+// 获取 token
+export function getToken() {
+  let token = ''
+  const userInfo = get('userInfo')
+
+  if (userInfo && userInfo.token) {
+    token = 'Bearer ' + userInfo.token
+  }
+
+  return token
+}
+
+/**
+ * 生成随机 ID
+ * @param {Number} len - 长度
+ */
+export function RandomId(len) {
+  return Math.random()
+    .toString(36)
+    .substr(3, len)
 }
