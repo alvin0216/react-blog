@@ -45,7 +45,7 @@ function getEmailList(target, userId) {
 
 exports.getEmailData = (article, disscussData, userId) => {
   const { WEB_HOST } = EMAIL_NOTICE
-  const link = article.id !== -1 ? `${WEB_HOST}/article/${article.id}` : `${WEB_HOST}/about`
+  const link = article.id !== -1 ? `${WEB_HOST}/article/${article.id}#discuss` : `${WEB_HOST}/about`
 
   const HTML_HEADER = `<h4 class='header'>您在文章 <span class='article-title'><a href="${link}" class='href'>${article.title}</a></span> 中的评论有了新的回复...</h4>`
 

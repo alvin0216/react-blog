@@ -28,6 +28,14 @@ function Article(props) {
   const [drawerVisible, setDrawerVisible] = useState(false)
 
   useEffect(() => {
+    setTimeout(() => {
+      const target = decodeURI(props.location.hash)
+      const ele = document.querySelector(`a[href="${target}"]`)
+      ele && ele.click() // 挂载时路由跳转到指定位置
+    }, 1000)
+  }, [])
+
+  useEffect(() => {
     const fetchData = id => {
       setLoading(true)
       axios
