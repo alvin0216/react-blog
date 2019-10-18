@@ -11,8 +11,13 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
  * @param {String} username - github 登录名
  */
 async function getGithubInfo(username) {
-  const result = await axios.get(`${GITHUB.fetch_user}${username}`)
-  return result.data
+  try {
+    const result = await axios.get(`${GITHUB.fetch_user}${username}`)
+    return result && result.data
+  } catch (error) {
+    console.log('==== ', '请检查登录 github 的用户名是否正确')
+    throw error
+  }
 }
 
 class UserController {
@@ -242,13 +247,13 @@ class UserController {
 
   /**
    * 初始化用户
-   * @param {String} githubName - github name
+   * @param {String} githubLoginName - github name
    */
-  static async initGithubUser(githubName) {
-    const temp = await UserController.find({ username: githubName })
+  static async initGithubUser(githubLoginName) {
+    const github = await getGithubInfo(githubLoginName)
+    const temp = await UserController.find({ id: github.id })
     if (!temp) {
-      const result = await getGithubInfo(githubName)
-      UserController.createGithubUser(result, 1)
+      UserController.createGithubUser(github, 1)
     }
 
     // const tempList = await Promise.all(list.map(username => UserController.find({ username }))) // 查找库里是否有这个用户
