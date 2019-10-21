@@ -1,7 +1,7 @@
 import React, { Component, Fragment, useState, useEffect } from 'react'
 import './index.less'
 
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // methods
 import axios from '@/utils/axios'
@@ -15,6 +15,8 @@ import Navigation from './Navigation'
 import Discuss from '@/components/Discuss'
 
 function Article(props) {
+  const windowWidth = useSelector(state => state.app.windowWidth)
+
   const [loading, setLoading] = useState(true)
   const [article, setArticle] = useState({
     title: '',
@@ -59,7 +61,7 @@ function Article(props) {
 
   const { title, content, tags, categories, comments, createdAt, viewCount } = article
   const articleId = parseInt(props.match.params.id)
-  const isFoldNavigation = props.windowWidth < 1300
+  const isFoldNavigation = windowWidth < 1300
   return (
     <Spin tip='Loading...' spinning={loading}>
       <div className='app-article' style={{ paddingRight: isFoldNavigation ? 0 : 265 }}>
@@ -114,6 +116,4 @@ function Article(props) {
   )
 }
 
-export default connect(state => ({
-  windowWidth: state.app.windowWidth
-}))(Article)
+export default Article

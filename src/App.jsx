@@ -1,17 +1,23 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 
 import routes from '@/routes'
 import { getWindowWidth } from '@/redux/app/actions'
 import { getTagList, getCategoryList } from '@/redux/article/actions'
 
 const App = props => {
+  const dispatch = useDispatch() // dispatch hooks
+  const role = useSelector(state => state.user.role) // 相当于 connect(state => state.user.role)(App)
+
   // 初始化数据 类似 componentDidMount
   useEffect(() => {
-    props.getWindowWidth()
-    props.getTagList()
-    props.getCategoryList()
+    dispatch(getWindowWidth())
+    dispatch(getTagList())
+    dispatch(getCategoryList())
+    // props.getWindowWidth()
+    // props.getTagList()
+    // props.getCategoryList()
     //
     console.log('app did mount')
     /*eslint react-hooks/exhaustive-deps: "off"*/
@@ -24,7 +30,7 @@ const App = props => {
     const renderRoute = (item, routeContextPath) => {
       let newContextPath = item.path ? `${routeContextPath}/${item.path}` : routeContextPath
       newContextPath = newContextPath.replace(/\/+/g, '/')
-      if (newContextPath.includes('admin') && props.role !== 1) {
+      if (newContextPath.includes('admin') && role !== 1) {
         item = {
           ...item,
           component: () => <Redirect to='/' />,
@@ -58,12 +64,14 @@ const App = props => {
   return <BrowserRouter>{children}</BrowserRouter>
 }
 
-export default connect(
-  state => ({
-    role: state.user.role
-  }),
-  { getWindowWidth, getTagList, getCategoryList }
-)(App)
+export default App
+
+// export default connect(
+//   state => ({
+//     role: state.user.role
+//   }),
+//   { getWindowWidth, getTagList, getCategoryList }
+// )(App)
 
 // example test
 // import WebLayout from '@/layout/web'

@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import { Table, Divider, Tag, Modal, message, Badge, Button, Popconfirm, Icon } from 'antd'
 
 import axios from '@/utils/axios'
@@ -11,7 +11,11 @@ import AppPagination from '@/components/Pagination'
 import download from '@/utils/download'
 
 function ArticleManager(props) {
-  const { tagList, categoryList } = props
+  const { tagList, categoryList } = useSelector(state => ({
+    tagList: state.article.tagList,
+    categoryList: state.article.categoryList
+  }))
+
   const [loading, setLoading] = useState(false)
   const [list, setList] = useState([])
   const [pagination, setPagination] = useState({
@@ -155,7 +159,4 @@ function ArticleManager(props) {
   )
 }
 
-export default connect(state => ({
-  tagList: state.article.tagList,
-  categoryList: state.article.categoryList
-}))(ArticleManager)
+export default ArticleManager

@@ -2,7 +2,7 @@ import React from 'react'
 
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Icon, Tag, Divider } from 'antd'
 import SvgIcon from '@/components/SvgIcon'
 
@@ -11,7 +11,10 @@ function getColor(name, colorList) {
   return target ? target.color : ''
 }
 
-const ArticleTag = ({ tagList, categoryList, tagColorList }) => {
+const ArticleTag = props => {
+  const tagColorList = useSelector(state => state.article.tagList) // 相当于 connect(state => state.article.tagList)(ArticleTag)
+  const { tagList, categoryList } = props
+
   return (
     <>
       {tagList.length > 0 && (
@@ -45,7 +48,4 @@ ArticleTag.propTypes = {
   categoryList: PropTypes.array.isRequired
 }
 
-export default connect(state => ({
-  tagColorList: state.article.tagList
-  // colorList: state.article.tagList,
-}))(withRouter(ArticleTag))
+export default withRouter(ArticleTag)

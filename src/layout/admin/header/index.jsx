@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import { loginout } from '@/redux/user/actions'
@@ -13,7 +13,10 @@ import ResultModal from '@/components/UploadModal/result'
 import { switchSignModal, switchUploadModal } from '@/redux/app/actions'
 
 function AdminHeader(props) {
-  const { collapsed, onToggle, userInfo } = props
+  const dispatch = useDispatch()
+  const userInfo = useSelector(state => state.user)
+
+  const { collapsed, onToggle } = props
 
   function backToHome() {
     props.history.push('/')
@@ -26,13 +29,13 @@ function AdminHeader(props) {
       </Menu.Item>
 
       <Menu.Item>
-        <span onClick={e => props.switchUploadModal(true)}>导入文章</span>
+        <span onClick={e => dispatch(switchUploadModal(true))}>导入文章</span>
       </Menu.Item>
 
       <Menu.Item>
         <span
           onClick={e => {
-            props.loginout()
+            dispatch(loginout())
             backToHome()
           }}>
           退出登录
@@ -47,7 +50,7 @@ function AdminHeader(props) {
       <div className='header-right'>
         <Dropdown overlay={menu}>
           <span>
-            <AppAvatar userInfo={props.userInfo} popoverVisible={false} />
+            <AppAvatar userInfo={userInfo} popoverVisible={false} />
           </span>
         </Dropdown>
       </div>
@@ -62,12 +65,4 @@ AdminHeader.propTypes = {
   onToggle: PropTypes.func
 }
 
-export default connect(
-  state => ({
-    userInfo: state.user
-  }),
-  {
-    loginout,
-    switchUploadModal
-  }
-)(withRouter(AdminHeader))
+export default withRouter(AdminHeader)

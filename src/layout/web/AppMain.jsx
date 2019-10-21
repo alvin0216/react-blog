@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { decodeQuery } from '@/utils'
 import { login } from '@/redux/user/actions'
@@ -9,6 +9,8 @@ import { GITHUB } from '@/config'
 
 function AppMain(props) {
   if (GITHUB.loadingType === 1 || !GITHUB.enable) return <div className='app-main'>{props.children}</div>
+
+  const dispatch = useDispatch() // dispatch hooks
 
   const [loading, setLoading] = useState(false)
 
@@ -29,8 +31,7 @@ function AppMain(props) {
     if (params.code) {
       // github callback code
       setLoading(true)
-      props
-        .login({ code: params.code })
+      dispatch(login({ code: params.code }))
         .then(() => {
           jumpToBefore()
           if (componentWillUnmount) return
@@ -55,7 +56,4 @@ function AppMain(props) {
   )
 }
 
-export default connect(
-  null,
-  { login }
-)(AppMain)
+export default AppMain

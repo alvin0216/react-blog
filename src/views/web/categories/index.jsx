@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import './index.less'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Badge, Tag } from 'antd'
 import { Link } from 'react-router-dom'
 
 function Categories(props) {
-  const { categoryList } = props
+  const categoryList = useSelector(state => state.article.categoryList)
+
   return (
     <div className='app-categories'>
       <h2 className='title'>Categories</h2>
@@ -24,6 +25,4 @@ function Categories(props) {
   )
 }
 
-export default connect(state => ({
-  categoryList: state.article.categoryList
-}))(Categories)
+export default Categories
