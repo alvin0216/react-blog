@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 // methods
@@ -14,12 +14,15 @@ import ResultModal from '@/components/UploadModal/result'
 import AppAvatar from '@/components/Avatar'
 
 function UserInfo(props) {
-  const { username, github, role } = props.userInfo
+  const dispatch = useDispatch()
+  const userInfo = useSelector(state => state.user)
+  const { username, github, role } = userInfo
+
   const MenuOverLay = (
     <Menu>
       {role === 1 && (
         <Menu.Item>
-          <span onClick={e => props.switchUploadModal(true)}>导入文章</span>
+          <span onClick={e => dispatch(switchUploadModal(true))}>导入文章</span>
         </Menu.Item>
       )}
       {role === 1 && (
@@ -28,7 +31,7 @@ function UserInfo(props) {
         </Menu.Item>
       )}
       <Menu.Item>
-        <span className='user-logout' onClick={props.loginout}>
+        <span className='user-logout' onClick={e => dispatch(loginout())}>
           退出登录
         </span>
       </Menu.Item>
@@ -39,7 +42,7 @@ function UserInfo(props) {
       {username ? (
         <Dropdown placement='bottomCenter' overlay={MenuOverLay} trigger={['click', 'hover']}>
           <div style={{ height: 55 }}>
-            <AppAvatar userInfo={props.userInfo} popoverVisible={false} />
+            <AppAvatar userInfo={userInfo} popoverVisible={false} />
           </div>
         </Dropdown>
       ) : (
@@ -49,10 +52,10 @@ function UserInfo(props) {
             type='primary'
             size='small'
             style={{ marginRight: 20 }}
-            onClick={e => props.switchSignModal('login', true)}>
+            onClick={e => dispatch(switchSignModal('login', true))}>
             登录
           </Button>
-          <Button ghost type='danger' size='small' onClick={e => props.switchSignModal('register', true)}>
+          <Button ghost type='danger' size='small' onClick={e => dispatch(switchSignModal('register', true))}>
             注册
           </Button>
         </>
@@ -64,9 +67,4 @@ function UserInfo(props) {
   )
 }
 
-export default connect(
-  state => ({
-    userInfo: state.user
-  }),
-  { switchSignModal, switchUploadModal, loginout }
-)(withRouter(UserInfo))
+export default withRouter(UserInfo)

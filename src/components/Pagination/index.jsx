@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Pagination } from 'antd'
 
-function WebPagination({ total, current, onChange, pageSize, windowWidth }) {
+function WebPagination({ total, current, onChange, pageSize }) {
+  const windowWidth = useSelector(state => state.app.windowWidth) // 相当于 connect(state => state.app.windowWidth)(WebPagination)
+
   return (
     <div className='app-pagination'>
       <Pagination
@@ -29,6 +31,4 @@ WebPagination.defaultProps = {
   pageSize: 10
 }
 
-export default connect(state => ({
-  windowWidth: state.app.windowWidth
-}))(WebPagination)
+export default WebPagination

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { SIDEBAR } from '@/config'
 import axios from '@/utils/axios'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // components
 import { Link } from 'react-router-dom'
@@ -21,6 +21,8 @@ const HOME_PAGES_ICONS_LIST = [
 ]
 
 function SideBar(props) {
+  const tagList = useSelector(state => state.article.tagList || [])
+
   const [articleList, setArticleLst] = useState([])
 
   useEffect(() => {
@@ -62,7 +64,7 @@ function SideBar(props) {
 
       <Divider orientation='left'>标签</Divider>
       <div className='tag-list'>
-        {props.tagList.map((tag, i) => (
+        {tagList.map((tag, i) => (
           <Tag key={i} color={tag.color}>
             <Link to={`/tags/${tag.name}`}>{tag.name}</Link>
           </Tag>
@@ -72,6 +74,4 @@ function SideBar(props) {
   )
 }
 
-export default connect(state => ({
-  tagList: state.article.tagList || []
-}))(SideBar)
+export default SideBar

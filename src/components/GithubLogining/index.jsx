@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 // ..
 import { Spin } from 'antd'
@@ -8,6 +8,8 @@ import { login } from '@/redux/user/actions'
 import { get, remove } from '@/utils/storage'
 
 function AppLoading(props) {
+  const dispatch = useDispatch() // dispatch hooks
+
   const [loading, setLoading] = useState('')
 
   function jumpToBefore() {
@@ -27,8 +29,7 @@ function AppLoading(props) {
     if (params.code) {
       // github callback code
       setLoading(true)
-      props
-        .login({ code: params.code })
+      dispatch(login({ code: params.code }))
         .then(() => {
           jumpToBefore()
           if (componentWillUnmount) return
@@ -60,7 +61,4 @@ function AppLoading(props) {
   )
 }
 
-export default connect(
-  null,
-  { login }
-)(AppLoading)
+export default AppLoading

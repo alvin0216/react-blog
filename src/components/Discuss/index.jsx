@@ -1,7 +1,7 @@
 import React, { Component, Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import './index.less'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { DISCUSS_AVATAR } from '@/config'
 
 // methods
@@ -35,10 +35,12 @@ const Editor = ({ onChange, onSubmit, submitting, value, articleId }) => (
   </div>
 )
 
-function discuss(props) {
-  const { commentList, articleId, userInfo } = props
+function Discuss(props) {
+  const dispatch = useDispatch()
+  const userInfo = useSelector(state => state.user)
   const { username, role } = userInfo
 
+  const { commentList, articleId } = props
   const [value, setValue] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -58,15 +60,17 @@ function discuss(props) {
   function handleMenuClick(e) {
     switch (e.key) {
       case 'login':
-        props.switchSignModal('login', true)
+        dispatch(switchSignModal('login', true))
+
         break
 
       case 'register':
-        props.switchSignModal('register', true)
+        dispatch(switchSignModal('register', true))
+
         break
 
       case 'loginout':
-        props.loginout()
+        dispatch(loginout())
         break
 
       default:
@@ -129,16 +133,8 @@ function discuss(props) {
   )
 }
 
-discuss.propTypes = {
+Discuss.propTypes = {
   commentList: PropTypes.array.isRequired
 }
 
-export default connect(
-  state => ({
-    userInfo: state.user
-  }),
-  {
-    switchSignModal,
-    loginout
-  }
-)(discuss)
+export default Discuss

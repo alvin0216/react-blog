@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Modal, Upload, Icon, Checkbox, Typography } from 'antd'
 
 import { API_BASE_URL } from '@/config'
@@ -14,7 +14,14 @@ const { confirm } = Modal
 const { Paragraph, Text } = Typography
 
 function UploadModal(props) {
-  const { visible, switchUploadModal } = props
+  const dispatch = useDispatch() // dispatch hooks
+
+  const { visible, authorId } = useSelector(state => ({
+    ...state.app.uploadModal,
+    authorId: state.user.userId
+  }))
+
+  // const { visible, switchUploadModal } = props
   const [fileList, setFileList] = useState([])
   const [loading, setLoading] = useState(false)
 
@@ -75,7 +82,7 @@ function UploadModal(props) {
     setLoading(true)
     axios
       .post('/article/upload/confirm', {
-        authorId: props.authorId,
+        authorId: authorId,
         insertList: Array.isArray(insertList) ? insertList : insertSelectedList,
         updateList: updateSelectedList
       })
@@ -83,7 +90,7 @@ function UploadModal(props) {
         setLoading(false)
         setConfirmVisible(false)
         switchUploadModal(false)
-        props.updateResultModal({ visible: true, result })
+        dispatch(updateResultModal({ visible: true, result }))
       })
       .catch(err => {
         console.log(err)
@@ -187,10 +194,4 @@ function UploadModal(props) {
   )
 }
 
-export default connect(
-  state => ({
-    ...state.app.uploadModal,
-    authorId: state.user.userId
-  }),
-  { switchUploadModal, updateResultModal }
-)(UploadModal)
+export default UploadModal

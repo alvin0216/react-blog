@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import { GITHUB } from '@/config'
@@ -13,13 +13,14 @@ import FormBuilder from '@/components/FormBuilder'
 import { Modal, Input, Icon, message, Button, Form, Alert, Checkbox } from 'antd'
 
 function SignModal(props) {
-  const { type, visible } = props
+  // const { type, visible } = props
+  const dispatch = useDispatch() // dispatch hooks
+  const { type, visible } = useSelector(state => state.app.signModal)
 
   useEffect(() => {
-    // console.log(props.visible, 'componentDidMount and componentDidUpdate')
-    props.visible && props.form.resetFields()
+    visible && props.form.resetFields()
     /*eslint react-hooks/exhaustive-deps: "off"*/
-  }, [props.visible])
+  }, [visible])
 
   // 确认密码
   function compareToFirstPassword(rule, value, callback) {
@@ -107,9 +108,9 @@ function SignModal(props) {
     props.form.validateFieldsAndScroll((errors, values) => {
       if (errors) return
       if (type === 'login') {
-        props.login(values)
+        dispatch(login(values))
       } else if (type === 'register') {
-        props.register(values)
+        dispatch(register(values))
       }
     })
   }
@@ -121,7 +122,12 @@ function SignModal(props) {
   }
 
   return (
-    <Modal width={460} title={type} visible={visible} onCancel={e => props.switchSignModal(type, false)} footer={null}>
+    <Modal
+      width={460}
+      title={type}
+      visible={visible}
+      onCancel={e => dispatch(switchSignModal(type, false))}
+      footer={null}>
       <Form layout='horizontal'>
         <FormBuilder meta={getMeta(type)} form={props.form} />
         <Button type='primary' block htmlType='submit' onClick={handleSubmit}>
@@ -137,7 +143,4 @@ function SignModal(props) {
   )
 }
 
-export default connect(
-  state => state.app.signModal,
-  { login, register, switchSignModal }
-)(Form.create()(withRouter(SignModal)))
+export default Form.create()(withRouter(SignModal))

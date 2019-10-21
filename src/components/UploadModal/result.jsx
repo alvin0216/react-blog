@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import { updateResultModal } from '@/redux/app/actions'
 
@@ -32,10 +32,12 @@ function List(props) {
 }
 
 function ResultModal(props) {
-  const { visible, result } = props
+  const dispatch = useDispatch() // dispatch hooks
+  // 相当于 connect(state => state.app.resultModal)(ResultModal)
+  const { visible, result } = useSelector(state => state.app.resultModal)
 
   function reset() {
-    props.updateResultModal({ visible: false, result: null })
+    dispatch(updateResultModal({ visible: false, result: null }))
   }
 
   const insertList = result ? result.insertList : []
@@ -53,7 +55,4 @@ function ResultModal(props) {
   )
 }
 
-export default connect(
-  state => state.app.resultModal,
-  { updateResultModal }
-)(withRouter(ResultModal))
+export default withRouter(ResultModal)

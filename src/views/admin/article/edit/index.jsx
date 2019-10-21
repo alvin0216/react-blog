@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import './index.less'
 
 import axios from '@/utils/axios'
@@ -8,6 +8,12 @@ import MdEditor from '@/components/MdEditor'
 import List from './Tag'
 
 function Edit(props) {
+  const store = useSelector(state => ({
+    tagList: state.article.tagList,
+    categoryList: state.article.categoryList,
+    authorId: state.user.userId
+  }))
+
   const [content, setContent] = useState('')
   const [title, setTitle] = useState('')
   const [tagList, setTagList] = useState([])
@@ -28,14 +34,14 @@ function Edit(props) {
   useEffect(() => {
     // mounted
     if (!editId) {
-      const tags = props.tagList.map(d => d.name).slice(0, 10)
-      const cates = props.categoryList.map(d => d.name).slice(0, 10)
+      const tags = store.tagList.map(d => d.name).slice(0, 10)
+      const cates = store.categoryList.map(d => d.name).slice(0, 10)
       setTagList(tags)
       setCategoryList(cates)
       tags[0] && setTagSelectedList([tags[0]])
       cates[0] && setCateSelectedList([cates[0]])
     }
-  }, [props.tagList, props.categoryList])
+  }, [store.tagList, store.categoryList])
 
   function fetchArticle(id) {
     axios.get(`/article/${id}?type=0`).then(res => {
@@ -58,7 +64,7 @@ function Edit(props) {
         content,
         tagList: tagSelectedList,
         categoryList: cateSelectedList,
-        authorId: props.authorId
+        authorId: store.authorId
       })
       .then(res => {
         Modal.confirm({
@@ -138,8 +144,4 @@ function Edit(props) {
   )
 }
 
-export default connect(state => ({
-  tagList: state.article.tagList,
-  categoryList: state.article.categoryList,
-  authorId: state.user.userId
-}))(Edit)
+export default Edit
