@@ -18,42 +18,42 @@ function AdminUser(props) {
   const [switchId, setSwitchId] = useState(0)
 
   useEffect(() => {
-    //
-    fetchList({ current: 1 })
-  }, [])
+    fetchList()
+  }, [query])
 
-  function fetchList({ current = 1, pageSize = 10, ...query }) {
+  function fetchList() {
     setLoading(true)
+    const params = { ...query, ...pagination }
+    if (params.current) {
+      params.page = params.current
+      delete params.current
+    }
     axios
-      .get('/user/list', {
-        params: { page: current, pageSize, ...query }
-      })
+      .get('/user/list', { params })
       .then(res => {
         setList(res.rows)
-        setPagination({
-          current,
-          pageSize,
-          total: res.count
-        })
+        setPagination({ ...pagination, total: res.count })
+        setLoading(false)
+      })
+      .catch(() => {
         setLoading(false)
       })
   }
 
   function onQuery(values) {
-    setQuery(query)
-    fetchList({ ...values, current: 1 })
+    setQuery(values)
   }
 
   function onDelete(userId) {
     axios.delete(`/user/${userId}`).then(res => {
-      fetchList(pagination)
+      fetchList()
     })
   }
 
   function handlePageChange(page) {
     pagination.current = page
     setPagination(pagination)
-    fetchList({ ...pagination, ...query })
+    fetchList()
   }
 
   function switchNotice(checked, userId) {
