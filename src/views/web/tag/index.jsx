@@ -71,7 +71,13 @@ function List(props) {
     <Spin tip='Loading...' spinning={loading} delay={500}>
       <div className='app-tags'>
         <TimeLineList list={list} name={name} type={type} />
-        <Pagination current={currentPage} onChange={handlePageChange} total={total} pageSize={TAG_PAGESIZE} />
+        <Pagination
+          current={currentPage}
+          onChange={handlePageChange}
+          total={total}
+          pageSize={TAG_PAGESIZE}
+          style={{ float: 'initial', marginTop: 10 }}
+        />
       </div>
     </Spin>
   )
