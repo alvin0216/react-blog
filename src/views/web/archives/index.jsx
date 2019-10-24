@@ -70,7 +70,7 @@ function Archives(props) {
           ))}
         </Timeline>
 
-        <Pagination current={currentPage} total={total} pageSize={ARCHIVES_PAGESIZE} onChange={handlePageChange} />
+        <Pagination current={currentPage} total={total} pageSize={ARCHIVES_PAGESIZE} onChange={handlePageChange} style={{ float: 'initial', marginTop: 10 }}/>
       </Spin>
     </div>
   )

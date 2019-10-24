@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { Pagination } from 'antd'
 
-function WebPagination({ total, current, onChange, pageSize }) {
+function WebPagination({ total, current, onChange, pageSize, style = {} }) {
   const windowWidth = useSelector(state => state.app.windowWidth) // 相当于 connect(state => state.app.windowWidth)(WebPagination)
 
   return (
-    <div className='app-pagination'>
+    <div className='app-pagination' style={style}>
       <Pagination
         hideOnSinglePage
         current={current}
