@@ -23,15 +23,12 @@ export const SIDEBAR = {
 export const DISCUSS_AVATAR = SIDEBAR.avatar // 评论框博主头像
 
 /**
- * loadingType: github 登录中 等待的加载方式
- *  loadingType 1 采用路由方式跳转至一个路由组件，需要在 github 中设置好回调路径 如 www.guodada.fun/github 跳转到 /github 页面
- *  loadingType 2 采用 Spin 组件包裹形式 等待 loading... 详见 AppMain.jsx 组件
+ * github config
  */
 export const GITHUB = {
-  enable: true, // github 第三方授权开关
+  enable: false, // github 第三方授权开关
   client_id: 'c6a96a84105bb0be1fe5', // Setting > Developer setting > OAuth applications => client_id
-  url: 'https://github.com/login/oauth/authorize', // 跳转的登录的地址
-  loadingType: 1
+  url: 'https://github.com/login/oauth/authorize' // 跳转的登录的地址
 }
 
 export const ABOUT = {
