@@ -188,8 +188,7 @@ export const DISCUSS_AVATAR = SIDEBAR.avatar // 评论框博主头像
 export const GITHUB = {
   enable: true, // github 第三方授权开关
   client_id: '', // Setting > Developer setting > OAuth applications => client_id
-  url: 'https://github.com/login/oauth/authorize', // 跳转的登录的地址
-  loadingType: 1
+  url: 'https://github.com/login/oauth/authorize' // 跳转的登录的地址
 }
 
 export const ABOUT = {
