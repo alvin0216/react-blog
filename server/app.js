@@ -37,7 +37,8 @@ app
   .use(authHandler)
   .use(logger())
 
-app.use(router.routes(), router.allowedMethods())
+// app.use(router.routes(), router.allowedMethods())
+router(app)
 
 app.listen(config.PORT, () => {
   db.sequelize
