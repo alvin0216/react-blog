@@ -138,6 +138,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "babel-plugin-import": "^1.12.1",
+    "compression-webpack-plugin": "^3.0.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "react-hot-loader": "^4.12.12",
