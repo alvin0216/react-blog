@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import { connect, useSelector, useDispatch } from 'react-redux'
 
 import routes from '@/routes'
-import { getWindowWidth } from '@/redux/app/actions'
+// import { getWindowWidth } from '@/redux/app/actions'
 import { getTagList, getCategoryList } from '@/redux/article/actions'
 
 const App = props => {
@@ -12,7 +12,7 @@ const App = props => {
 
   // 初始化数据 类似 componentDidMount
   useEffect(() => {
-    dispatch(getWindowWidth())
+    // dispatch(getWindowWidth())
     dispatch(getTagList())
     dispatch(getCategoryList())
     // props.getWindowWidth()
