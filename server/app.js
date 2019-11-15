@@ -6,7 +6,7 @@ const logger = require('koa-logger')
 //  config
 const config = require('./config')
 
-const router = require('./router')
+const loadRouter = require('./router')
 const db = require('./models')
 
 // app...
@@ -37,7 +37,7 @@ app
   .use(authHandler)
   .use(logger())
 
-app.use(router.routes(), router.allowedMethods())
+loadRouter(app)
 
 app.listen(config.PORT, () => {
   db.sequelize
