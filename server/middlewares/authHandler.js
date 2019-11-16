@@ -48,8 +48,9 @@ module.exports = async (ctx, next) => {
     if (checkToken(ctx, roleList)) {
       await next()
     } else {
-      ctx.status = 401
-      ctx.client(401)
+      // ctx.status = 401
+      // ctx.client(401)
+      ctx.throw(401)
     }
   } else {
     await next()
