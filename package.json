@@ -36,7 +36,6 @@
     "jest-environment-jsdom-fourteen": "0.1.0",
     "jest-resolve": "24.8.0",
     "jest-watch-typeahead": "0.3.1",
-    "koa-json-error": "^3.1.2",
     "marked": "^0.7.0",
     "mini-css-extract-plugin": "0.5.0",
     "normalize.css": "^8.0.1",
