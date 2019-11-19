@@ -74,7 +74,8 @@
     "start": "node scripts/start.js",
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "commit": "git-cz"
   },
   "browserslist": {
     "production": [
@@ -139,6 +140,8 @@
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "babel-plugin-import": "^1.12.1",
+    "compression-webpack-plugin": "^3.0.0",
+    "git-cz": "^3.3.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "react-hot-loader": "^4.12.12",
