@@ -11,13 +11,8 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
  * @param {String} username - github 登录名
  */
 async function getGithubInfo(username) {
-  try {
-    const result = await axios.get(`${GITHUB.fetch_user}${username}`)
-    return result && result.data
-  } catch (error) {
-    console.log('==== ', '请检查登录 github 的用户名是否正确')
-    throw error
-  }
+  const result = await axios.get(`${GITHUB.fetch_user}${username}`)
+  return result && result.data
 }
 
 class UserController {
@@ -62,89 +57,90 @@ class UserController {
       password: Joi.string()
     })
     if (validator) {
-      try {
-        const { account, password } = ctx.request.body
+      const { account, password } = ctx.request.body
 
-        const user = await UserModel.findOne({
-          where: {
-            // $or: { email: account, username: account }
-            username: account
-          }
-        })
-
-        if (!user) {
-          ctx.client(403, '用户不存在')
-        } else {
-          const isMatch = await comparePassword(password, user.password)
-          if (!isMatch) {
-            ctx.client(403, '密码不正确')
-          } else {
-            const { id, role } = user
-            const token = createToken({ username: user.username, userId: id, role }) // 生成 token
-            ctx.client(200, '登录成功', { username: user.username, role, userId: id, token })
-          }
+      const user = await UserModel.findOne({
+        where: {
+          // $or: { email: account, username: account }
+          username: account
         }
-      } catch (error) {
-        console.log(error)
-        // ctx.client(500, null, error)
-        throw error
+      })
+
+      if (!user) {
+        // ctx.client(403, '用户不存在')
+        ctx.throw(403, '用户不存在')
+      } else {
+        const isMatch = await comparePassword(password, user.password)
+        if (!isMatch) {
+          // ctx.client(403, '密码不正确')
+          ctx.throw(403, '密码不正确')
+        } else {
+          const { id, role } = user
+          const token = createToken({ username: user.username, userId: id, role }) // 生成 token
+          // ctx.client(200, '登录成功', { username: user.username, role, userId: id, token })
+          ctx.body = { username: user.username, role, userId: id, token }
+        }
       }
     }
   }
 
   // github 登录
   static async githubLogin(ctx, code) {
-    try {
-      const result = await axios.post(GITHUB.access_token_url, {
-        client_id: GITHUB.client_id,
-        client_secret: GITHUB.client_secret,
-        code
-      })
+    const result = await axios.post(GITHUB.access_token_url, {
+      client_id: GITHUB.client_id,
+      client_secret: GITHUB.client_secret,
+      code
+    })
 
-      const { access_token } = decodeQuery(result.data)
+    const { access_token } = decodeQuery(result.data)
 
-      if (access_token) {
-        // 拿到 access_token 去获取用户信息
-        const result2 = await axios.get(`${GITHUB.fetch_user_url}?access_token=${access_token}`)
-        const githubInfo = result2.data
+    if (access_token) {
+      // 拿到 access_token 去获取用户信息
+      const result2 = await axios.get(`${GITHUB.fetch_user_url}?access_token=${access_token}`)
+      const githubInfo = result2.data
 
-        let target = await UserController.find({ id: githubInfo.id }) // 在数据库中查找该用户是否存在
+      let target = await UserController.find({ id: githubInfo.id }) // 在数据库中查找该用户是否存在
 
-        if (!target) {
-          target = await UserModel.create({
-            id: githubInfo.id,
-            username: githubInfo.name || githubInfo.username,
-            github: JSON.stringify(githubInfo),
-            email: githubInfo.email
-          })
-        } else {
-          if (target.github !== JSON.stringify(githubInfo)) {
-            // github 信息发生了变动
-            // console.log(`${githubInfo.login}: github 信息发生改变， 更新 user....`)
-            const { id, login, email } = githubInfo
-            const data = {
-              username: login,
-              email,
-              github: JSON.stringify(githubInfo)
-            }
-            await UserController.updateUserById(id, data)
-          }
-        }
-        // username: user.username, role, userId: id, token
-        const token = createToken({ userId: githubInfo.id, role: target.role }) // 生成 token
-
-        ctx.client(200, 'success', {
-          github: githubInfo,
-          username: target.username,
-          userId: target.id,
-          role: target.role,
-          token
+      if (!target) {
+        target = await UserModel.create({
+          id: githubInfo.id,
+          username: githubInfo.name || githubInfo.username,
+          github: JSON.stringify(githubInfo),
+          email: githubInfo.email
         })
       } else {
-        ctx.client(403, 'github 授权码已失效！')
+        if (target.github !== JSON.stringify(githubInfo)) {
+          // github 信息发生了变动
+          // console.log(`${githubInfo.login}: github 信息发生改变， 更新 user....`)
+          const { id, login, email } = githubInfo
+          const data = {
+            username: login,
+            email,
+            github: JSON.stringify(githubInfo)
+          }
+          await UserController.updateUserById(id, data)
+        }
       }
-    } catch (error) {
-      ctx.client(500, 'github 登录超时')
+      // username: user.username, role, userId: id, token
+      const token = createToken({ userId: githubInfo.id, role: target.role }) // 生成 token
+
+      // ctx.client(200, 'success', {
+      //   github: githubInfo,
+      //   username: target.username,
+      //   userId: target.id,
+      //   role: target.role,
+      //   token
+      // })
+      ctx.body = {
+        github: githubInfo,
+        username: target.username,
+        userId: target.id,
+        role: target.role,
+        token
+      }
+    } else {
+      // ctx.client(403, 'github 授权码已失效！')
+      ctx.throw(403, 'github 授权码已失效！')
     }
   }
 
@@ -162,15 +158,18 @@ class UserController {
       const { username, password, email } = ctx.request.body
       const result = await UserModel.findOne({ where: { email } })
       if (result) {
-        ctx.client(403, '邮箱已被注册')
+        // ctx.client(403, '邮箱已被注册')
+        ctx.throw(403, '邮箱已被注册')
       } else {
         const user = await UserModel.findOne({ where: { username } })
         if (user && !user.github) {
+          // ctx.client(403, '用户名已被占用')
           ctx.client(403, '用户名已被占用')
         } else {
           const saltPassword = await encrypt(password)
           await UserModel.create({ username, password: saltPassword, email })
-          ctx.client(200, '注册成功')
+          // ctx.client(200, '注册成功')
+          ctx.status = 204
         }
       }
     }
@@ -204,7 +203,8 @@ class UserController {
         order: [['createdAt', 'DESC']]
       })
 
-      ctx.client(200, 'success', result)
+      // ctx.client(200, 'success', result)
+      ctx.body = result
     }
   }
 
@@ -218,7 +218,8 @@ class UserController {
         `delete comment, reply from comment left join reply on comment.id=reply.commentId where comment.userId=${ctx.params.userId}`
       )
       await UserModel.destroy({ where: { id: ctx.params.userId } })
-      ctx.client(200)
+      // ctx.client(200)
+      ctx.status = 204
     }
   }
 
@@ -241,7 +242,8 @@ class UserController {
       const { userId } = ctx.params
       const { notice } = ctx.request.body
       await UserController.updateUserById(userId, { notice })
-      ctx.client(200)
+      // ctx.client(200)
+      ctx.status = 204
     }
   }
 
