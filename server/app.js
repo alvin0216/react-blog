@@ -1,17 +1,17 @@
 const Koa = require('koa')
 const koaBody = require('koa-body')
 const cors = require('koa2-cors')
+const error = require('koa-json-error');
 const logger = require('koa-logger')
 
 //  config
 const config = require('./config')
 
-const router = require('./router')
+const loadRouter = require('./router')
 const db = require('./models')
 
 // app...
 const app = new Koa()
-
 // context binding...
 const context = require('./utils/context')
 Object.keys(context).forEach(key => {
@@ -34,10 +34,13 @@ app
       }
     })
   )
+  .use(error({
+    postFormat: (e, { stack, ...rest}) => process.env.NODE_ENV !== 'development' ? rest: { stack, ...rest}
+  }))
   .use(authHandler)
   .use(logger())
 
-app.use(router.routes(), router.allowedMethods())
+loadRouter(app)
 
 app.listen(config.PORT, () => {
   db.sequelize

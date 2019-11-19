@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
 import { Pagination } from 'antd'
+import { useMediaQuery } from 'react-responsive'
 
 function WebPagination({ total, current, onChange, pageSize, style = {} }) {
-  const windowWidth = useSelector(state => state.app.windowWidth) // 相当于 connect(state => state.app.windowWidth)(WebPagination)
-
+  const isLessThan736 = useMediaQuery({
+    query: '(max-width: 736px)'
+  })
   return (
     <div className='app-pagination' style={style}>
       <Pagination
@@ -14,7 +15,7 @@ function WebPagination({ total, current, onChange, pageSize, style = {} }) {
         onChange={onChange}
         total={total}
         pageSize={pageSize}
-        simple={windowWidth < 736}
+        simple={isLessThan736}
       />
     </div>
   )

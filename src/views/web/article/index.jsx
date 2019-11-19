@@ -1,22 +1,19 @@
-import React, { Component, Fragment, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './index.less'
 
-import { useSelector } from 'react-redux'
-
+import { useMediaQuery } from 'react-responsive'
 // methods
 import axios from '@/utils/axios'
 import { translateMarkdown, calcCommentsCount } from '@/utils'
 
 // components
-import { Drawer, Icon, Divider, Tag, Spin } from 'antd'
+import { Drawer, Icon, Divider, Spin } from 'antd'
 import ArticleTag from '@/components/ArticleTag'
 import SvgIcon from '@/components/SvgIcon'
 import Navigation from './Navigation'
 import Discuss from '@/components/Discuss'
 
 function Article(props) {
-  const windowWidth = useSelector(state => state.app.windowWidth)
-
   const [loading, setLoading] = useState(true)
   const [article, setArticle] = useState({
     title: '',
@@ -61,7 +58,7 @@ function Article(props) {
 
   const { title, content, tags, categories, comments, createdAt, viewCount } = article
   const articleId = parseInt(props.match.params.id)
-  const isFoldNavigation = windowWidth < 1300
+  const isFoldNavigation = useMediaQuery({ query: '(max-width: 1300px)' })
   return (
     <Spin tip='Loading...' spinning={loading}>
       <div className='app-article' style={{ paddingRight: isFoldNavigation ? 0 : 265 }}>

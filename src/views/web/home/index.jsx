@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react'
 import './index.less'
 import axios from '@/utils/axios'
 
-import { connect, useSelector, useDispatch } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
+import { useMediaQuery } from 'react-responsive'
 import { decodeQuery, translateMarkdown, calcCommentsCount } from '@/utils'
 
 // components
@@ -37,14 +36,14 @@ function NoDataDesc({ keyword }) {
 }
 
 function Home(props) {
-  const windowWidth = useSelector(state => state.app.windowWidth) //  相当于 connect(state =>  state.app.windowWidth)(Home)
-  const dispatch = useDispatch() // dispatch hooks
-
   const [list, setList] = useState([])
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(false)
   const [drawerVisible, setDrawerVisible] = useState(false)
 
+  const isGreaterThan1300 = useMediaQuery({
+    query: '(min-width: 1300px)'
+  })
   // 当地址栏发生变化
   useEffect(() => {
     // componentDidMount props.location.search 发生变化 均执行以下代码
@@ -125,7 +124,7 @@ function Home(props) {
         </ul>
         {list.length > 0 ? (
           <>
-            {windowWidth > 1300 ? (
+            {isGreaterThan1300 ? (
               <Preview list={list} />
             ) : (
               <>

@@ -33,25 +33,23 @@ service.interceptors.request.use(
 // 拦截响应
 service.interceptors.response.use(
   response => {
-    if (response.data.code !== 200) {
-      response.data.message && message.warning(response.data.message)
-      return Promise.reject(response.data)
-    } else {
-      return response.data.data || response.data
-    }
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    return response.data
   },
   err => {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
     clearTimeout(timer)
     timer = setTimeout(() => {
       if (err.response) {
-        switch (err.response.status) {
+        const { status, data } = err.response
+        switch (status) {
           case 401:
             store.dispatch(loginout())
             message.error('登录信息过期或未授权，请重新登录！')
             break
 
           default:
-            message.error(`连接错误 ${err.response.status}！`)
+            message.error(data.message || `连接错误 ${status}！`)
             break
         }
       } else {
