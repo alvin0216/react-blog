@@ -34,6 +34,10 @@ module.exports = (sequelize, dataTypes) => {
       github: {
         type: dataTypes.TEXT // github 登录用户 直接绑定在 user 表
       },
+      disabledDiscuss: {
+        type: dataTypes.BOOLEAN, // 是否禁言
+        defaultValue: false
+      },
       createdAt: {
         type: dataTypes.DATE,
         defaultValue: dataTypes.NOW,

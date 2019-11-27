@@ -45,7 +45,7 @@ service.interceptors.response.use(
         switch (status) {
           case 401:
             store.dispatch(loginout())
-            message.error('登录信息过期或未授权，请重新登录！')
+            message.error((data && data.message) || '登录信息过期或未授权，请重新登录！')
             break
 
           default:

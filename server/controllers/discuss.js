@@ -44,20 +44,28 @@ class DiscussController {
       const { articleId, userId, content } = ctx.request.body
       let commentId = ctx.request.body.commentId
 
-      if (!commentId) {
-        // 添加评论
-        const comment = await CommentModel.create({ userId, articleId, content })
-        commentId = comment.id
+      const user = await UserModel.findOne({ where: { id: userId } })
+      if (!user.disabledDiscuss) {
+        if (!commentId) {
+          // 添加评论
+          const comment = await CommentModel.create({ userId, articleId, content })
+          commentId = comment.id
+        } else {
+          // 添加回复
+          await ReplyModel.create({ userId, articleId, content, commentId })
+        }
+
+        const list = await DiscussController.fetchCommentList(articleId)
+
+        EMAIL_NOTICE.enable && sendingEmail(articleId, list, commentId, userId)
+        // ctx.client(200, 'success', list)
+        ctx.body = list
       } else {
-        // 添加回复
-        await ReplyModel.create({ userId, articleId, content, commentId })
+        ctx.status = 401
+        ctx.response.body = {
+          message: '您已被禁言，请文明留言！'
+        }
       }
-
-      const list = await DiscussController.fetchCommentList(articleId)
-
-      EMAIL_NOTICE.enable && sendingEmail(articleId, list, commentId, userId)
-      // ctx.client(200, 'success', list)
-      ctx.body = 200
     }
   }
 

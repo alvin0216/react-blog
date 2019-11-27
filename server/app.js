@@ -1,7 +1,7 @@
 const Koa = require('koa')
 const koaBody = require('koa-body')
 const cors = require('koa2-cors')
-const error = require('koa-json-error');
+const error = require('koa-json-error')
 const logger = require('koa-logger')
 
 //  config
@@ -34,9 +34,11 @@ app
       }
     })
   )
-  .use(error({
-    postFormat: (e, { stack, ...rest}) => process.env.NODE_ENV !== 'development' ? rest: { stack, ...rest}
-  }))
+  .use(
+    error({
+      postFormat: (e, { stack, ...rest }) => (process.env.NODE_ENV !== 'development' ? rest : { stack, ...rest })
+    })
+  )
   .use(authHandler)
   .use(logger())
 
