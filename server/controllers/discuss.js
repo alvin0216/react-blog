@@ -57,7 +57,7 @@ class DiscussController {
 
       EMAIL_NOTICE.enable && sendingEmail(articleId, list, commentId, userId)
       // ctx.client(200, 'success', list)
-      ctx.body = 200
+      ctx.body = list
     }
   }
 
