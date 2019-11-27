@@ -234,14 +234,15 @@ class UserController {
       },
       {
         userId: Joi.number().required(),
-        notice: Joi.boolean()
+        notice: Joi.boolean(),
+        disabledDiscuss: Joi.boolean()
       }
     )
 
     if (validator) {
       const { userId } = ctx.params
-      const { notice } = ctx.request.body
-      await UserController.updateUserById(userId, { notice })
+      const { notice, disabledDiscuss } = ctx.request.body
+      await UserController.updateUserById(userId, { notice, disabledDiscuss })
       // ctx.client(200)
       ctx.status = 204
     }

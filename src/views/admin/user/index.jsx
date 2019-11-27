@@ -73,6 +73,23 @@ function AdminUser(props) {
       })
   }
 
+  function switchDiscuss(checked, userId) {
+    setSwitchId(userId)
+    axios
+      .put(`/user/${userId}`, {
+        disabledDiscuss: checked
+      })
+      .then(res => {
+        const target = list.find(l => l.id === userId)
+        target.disabledDiscuss = checked
+        setList(list)
+        setSwitchId(0)
+      })
+      .catch(res => {
+        setSwitchId(0)
+      })
+  }
+
   const columns = [
     {
       title: '用户名',
@@ -88,7 +105,18 @@ function AdminUser(props) {
       render: (text, record) => (
         <Switch
           defaultChecked={text}
-          onChange={checked => switchNotice(checked, record.id)}
+          onChange={checked => switchDiscuss(checked, record.id)}
+          loading={switchId === record.id}
+        />
+      )
+    },
+    {
+      title: '禁言',
+      dataIndex: 'disabledDiscuss',
+      render: (text, record) => (
+        <Switch
+          defaultChecked={text}
+          onChange={checked => switchDiscuss(checked, record.id)}
           loading={switchId === record.id}
         />
       )
