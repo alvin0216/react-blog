@@ -26,7 +26,7 @@ export const DISCUSS_AVATAR = SIDEBAR.avatar // 评论框博主头像
  * github config
  */
 export const GITHUB = {
-  enable: false, // github 第三方授权开关
+  enable: true, // github 第三方授权开关
   client_id: 'c6a96a84105bb0be1fe5', // Setting > Developer setting > OAuth applications => client_id
   url: 'https://github.com/login/oauth/authorize' // 跳转的登录的地址
 }
