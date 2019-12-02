@@ -104,7 +104,7 @@ function UploadModal(props) {
         visible={visible}
         title='导入文章'
         onOk={handleOk}
-        onCancel={e => switchUploadModal(false)}
+        onCancel={e => dispatch(switchUploadModal(false))}
         // keyboard={false}
         maskClosable={false}
         destroyOnClose
