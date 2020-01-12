@@ -62,7 +62,6 @@ function SignModal(props) {
           rules: [{ required: true, message: 'Username is required' }]
         },
         {
-          key: 'password',
           label: '密码',
           widget: <Input placeholder='请输入密码' type='password' />,
           rules: [{ required: true, message: 'Password is required' }]

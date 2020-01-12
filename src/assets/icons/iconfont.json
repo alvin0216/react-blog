@@ -1,0 +1,79 @@
+{
+  "id": "1383706",
+  "name": "react-blog-v2",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5194",
+      "name": "tags",
+      "font_class": "tags",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "455825",
+      "name": "icon-location",
+      "font_class": "location",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "3255327",
+      "name": "e-mail",
+      "font_class": "email",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "3510896",
+      "name": "掘金",
+      "font_class": "juejin",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "4472443",
+      "name": "tip-2",
+      "font_class": "tips",
+      "unicode": "e704",
+      "unicode_decimal": 59140
+    },
+    {
+      "icon_id": "5296170",
+      "name": "blog",
+      "font_class": "blog2",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "6428398",
+      "name": "post",
+      "font_class": "post",
+      "unicode": "e84c",
+      "unicode_decimal": 59468
+    },
+    {
+      "icon_id": "6586104",
+      "name": "飞机",
+      "font_class": "blog",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "7823880",
+      "name": "评 论",
+      "font_class": "comment",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "8872521",
+      "name": "view",
+      "font_class": "view",
+      "unicode": "e700",
+      "unicode_decimal": 59136
+    }
+  ]
+}
