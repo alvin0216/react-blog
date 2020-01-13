@@ -34,8 +34,6 @@ export default function useFetchList({
   useEffect(() => {
     if (fetchDependence.length > 0) {
       const params = decodeQuery(location.search)
-      pagination.current = parseInt(params.page) || 1
-      setPagination({ ...pagination })
       fetchWithLoading(params)
     }
   }, fetchDependence)
@@ -48,20 +46,22 @@ export default function useFetchList({
   function fetchDataList(params) {
     const requestParams = {
       page: pagination.current,
-      limit: pagination.pageSize,
+      pageSize: pagination.pageSize,
       ...queryParams,
       ...params
     }
 
+    requestParams.page = parseInt(requestParams.page)
+    requestParams.pageSize = parseInt(requestParams.pageSize)
     axios
       .get(requestUrl, { params: requestParams })
       .then(response => {
         pagination.total = response.count
         pagination.current = parseInt(requestParams.page)
-        pagination.pageSize = parseInt(requestParams.limit)
+        pagination.pageSize = parseInt(requestParams.pageSize)
         setPagination({ ...pagination })
         setDataList(response.rows)
-        console.log('%c useFetchList: ', 'background: yellow', requestParams, response.rows)
+        // console.log('%c useFetchList: ', 'background: yellow', requestParams, response)
         withLoading && setLoading(false)
       })
       .catch(e => withLoading && setLoading(false))
@@ -77,6 +77,7 @@ export default function useFetchList({
 
   const handlePageChange = useCallback(
     page => {
+      // return
       const search = location.search.includes('page=')
         ? location.search.replace(/(page=)(\d+)/, `$1${page}`)
         : `?page=${page}`
@@ -84,7 +85,7 @@ export default function useFetchList({
 
       history.push(jumpUrl)
     },
-    [queryParams]
+    [queryParams, location.pathname]
   )
 
   return {

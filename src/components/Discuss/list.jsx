@@ -106,8 +106,7 @@ function CommentItem(props) {
 }
 
 @connect(state => ({
-  userInfo: state.user,
-  colorMap: state.app.colorMap
+  userInfo: state.user
 }))
 class CommentList extends React.Component {
   static propTypes = {
@@ -128,7 +127,7 @@ class CommentList extends React.Component {
   }
 
   render() {
-    const { commentList, userInfo, colorMap, articleId } = this.props
+    const { commentList, userInfo, articleId } = this.props
     const { replyTarget } = this.state
 
     return (
