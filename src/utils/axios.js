@@ -3,7 +3,7 @@ import { API_BASE_URL } from '@/config'
 
 import { message } from 'antd'
 import store from '@/redux'
-import { loginout } from '@/redux/user/actions'
+import { loginout } from '@/redux/modal/user'
 import { getToken } from '@/utils'
 
 // create an axios instance

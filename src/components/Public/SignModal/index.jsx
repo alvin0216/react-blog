@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Icon, Input, Button, Modal } from 'antd'
+import { useLocation } from 'react-router-dom'
 
 import { GITHUB } from '@/config'
-import { save, remove } from '@/utils/storage'
+import { save } from '@/utils/storage'
+
+// redux
+import { login, register } from '@/redux/modal/user'
+import { useDispatch } from 'react-redux'
 
 // hooks
 import { useListener } from '@/hooks/useBus'
@@ -24,9 +29,12 @@ function FormItem(props) {
 }
 
 function SignModal(props) {
+  const dispatch = useDispatch() // dispatch hooks
+  const location = useLocation() // location
   const [visible, setVisible] = useState(false)
   const [type, setType] = useState('login')
   const { getFieldDecorator } = props.form
+
   useListener('openSignModal', type => {
     props.form.resetFields()
     setType(type)
@@ -37,17 +45,15 @@ function SignModal(props) {
     e.preventDefault()
     props.form.validateFieldsAndScroll((errors, values) => {
       if (errors) return
-      console.log(values)
-      if (type === 'login') {
-        // dispatch(login(values))
-      } else if (type === 'register') {
-        // dispatch(register(values))
-      }
+      const action = type === 'login' ? login : register
+      dispatch(action(values)).then(() => {
+        setVisible(false) // type =  login | register
+      })
     })
   }
 
   function githubLogin() {
-    const { pathname, search } = props.location
+    const { pathname, search } = location
     save('prevRouter', `${pathname}${search}`)
     window.location.href = `${GITHUB.url}?client_id=${GITHUB.client_id}`
   }
@@ -97,14 +103,14 @@ function SignModal(props) {
                 })(<Input placeholder='请输入密码' type='password' />)}
               </FormItem>
               <FormItem label='确认密码'>
-                {getFieldDecorator('password', {
+                {getFieldDecorator('confirm', {
                   rules: [
                     { required: true, message: 'Password is required' },
                     { validator: compareToFirstPassword }
                   ]
                 })(<Input placeholder='确认密码' type='password' />)}
               </FormItem>
-              <FormItem label='密码'>
+              <FormItem label='邮箱'>
                 {getFieldDecorator('email', {
                   rules: [
                     { type: 'email', message: 'The input is not valid E-mail!' },

@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom'
 import { Timeline, Spin } from 'antd'
 import Pagination from '@/components/Pagination'
 
+// hooks
+import useFetchList from '@/hooks/useFetchList'
+
 function TimeLineList({ list, name, type }) {
   return (
     <div className='timeline'>
@@ -35,46 +38,18 @@ function List(props) {
   const type = props.location.pathname.includes('categories') ? 'category' : 'tag'
   const name = props.match.params.name
 
-  const [list, setList] = useState([])
-  const [total, setTotal] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    // componentDidMount name did update
-    fetchList(1)
-    // console.log(props)
-  }, [props.match.params.name])
-
-  function fetchList(page) {
-    setLoading(true)
-    axios
-      .get(`/article/list`, {
-        params: {
-          [type]: name,
-          page
-        }
-      })
-      .then(res => {
-        setLoading(false)
-        setTotal(res.count)
-        setList(res.rows)
-      })
-  }
-
-  function handlePageChange(page) {
-    fetchList(page)
-    setCurrentPage(page)
-  }
+  const { loading, pagination, dataList } = useFetchList({
+    requestUrl: '/article/list',
+    queryParams: { [type]: name },
+    fetchDependence: [props.location.search, props.location.pathname]
+  })
 
   return (
     <Spin tip='Loading...' spinning={loading} delay={500}>
       <div className='app-tags'>
-        <TimeLineList list={list} name={name} type={type} />
+        <TimeLineList list={dataList} name={name} type={type} />
         <Pagination
-          current={currentPage}
-          onChange={handlePageChange}
-          total={total}
+          {...pagination}
           pageSize={TAG_PAGESIZE}
           style={{ float: 'initial', marginTop: 10 }}
         />

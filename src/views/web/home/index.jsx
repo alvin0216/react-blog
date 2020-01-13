@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './index.less'
-import axios from '@/utils/axios'
 
 import { Link } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
@@ -11,6 +10,9 @@ import { Icon, Divider, Empty, Drawer, Tag, Spin } from 'antd'
 import Pagination from '@/components/Pagination'
 import ArticleTag from '@/components/ArticleTag'
 import SvgIcon from '@/components/SvgIcon'
+
+// hooks
+import useFetchList from '@/hooks/useFetchList'
 
 function Preview({ list, showTitle = true }) {
   return (
@@ -36,61 +38,29 @@ function NoDataDesc({ keyword }) {
 }
 
 function Home(props) {
-  const [list, setList] = useState([])
-  const [total, setTotal] = useState(0)
-  const [loading, setLoading] = useState(false)
   const [drawerVisible, setDrawerVisible] = useState(false)
+
+  const { loading, pagination, dataList } = useFetchList({
+    requestUrl: '/article/list',
+    fetchDependence: [props.location.search]
+  })
+
+  const list = [...dataList].map(item => {
+    const index = item.content.indexOf('<!--more-->')
+    item.content = translateMarkdown(item.content.slice(0, index))
+    return item
+  })
 
   const isGreaterThan1300 = useMediaQuery({
     query: '(min-width: 1300px)'
   })
-  // 当地址栏发生变化
-  useEffect(() => {
-    // componentDidMount props.location.search 发生变化 均执行以下代码
-    const params = decodeQuery(props.location.search)
-    fetchList(params)
-
-    /*eslint react-hooks/exhaustive-deps: "off"*/
-  }, [props.location.search])
-
-  function fetchList({ page, keyword }) {
-    const queryParams = { page, pageSize: 10 }
-    if (keyword) queryParams.keyword = keyword
-    setLoading(true)
-    axios
-      .get('/article/list', { params: queryParams })
-      .then(res => {
-        const list = res.rows
-        // 处理 read more 的内容
-        list.forEach(item => {
-          const index = item.content.indexOf('<!--more-->')
-          item.content = translateMarkdown(item.content.slice(0, index))
-        })
-        setList(list)
-        setTotal(res.count)
-        setLoading(false)
-      })
-      .catch(e => {
-        setLoading(false)
-      })
-  }
 
   // 跳转到文章详情
   function jumpTo(id) {
     props.history.push(`/article/${id}`)
   }
 
-  function handlePageChange(page) {
-    document.querySelector('.app-main').scrollTop = 0
-    const params = { ...decodeQuery(props.location.search), page }
-    let url
-    Object.entries(params).forEach(item => {
-      url = !url ? `?${item[0]}=${item[1]}` : `${url}&${item[0]}=${item[1]}`
-    })
-    props.history.push(url)
-  }
-
-  const { page, keyword } = decodeQuery(props.location.search)
+  const { keyword } = decodeQuery(props.location.search)
   return (
     <Spin tip='Loading...' spinning={loading}>
       <div className='app-home'>
@@ -153,7 +123,12 @@ function Home(props) {
           </>
         )}
 
-        <Pagination current={parseInt(page) || 1} onChange={handlePageChange} total={total} />
+        <Pagination {...pagination} onChange={
+          page => {
+            document.querySelector('.app-main').scrollTop = 0
+            pagination.onChange(page)
+          }
+        } />
       </div>
     </Spin>
   )

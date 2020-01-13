@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Icon, Dropdown, Menu, Input, message } from 'antd'
 import { Link } from 'react-router-dom'
-import { withRouter } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 // import config
 import { HEADER_BLOG_NAME } from '@/config'
@@ -12,6 +12,25 @@ import SvgIcon from '@/components/SvgIcon'
 
 const HeaderLeft = props => {
   const [keyword, setKeyword] = useState('')
+  const history = useHistory()
+
+  function handleChange(e) {
+    e.preventDefault()
+    setKeyword(e.target.value)
+  }
+
+  function onPressEnter(e) {
+    e.target.blur()
+  }
+
+  function onSubmit() {
+    history.push(`/?page=1&keyword=${keyword}`)
+    setKeyword('')
+  }
+
+  function clickSearch(e) {
+    e.stopPropagation()
+  }
 
   const menu = (
     <Menu className='header-nav'>
@@ -37,24 +56,6 @@ const HeaderLeft = props => {
     </Menu>
   )
 
-  function handleChange(e) {
-    e.preventDefault()
-    setKeyword(e.target.value)
-  }
-
-  function onPressEnter(e) {
-    e.target.blur()
-  }
-
-  function onSubmit() {
-    props.history.push(`/?page=1&keyword=${keyword}`)
-    setKeyword('')
-  }
-
-  function clickSearch(e) {
-    e.stopPropagation()
-  }
-
   return (
     <div className='header-left'>
       <SvgIcon type='iconblog' style={{ color: '#055796', width: 16, height: 16 }} />
@@ -70,4 +71,4 @@ const HeaderLeft = props => {
   )
 }
 
-export default withRouter(HeaderLeft)
+export default HeaderLeft

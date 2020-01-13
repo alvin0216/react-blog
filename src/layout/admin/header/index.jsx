@@ -3,17 +3,16 @@ import PropTypes from 'prop-types'
 import { connect, useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { loginout } from '@/redux/user/actions'
+import { loginout } from '@/redux/modal/user'
 
 import { Button, Icon, Dropdown, Menu } from 'antd'
 import AppAvatar from '@/components/Avatar'
-import UploadModal from '@/components/UploadModal'
-import ResultModal from '@/components/UploadModal/result'
 
-import { switchSignModal, switchUploadModal } from '@/redux/app/actions'
+import useBus from '@/hooks/useBus'
 
 function AdminHeader(props) {
   const dispatch = useDispatch()
+  const bus = useBus()
   const userInfo = useSelector(state => state.user)
 
   const { collapsed, onToggle } = props
@@ -29,7 +28,7 @@ function AdminHeader(props) {
       </Menu.Item>
 
       <Menu.Item>
-        <span onClick={e => dispatch(switchUploadModal(true))}>导入文章</span>
+        <span onClick={e => bus.emit('openUploadModal')}>导入文章</span>
       </Menu.Item>
 
       <Menu.Item>
@@ -54,8 +53,6 @@ function AdminHeader(props) {
           </span>
         </Dropdown>
       </div>
-      <UploadModal />
-      <ResultModal />
     </>
   )
 }

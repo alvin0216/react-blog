@@ -7,7 +7,7 @@
     "@svgr/webpack": "4.3.2",
     "@typescript-eslint/eslint-plugin": "1.13.0",
     "@typescript-eslint/parser": "1.13.0",
-    "antd": "^3.23.0",
+    "antd": "^3.26.6",
     "axios": "^0.19.0",
     "babel-eslint": "10.0.2",
     "babel-jest": "^24.8.0",

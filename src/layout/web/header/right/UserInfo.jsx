@@ -3,14 +3,10 @@ import { connect, useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 // methods
-import { switchSignModal, switchUploadModal } from '@/redux/app/actions'
-import { loginout } from '@/redux/user/actions'
+import { loginout } from '@/redux/modal/user'
 
 // components
 import { Button, Dropdown, Menu, Avatar } from 'antd'
-import SignModal from '@/components/SignModal'
-import UploadModal from '@/components/UploadModal'
-import ResultModal from '@/components/UploadModal/result'
 import AppAvatar from '@/components/Avatar'
 
 // hooks
@@ -26,7 +22,7 @@ function UserInfo(props) {
     <Menu>
       {role === 1 && (
         <Menu.Item>
-          <span onClick={e => dispatch(switchUploadModal(true))}>导入文章</span>
+          <span onClick={e => bus.emit('openUploadModal')}>导入文章</span>
         </Menu.Item>
       )}
       {role === 1 && (
@@ -65,9 +61,6 @@ function UserInfo(props) {
             </Button>
           </>
         )}
-      <SignModal />
-      <UploadModal />
-      <ResultModal />
     </div>
   )
 }

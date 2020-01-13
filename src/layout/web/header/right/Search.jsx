@@ -1,12 +1,21 @@
 import React, { useState } from 'react'
 import { Input, Icon, Row } from 'antd'
-import { withRouter } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
+import useMount from '@/hooks/useMount'
+import { decodeQuery } from '@/utils'
 
 function SearchButton(props) {
+  const history = useHistory()
+  const location = useLocation()
   const [keyword, setKeyword] = useState('')
 
+  useMount(() => {
+    const { keyword } = decodeQuery(location.search)
+    keyword && setKeyword(keyword)
+  })
+
   const handleSubmit = () => {
-    if (keyword) props.history.push(`/?page=1&keyword=${keyword}`)
+    if (keyword) history.push(`/?page=1&keyword=${keyword}`)
   }
 
   const handleChange = e => {
@@ -34,4 +43,4 @@ function SearchButton(props) {
   )
 }
 
-export default withRouter(SearchButton)
+export default SearchButton

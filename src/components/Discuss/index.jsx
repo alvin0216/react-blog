@@ -7,14 +7,15 @@ import { DISCUSS_AVATAR } from '@/config'
 // methods
 import axios from '@/utils/axios'
 import { calcCommentsCount } from '@/utils'
-import { login, register, loginout } from '@/redux/user/actions'
-import { switchSignModal } from '@/redux/app/actions'
+import { loginout } from '@/redux/modal/user'
 
 // components
 import SvgIcon from '@/components/SvgIcon'
 import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown, message, Modal } from 'antd'
 import List from './list' // 评论列表
 import AppAvatar from '@/components/Avatar'
+
+import useBus from '@/hooks/useBus'
 
 const { TextArea } = Input
 
@@ -37,6 +38,7 @@ const Editor = ({ onChange, onSubmit, submitting, value, articleId }) => (
 
 function Discuss(props) {
   const dispatch = useDispatch()
+  const bus = useBus()
   const userInfo = useSelector(state => state.user)
   const { username, role } = userInfo
 
@@ -60,12 +62,12 @@ function Discuss(props) {
   function handleMenuClick(e) {
     switch (e.key) {
       case 'login':
-        dispatch(switchSignModal('login', true))
+        bus.emit('openSignModal', 'login')
 
         break
 
       case 'register':
-        dispatch(switchSignModal('register', true))
+        bus.emit('openSignModal', 'register')
 
         break
 

@@ -1,4 +1,7 @@
 import React from 'react'
+import { Icon } from 'antd'
+import SvgIcon from '@/components/SvgIcon'
+
 import MyInfo from '@/views/web/about/MyInfo'
 
 // API_BASE_URL
@@ -14,8 +17,14 @@ export const SIDEBAR = {
   subTitle: '前端打杂人员，略微代码洁癖', // 子标题
   // 个人主页
   homepages: {
-    github: 'https://github.com/gershonv',
-    juejin: 'https://juejin.im/user/5acac6c4f265da2378408f92'
+    github: {
+      link: 'https://github.com/gershonv',
+      icon: <Icon type='github' theme='filled' className='homepage-icon' />
+    },
+    juejin: {
+      link: 'https://juejin.im/user/5acac6c4f265da2378408f92',
+      icon: <SvgIcon type='iconjuejin' className='homepage-icon' />
+    }
   }
 }
 
