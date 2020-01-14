@@ -201,19 +201,14 @@ class ArticleController {
     })
     if (validator) {
       const articleId = ctx.params.id
-      await TagModel.destroy({ where: { articleId } })
-      await ArticleModel.destroy({ where: { id: articleId } })
       await sequelize.query(
-        // `
-        //   delete article, tag, category, comment, reply
-        //   from article
-        //   left join comment on article.id=comment.articleId
-        //   left join reply on comment.id=reply.commentId
-        //   left join tag on article.id=tag.articleId
-        //   left join category on article.id=category.articleId
-        //   where article.id=${articleId}
-        // `
-        `delete comment, reply from comment left join reply on comment.id=reply.commentId where comment.articleId=${articleId}`
+        `delete comment, reply, category, tag, article
+        from article 
+        left join reply on article.id=reply.articleId 
+        left join comment on article.id=comment.articleId 
+        left join category on article.id=category.articleId 
+        left join tag on article.id=tag.articleId 
+        where article.id=${articleId}`
       )
       ctx.status = 204
     }
@@ -227,11 +222,14 @@ class ArticleController {
 
     if (validator) {
       const list = ctx.params.list.split(',')
-      console.log(list)
-      await TagModel.destroy({ where: { articleId: list } })
-      await ArticleModel.destroy({ where: { id: list } })
       await sequelize.query(
-        `delete comment, reply from comment left join reply on comment.id=reply.commentId where comment.articleId in (${list})`
+        `delete comment, reply, category, tag, article
+        from article 
+        left join reply on article.id=reply.articleId 
+        left join comment on article.id=comment.articleId 
+        left join category on article.id=category.articleId 
+        left join tag on article.id=tag.articleId 
+        where article.id in (${list})`
       )
       ctx.status = 204
     }
