@@ -8,9 +8,10 @@ class TagController {
       group: 'name',
       where: {
         articleId: { $not: null }
-      }
+      },
+      order: [[sequelize.fn('COUNT', sequelize.col('name')), 'desc']]
     })
-    // ctx.client(200, 'success', data)
+
     ctx.body = data
   }
 
@@ -20,9 +21,10 @@ class TagController {
       group: 'name',
       where: {
         articleId: { $not: null }
-      }
+      },
+      order: [[sequelize.fn('COUNT', sequelize.col('name')), 'desc']]
     })
-    // ctx.client(200, 'success', data)
+
     ctx.body = data
   }
 }

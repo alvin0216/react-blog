@@ -107,7 +107,7 @@ export function debounce(func, wait) {
 
 // 生成 color
 export function genertorColor(list = [], colorList = COLOR_LIST) {
-  const _list = [...list].sort((x, y) => y.count - x.count)
+  const _list = [...list]
   _list.forEach((l, i) => {
     l.color = colorList[i] || colorList[randomIndex(colorList)]
   })
