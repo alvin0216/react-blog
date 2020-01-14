@@ -1,7 +1,7 @@
 import * as TYPES from '@/redux/types'
 import { save, get, remove } from '@/utils/storage'
 
-// state
+// ====== state
 let defaultState = {
   username: '',
   role: 2,
@@ -15,8 +15,11 @@ if (userInfo) {
   defaultState = { ...defaultState, ...userInfo }
 }
 
-// reducer
-export const UserReducer = (state = defaultState, action) => {
+// console.log('%c defaultState', 'background: yellow', defaultState)
+/**
+ * UserReducer
+ */
+export default function UserReducer(state = defaultState, action) {
   const { type, payload } = action
   switch (type) {
     case TYPES.USER_LOGIN:
@@ -32,5 +35,3 @@ export const UserReducer = (state = defaultState, action) => {
       return state
   }
 }
-
-export default UserReducer

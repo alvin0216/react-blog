@@ -2,7 +2,7 @@ import React from 'react'
 import './index.less'
 
 const Minions = () => (
-  <div className='loading-wrapper'>
+  <div className='loading-wrapper' style={{ height: 600 }}>
     {/* <!-- 小黄人 --> */}
     <div className='minions'>
       {/* <!-- 身体 --> */}

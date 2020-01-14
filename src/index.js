@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import { AppContainer } from 'react-hot-loader'
+import { Provider as BusProvider } from '@/hooks/useBus'
 
 // redux
 import { Provider } from 'react-redux'
@@ -15,9 +16,11 @@ import '@/styles/index.less'
 const render = Component => {
   ReactDOM.render(
     <AppContainer>
-      <Provider store={store}>
-        <Component />
-      </Provider>
+      <BusProvider>
+        <Provider store={store()}>
+          <Component />
+        </Provider>
+      </BusProvider>
     </AppContainer>,
     document.getElementById('root')
   )

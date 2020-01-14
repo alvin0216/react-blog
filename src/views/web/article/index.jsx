@@ -31,7 +31,7 @@ function Article(props) {
       const hash = decodeURI(props.location.hash)
       const ele = document.querySelector(`a[href="${hash}"]`)
       ele && hash && ele.click() // 挂载时路由跳转到指定位置
-    }, 1000)
+    }, 800)
   }, [])
 
   useEffect(() => {

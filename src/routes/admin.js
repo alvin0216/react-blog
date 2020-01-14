@@ -10,7 +10,6 @@ export default {
     { path: 'article/edit/:id', component: lazy(() => import('@/views/admin/article/edit')) },
     { path: 'article/add', component: lazy(() => import('@/views/admin/article/edit')) },
     { path: 'article/manager', component: lazy(() => import('@/views/admin/article/manager')) },
-    { path: 'user', component: lazy(() => import('@/views/admin/user')) },
-    { path: 'ee', component: lazy(() => import('@/views/examples')) }
+    { path: 'user', component: lazy(() => import('@/views/admin/user')) }
   ]
 }

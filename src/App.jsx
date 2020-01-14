@@ -1,27 +1,15 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-import { connect, useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
+// config
 import routes from '@/routes'
-// import { getWindowWidth } from '@/redux/app/actions'
-import { getTagList, getCategoryList } from '@/redux/article/actions'
+
+// components
+import PublicComponent from '@/components/Public'
 
 const App = props => {
-  const dispatch = useDispatch() // dispatch hooks
   const role = useSelector(state => state.user.role) // 相当于 connect(state => state.user.role)(App)
-
-  // 初始化数据 类似 componentDidMount
-  useEffect(() => {
-    // dispatch(getWindowWidth())
-    dispatch(getTagList())
-    dispatch(getCategoryList())
-    // props.getWindowWidth()
-    // props.getTagList()
-    // props.getCategoryList()
-    //
-    console.log('app did mount')
-    /*eslint react-hooks/exhaustive-deps: "off"*/
-  }, [])
 
   // 解构 route
   function renderRoutes(routes, contextPath) {
@@ -61,45 +49,11 @@ const App = props => {
   }
 
   const children = renderRoutes(routes, '/')
-  return <BrowserRouter>{children}</BrowserRouter>
+  return (
+    <BrowserRouter>
+      {children}
+      <PublicComponent />
+    </BrowserRouter>)
 }
 
 export default App
-
-// export default connect(
-//   state => ({
-//     role: state.user.role
-//   }),
-//   { getWindowWidth, getTagList, getCategoryList }
-// )(App)
-
-// example test
-// import WebLayout from '@/layout/web'
-// import AdminLayout from '@/layout/admin'
-// import Example from '@/views/examples'
-
-// const App = () => {
-//   return (
-//     <BrowserRouter>
-//       <Switch>
-//         <Route path='/test' component={Example} />
-//         <Route
-//           path='/admin'
-//           render={props => (
-//             <AdminLayout>
-//               <Route path='/admin/e' component={Example} exact />
-//             </AdminLayout>
-//           )}
-//         />
-//         <Route
-//           path='/'
-//           render={props => (
-//             <WebLayout>
-//               <Route path='/e' component={Example} />
-//             </WebLayout>
-//           )}
-//         />
-//       </Switch>
-//     </BrowserRouter>
-//   )
-// }

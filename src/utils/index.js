@@ -1,5 +1,5 @@
 import marked from 'marked'
-// import hljs from 'highlight.js'
+import { COLOR_LIST } from '@/utils/config'
 import xss from 'xss'
 import { clear, get } from '@/utils/storage'
 
@@ -88,4 +88,28 @@ export function RandomId(len) {
   return Math.random()
     .toString(36)
     .substr(3, len)
+}
+
+/**
+ * debounce
+ */
+export function debounce(func, wait) {
+  let timer = null
+  return function() {
+    const context = this
+    const args = arguments
+    clearTimeout(timer)
+    timer = setTimeout(function() {
+      func.apply(context, args)
+    }, wait)
+  }
+}
+
+// 生成 color
+export function genertorColor(list = [], colorList = COLOR_LIST) {
+  const _list = [...list].sort((x, y) => y.count - x.count)
+  _list.forEach((l, i) => {
+    l.color = colorList[i] || colorList[randomIndex(colorList)]
+  })
+  return _list
 }

@@ -5,38 +5,25 @@ import { ARCHIVES_PAGESIZE } from '@/utils/config'
 
 // methods
 import { groupBy } from '@/utils'
-import axios from '@/utils/axios'
 
 // components
 import { Timeline, Icon, Spin } from 'antd'
 import { Link } from 'react-router-dom'
 import Pagination from '@/components/Pagination'
 
+// hooks
+import useFetchList from '@/hooks/useFetchList'
+
 function Archives(props) {
-  const [list, setList] = useState([])
-  const [total, setTotal] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [loading, setLoading] = useState(false)
+  const { dataList, loading, pagination } = useFetchList({
+    requestUrl: '/article/list',
+    queryParams: {
+      pageSize: ARCHIVES_PAGESIZE
+    },
+    fetchDependence: [props.location.pathname, props.location.search]
+  })
 
-  useEffect(() => {
-    fetchList(1)
-    // component did mout
-  }, [])
-
-  function fetchList(page) {
-    setLoading(true)
-    axios.get('/article/list', { params: { page, pageSize: ARCHIVES_PAGESIZE } }).then(res => {
-      const list = groupBy(res.rows, item => item.createdAt.slice(0, 4)) // 按年份排序
-      setList(list)
-      setTotal(res.count)
-      setLoading(false)
-    })
-  }
-
-  function handlePageChange(page) {
-    fetchList(page)
-    setCurrentPage(page)
-  }
+  const list = groupBy(dataList, item => item.createdAt.slice(0, 4)) // 按年份排序
 
   return (
     <div className='app-archives'>
@@ -46,7 +33,7 @@ function Archives(props) {
             <Fragment key={i}>
               {i === 0 && (
                 <Timeline.Item>
-                  <span className='desc'>{`Nice! ${total} posts in total. Keep on posting.`}</span>
+                  <span className='desc'>{`Nice! ${pagination.total} posts in total. Keep on posting.`}</span>
                   <br />
                   <br />
                 </Timeline.Item>
@@ -70,7 +57,7 @@ function Archives(props) {
           ))}
         </Timeline>
 
-        <Pagination current={currentPage} total={total} pageSize={ARCHIVES_PAGESIZE} onChange={handlePageChange} style={{ float: 'initial', marginTop: 10 }}/>
+        <Pagination {...pagination} style={{ float: 'initial', marginTop: 10 }} />
       </Spin>
     </div>
   )

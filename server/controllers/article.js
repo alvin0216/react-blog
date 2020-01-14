@@ -109,7 +109,7 @@ class ArticleController {
     const validator = ctx.validate(ctx.query, {
       page: Joi.string(),
       pageSize: Joi.number(),
-      keyword: Joi.string(), // 关键字查询
+      keyword: Joi.string().allow(''), // 关键字查询
       category: Joi.string(),
       tag: Joi.string(),
       preview: Joi.number(),
@@ -232,25 +232,21 @@ class ArticleController {
 
     if (validator) {
       const { fileNameList } = ctx.request.body
-      const existList = [] // 存在的文件名列表
-      const noExistList = []
       const list = await Promise.all(
         fileNameList.map(async fileName => {
           const filePath = `${uploadPath}/${fileName}`
-          const result = decodeFile(filePath)
-          const title = result.title || fileName.replace(/\.md/, '')
-          const article = await ArticleModel.findOne({ where: { title } })
+          const file = decodeFile(filePath)
+          const title = file.title || fileName.replace(/\.md/, '')
+          const article = await ArticleModel.findOne({ where: { title }, attributes: ['id'] })
+          const result = { fileName, title }
           if (article) {
-            existList.push({ fileName, articleId: article.id, title: article.title })
-          } else {
-            const params = { fileName, title: result.title }
-            params.title ? noExistList.unshift(params) : noExistList.push(params)
+            result.exist = true
+            result.articleId = article.id
           }
-          return article
+          return result
         })
       )
-
-      ctx.body = { existList, noExistList }
+      ctx.body = list
     }
   }
 
@@ -279,12 +275,16 @@ class ArticleController {
   static async uploadConfirm(ctx) {
     const validator = ctx.validate(ctx.request.body, {
       authorId: Joi.number(),
-      insertList: Joi.array(),
-      updateList: Joi.array()
+      uploadList: Joi.array()
     })
     if (validator) {
-      const { insertList, updateList, authorId } = ctx.request.body
+      const { uploadList, authorId } = ctx.request.body
       await findOrCreateFilePath(uploadPath) // 检查目录
+      // const insertList = []
+      // const updateList = []
+      // uploadList.forEach(file => {
+      //   file.exist ? updateList.push(file) : insertList.push(file)
+      // })
 
       const _parseList = list => {
         return list.map(item => {
@@ -304,16 +304,17 @@ class ArticleController {
         })
       }
 
-      const list1 = _parseList(insertList)
-      const list2 = _parseList(updateList)
+      const list = _parseList(uploadList)
+      const updateList = list.filter(d => d.articleId !== 'undefined')
+      const insertList = list.filter(d => d.articleId === 'undefined')
 
       // 插入文章
       const insertResultList = await Promise.all(
-        list1.map(data => ArticleModel.create(data, { include: [TagModel, CategoryModel] }))
+        insertList.map(data => ArticleModel.create(data, { include: [TagModel, CategoryModel] }))
       )
 
       const updateResultList = await Promise.all(
-        list2.map(async data => {
+        updateList.map(async data => {
           const { title, content, categories = [], tags = [], articleId } = data
           await ArticleModel.update({ title, content }, { where: { id: articleId } })
           await TagModel.destroy({ where: { articleId } })
@@ -324,7 +325,7 @@ class ArticleController {
         })
       )
 
-      ctx.body = { insertList: insertResultList, updateList: updateResultList }
+      ctx.body = { message: 'success', insertList: insertResultList, updateList: updateResultList }
     }
   }
 

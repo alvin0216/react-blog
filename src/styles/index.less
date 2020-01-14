@@ -45,44 +45,27 @@ ul {
   }
 }
 
-.confirm-modal {
+.delete-text {
+  color: #ff4d4f;
+  &:hover {
+    color: #d9363e;
+  }
 }
 
-.result-modal {
-  min-width: 500px;
-  .ant-modal-confirm-body > .anticon + .ant-modal-confirm-title + .ant-modal-confirm-content {
-    margin: 0;
-  }
-  .ant-modal-body {
-    .ant-result {
-      padding-bottom: 12px;
-    }
-
-    .list {
-      li {
-        display: flex;
-        align-items: center;
-        .anticon-check-circle {
-          margin-right: 8px;
-        }
-        a {
-          flex: 1;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          font-size: 14px;
-          line-height: 32px;
-          color: #8590a6;
-          cursor: pointer;
-        }
-        &:hover {
-          background: #f0f2f5;
-          border-radius: 4px;
-          a {
-            color: #40a9ff;
-          }
-        }
-      }
+.action-list {
+  user-select: none;
+  display: flex;
+  li:not(:last-child) {
+    &::after {
+      display: inline-block;
+      margin: 0 8px;
+      content: '';
+      height: 0.9em;
+      width: 1px;
+      background-color: #e8e8e8;
+      vertical-align: middle;
+      position: relative;
+      top: -0.06em;
     }
   }
 }

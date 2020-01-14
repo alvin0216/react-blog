@@ -124,13 +124,6 @@ class UserController {
       // username: user.username, role, userId: id, token
       const token = createToken({ userId: githubInfo.id, role: target.role }) // 生成 token
 
-      // ctx.client(200, 'success', {
-      //   github: githubInfo,
-      //   username: target.username,
-      //   userId: target.id,
-      //   role: target.role,
-      //   token
-      // })
       ctx.body = {
         github: githubInfo,
         username: target.username,
@@ -139,7 +132,6 @@ class UserController {
         token
       }
     } else {
-      // ctx.client(403, 'github 授权码已失效！')
       ctx.throw(403, 'github 授权码已失效！')
     }
   }
@@ -163,8 +155,7 @@ class UserController {
       } else {
         const user = await UserModel.findOne({ where: { username } })
         if (user && !user.github) {
-          // ctx.client(403, '用户名已被占用')
-          ctx.client(403, '用户名已被占用')
+          ctx.throw(403, '用户名已被占用')
         } else {
           const saltPassword = await encrypt(password)
           await UserModel.create({ username, password: saltPassword, email })
@@ -180,7 +171,7 @@ class UserController {
    */
   static async getList(ctx) {
     const validator = ctx.validate(ctx.query, {
-      username: Joi.string(),
+      username: Joi.string().allow(''),
       page: Joi.string(),
       pageSize: Joi.number()
     })
@@ -193,6 +184,7 @@ class UserController {
         }
       }
       if (username) {
+        where.username = {}
         where.username['$like'] = `%${username}%`
       }
       const result = await UserModel.findAndCountAll({

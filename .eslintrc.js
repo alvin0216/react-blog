@@ -175,6 +175,7 @@ module.exports = {
     'no-path-concat': 'off', // 可以直接使用 __dirname
     'prefer-promise-reject-errors': 0,
     "react-hooks/rules-of-hooks": "off",
-    'react-hooks/exhaustive-deps': 'off' 
+    'react-hooks/exhaustive-deps': 'off',
+    'jsx-a11y/anchor-is-valid': 'off' 
   }
 }

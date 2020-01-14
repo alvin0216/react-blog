@@ -3,18 +3,18 @@ import { connect, useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 // methods
-import { switchSignModal, switchUploadModal } from '@/redux/app/actions'
 import { loginout } from '@/redux/user/actions'
 
 // components
 import { Button, Dropdown, Menu, Avatar } from 'antd'
-import SignModal from '@/components/SignModal'
-import UploadModal from '@/components/UploadModal'
-import ResultModal from '@/components/UploadModal/result'
 import AppAvatar from '@/components/Avatar'
+
+// hooks
+import useBus from '@/hooks/useBus'
 
 function UserInfo(props) {
   const dispatch = useDispatch()
+  const bus = useBus()
   const userInfo = useSelector(state => state.user)
   const { username, github, role } = userInfo
 
@@ -22,7 +22,7 @@ function UserInfo(props) {
     <Menu>
       {role === 1 && (
         <Menu.Item>
-          <span onClick={e => dispatch(switchUploadModal(true))}>导入文章</span>
+          <span onClick={e => bus.emit('openUploadModal')}>导入文章</span>
         </Menu.Item>
       )}
       {role === 1 && (
@@ -45,24 +45,22 @@ function UserInfo(props) {
             <AppAvatar userInfo={userInfo} popoverVisible={false} />
           </div>
         </Dropdown>
-      ) : (
-        <>
-          <Button
-            ghost
-            type='primary'
-            size='small'
-            style={{ marginRight: 20 }}
-            onClick={e => dispatch(switchSignModal('login', true))}>
-            登录
-          </Button>
-          <Button ghost type='danger' size='small' onClick={e => dispatch(switchSignModal('register', true))}>
-            注册
-          </Button>
-        </>
-      )}
-      <SignModal />
-      <UploadModal />
-      <ResultModal />
+      )
+        : (
+          <>
+            <Button
+              ghost
+              type='primary'
+              size='small'
+              style={{ marginRight: 20 }}
+              onClick={e => bus.emit('openSignModal', 'login')}>
+              登录
+            </Button>
+            <Button ghost type='danger' size='small' onClick={e => bus.emit('openSignModal', 'register')}>
+              注册
+            </Button>
+          </>
+        )}
     </div>
   )
 }
