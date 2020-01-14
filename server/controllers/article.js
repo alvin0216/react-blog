@@ -311,8 +311,8 @@ class ArticleController {
           const { title, date, categories = [], tags = [], content } = result
           const data = {
             title: title || item.fileName.replace(/\.md/, ''),
-            categories: categories.map(d => ({ name: d, articleId: item.articleId })),
-            tags: tags.map(d => ({ name: d, articleId: item.articleId })),
+            categories: categories.map(d => ({ name: d })),
+            tags: tags.map(d => ({ name: d })),
             content,
             authorId
           }
@@ -323,8 +323,8 @@ class ArticleController {
       }
 
       const list = _parseList(uploadList)
-      const updateList = list.filter(d => d.articleId !== 'undefined')
-      const insertList = list.filter(d => d.articleId === 'undefined')
+      const updateList = list.filter(d => !!d.articleId)
+      const insertList = list.filter(d => !d.articleId)
 
       // 插入文章
       const insertResultList = await Promise.all(
