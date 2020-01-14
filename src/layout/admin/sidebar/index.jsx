@@ -2,21 +2,29 @@ import React, { useState, useEffect } from 'react'
 import { NavLink, withRouter } from 'react-router-dom'
 import { Menu, Icon } from 'antd'
 import menu from './menu'
-
 const SubMenu = Menu.SubMenu
 
+function getMenuOpenKeys(menu) {
+  const list = []
+  menu.forEach(item => {
+    if (item.children) {
+      item.children.forEach(child => {
+        list.push({
+          pathname: child.path,
+          openKey: item.path
+        })
+      })
+    }
+  })
+  return list
+}
+const menuMenuOpenKeys = getMenuOpenKeys(menu)
+
 function AdminSidebar(props) {
-  const [openKeys, setOpenKeys] = useState([])
-  const [selectedKeys, setSelectedKeys] = useState([])
-
-  useEffect(() => {
-    // component did mount
-    console.log(props.location.pathname)
-  }, [])
-
   // 菜单渲染
   function renderMenu(list) {
     const renderRoute = item => {
+      if (item.hidden) return null
       if (item.children) {
         return (
           <SubMenu
@@ -46,18 +54,17 @@ function AdminSidebar(props) {
     return list.map(l => renderRoute(l))
   }
 
+  const target = menuMenuOpenKeys.find(d => d.pathname === props.selectedKeys[0])
+  const openKeys = target ? [target.openKey] : []
   return (
-    <div className='sibar-container'>
-      <Menu
-        openKeys={openKeys}
-        selectedKeys={selectedKeys}
-        onOpenChange={openKeys => setOpenKeys(openKeys)}
-        onClick={({ key }) => setSelectedKeys([key])}
-        theme='dark'
-        mode='inline'>
-        {renderMenu(menu)}
-      </Menu>
-    </div>
+    <Menu
+      defaultOpenKeys={openKeys}
+      // defaultSelectedKeys={props.selectedKeys}
+      selectedKeys={props.selectedKeys}
+      mode='inline'
+      style={{ height: '100%', borderRight: 0 }}>
+      {renderMenu(menu)}
+    </Menu>
   )
 }
 

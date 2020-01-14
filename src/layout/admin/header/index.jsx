@@ -1,41 +1,30 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { connect, useSelector, useDispatch } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
-import { loginout } from '@/redux/modal/user'
+import { loginout } from '@/redux/user/actions'
 
-import { Button, Icon, Dropdown, Menu } from 'antd'
-import AppAvatar from '@/components/Avatar'
-
-import useBus from '@/hooks/useBus'
+import { Button, Icon, Dropdown, Menu, Avatar } from 'antd'
+import logo from '@/assets/images/avatar.jpeg'
 
 function AdminHeader(props) {
   const dispatch = useDispatch()
-  const bus = useBus()
+  const history = useHistory()
+
   const userInfo = useSelector(state => state.user)
-
-  const { collapsed, onToggle } = props
-
-  function backToHome() {
-    props.history.push('/')
-  }
 
   const menu = (
     <Menu className='menu'>
       <Menu.Item>
-        <span onClick={backToHome}>返回主页</span>
+        <span onClick={e => history.push('/')}>
+          返回主页
+        </span>
       </Menu.Item>
-
-      <Menu.Item>
-        <span onClick={e => bus.emit('openUploadModal')}>导入文章</span>
-      </Menu.Item>
-
       <Menu.Item>
         <span
           onClick={e => {
             dispatch(loginout())
-            backToHome()
+            history.push('/')
           }}>
           退出登录
         </span>
@@ -45,21 +34,17 @@ function AdminHeader(props) {
 
   return (
     <>
-      <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} className='trigger' onClick={onToggle} />
-      <div className='header-right'>
-        <Dropdown overlay={menu}>
-          <span>
-            <AppAvatar userInfo={userInfo} popoverVisible={false} />
-          </span>
+      <div>
+        {/* <img src={logo} alt='pvmed' /> */}
+        <span className='header-title'>Blog Manager</span>
+        <Dropdown overlay={menu} className='header-dropdown'>
+          <a className='ant-dropdown-link'>
+            {userInfo.username} <Icon type='down' />
+          </a>
         </Dropdown>
       </div>
     </>
   )
 }
 
-AdminHeader.propTypes = {
-  collapsed: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func
-}
-
-export default withRouter(AdminHeader)
+export default AdminHeader

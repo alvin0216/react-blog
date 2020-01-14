@@ -3,13 +3,13 @@ import axios from '@/utils/axios'
 import useMount from './useMount'
 
 /**
- * usePvTable hooks 用于处理 loading 逻辑以及换页 检索等
+ * useAntdTable hooks 用于处理 loading 逻辑以及换页 检索等
  *
  * @param {Object} obj
  * @param {Function} obj.fetchList 获取列表的函数
  * @param {Object} obj.queryParams 默认要检索的参数
  */
-export default function usePvTable({ requestUrl = '', queryParams = null, columns = [] }) {
+export default function useAntdTable({ requestUrl = '', queryParams = null, columns = [], isAdmin = true }) {
   const [loading, setLoading] = useState(false)
   const [dataList, setDataList] = useState([])
   const [tablePagination, setTablePagination] = useState({ current: 1, pageSize: 10, totoal: 0 })
@@ -19,7 +19,7 @@ export default function usePvTable({ requestUrl = '', queryParams = null, column
   function fetchDataList(params) {
     const requestParams = {
       page: tablePagination.current,
-      limit: tablePagination.pageSize,
+      pageSize: tablePagination.pageSize,
       ...queryParams,
       ...params
     }
@@ -27,11 +27,20 @@ export default function usePvTable({ requestUrl = '', queryParams = null, column
     axios
       .get(requestUrl, { params: requestParams })
       .then(response => {
-        tablePagination.current = requestParams.params.page
-        tablePagination.total = response.count
+        const { page, pageSize } = requestParams
+        const { count, rows } = response
+
+        if (count > 0 && count > pageSize) {
+          const totalPage = Math.ceil(count / pageSize)
+          if (totalPage < page) return fetchDataList({ page: totalPage }) // 例如 删除了列表里只有一项且删除，则需要跳转回前一页 也即最后一页
+        }
+
+        tablePagination.current = page
+        tablePagination.total = count
         setTablePagination({ ...tablePagination }) // 设置分页
-        setDataList(response.rows)
+        setDataList(rows)
         setLoading(false)
+        console.log('%c useAntdTabled', 'background: yellow', requestParams, rows)
       })
       .catch(error => {
         console.log('fetchDataList error: ', requestParams, error)
@@ -60,8 +69,10 @@ export default function usePvTable({ requestUrl = '', queryParams = null, column
    * 注意 当前只封装分页
    */
   function handleTableChange(pagination, filters, sorter) {
-    console.log('handleTableChange: ', pagination, filters, sorter)
-    fetchListWithLoading({ page: pagination.current })
+    if (JSON.stringify(filters) === '{}' && JSON.stringify(sorter) === '{}') {
+      console.log('handleTableChange: ', pagination, filters, sorter)
+      fetchListWithLoading({ page: pagination.current })
+    }
   }
 
   /**
@@ -73,13 +84,16 @@ export default function usePvTable({ requestUrl = '', queryParams = null, column
 
   return {
     tableProps: {
+      className: isAdmin ? 'admin-table' : '',
+      rowKey: 'id',
       loading,
       columns,
       dataSource: dataList,
       pagination: {
         current: tablePagination.current,
         pageSize: tablePagination.pageSize,
-        total: tablePagination.total
+        total: tablePagination.total,
+        showTotal: total => `共 ${total} 条`
       },
       onChange: handleTableChange
     },

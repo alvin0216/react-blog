@@ -109,7 +109,7 @@ class ArticleController {
     const validator = ctx.validate(ctx.query, {
       page: Joi.string(),
       pageSize: Joi.number(),
-      keyword: Joi.string(), // 关键字查询
+      keyword: Joi.string().allow(''), // 关键字查询
       category: Joi.string(),
       tag: Joi.string(),
       preview: Joi.number(),

@@ -6,7 +6,7 @@ import { GITHUB } from '@/config'
 import { save } from '@/utils/storage'
 
 // redux
-import { login, register } from '@/redux/modal/user'
+import { login, register } from '@/redux/user/actions'
 import { useDispatch } from 'react-redux'
 
 // hooks

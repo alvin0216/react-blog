@@ -1,41 +1,40 @@
 .admin-container {
-  height: 100vh;
   .admin-header {
-    height: 64px;
-    background: #fff;
-    padding: 0 16px;
-    .trigger {
-      font-size: 18px;
-      line-height: 64px;
-      cursor: pointer;
+    color: #fff;
+    .header-title {
+      font-size: 24px;
+      display: inline-block;
+      transform: translate(20px, 5px);
     }
-    .trigger:hover {
-      color: #1890ff;
-    }
-    .header-right {
+    .header-dropdown {
       float: right;
-      line-height: 64px;
-      margin-right: 10px;
+      color: #fff;
     }
   }
 
-  .admin-main {
-    overflow-y: scroll;
-    padding: 24px;
-    // background-color: #fff;
-    .query-form {
-      margin-bottom: 20px;
-      .form-select {
-        min-width: 140px;
-      }
+  .admin-sider {
+    // height: 100%;
+    background: #fff;
+  }
+
+  .admin-content-wrap {
+    padding: 0 24px;
+
+    height: calc(100vh - 64px);
+    .admin-content {
+      position: relative;
+      background: #fff;
+      padding: 24px;
+      margin: 0;
+      flex: none;
+      margin-bottom: 24px;
     }
-    .delete-text {
-      cursor: pointer;
-      color: red;
-    }
-    .app-pagination {
-      float: right;
-      margin: 20px 0;
+  }
+
+  .admin-table {
+    .ant-table-thead > tr > th {
+      color: #909399;
+      background-color: #fff;
     }
   }
 }

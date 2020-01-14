@@ -171,7 +171,7 @@ class UserController {
    */
   static async getList(ctx) {
     const validator = ctx.validate(ctx.query, {
-      username: Joi.string(),
+      username: Joi.string().allow(''),
       page: Joi.string(),
       pageSize: Joi.number()
     })
@@ -184,6 +184,7 @@ class UserController {
         }
       }
       if (username) {
+        where.username = {}
         where.username['$like'] = `%${username}%`
       }
       const result = await UserModel.findAndCountAll({

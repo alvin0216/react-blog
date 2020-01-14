@@ -3,7 +3,7 @@ import { connect, useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 // methods
-import { loginout } from '@/redux/modal/user'
+import { loginout } from '@/redux/user/actions'
 
 // components
 import { Button, Dropdown, Menu, Avatar } from 'antd'

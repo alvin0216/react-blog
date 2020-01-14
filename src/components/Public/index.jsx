@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import useMount from '@/hooks/useMount'
 
 // actions
-import { getTagList, getCategoryList } from '@/redux/modal/article'
+import { getTagList, getCategoryList } from '@/redux/article/actions'
 
 // components
 import SignModal from '@/components/Public/SignModal'

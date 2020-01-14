@@ -7,7 +7,7 @@ import { DISCUSS_AVATAR } from '@/config'
 // methods
 import axios from '@/utils/axios'
 import { calcCommentsCount } from '@/utils'
-import { loginout } from '@/redux/modal/user'
+import { loginout } from '@/redux/user/actions'
 
 // components
 import SvgIcon from '@/components/SvgIcon'

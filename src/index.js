@@ -17,7 +17,7 @@ const render = Component => {
   ReactDOM.render(
     <AppContainer>
       <BusProvider>
-        <Provider store={store}>
+        <Provider store={store()}>
           <Component />
         </Provider>
       </BusProvider>

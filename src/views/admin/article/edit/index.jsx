@@ -6,7 +6,7 @@ import axios from '@/utils/axios'
 import { Button, Input, Modal, BackTop, message } from 'antd'
 import MdEditor from '@/components/MdEditor'
 import List from './Tag'
-
+import useBreadcrumb from '@/hooks/useBreadcrumb'
 function Edit(props) {
   const store = useSelector(state => ({
     tagList: state.article.tagList,
@@ -22,6 +22,8 @@ function Edit(props) {
   const [cateSelectedList, setCateSelectedList] = useState([])
 
   const editId = parseInt(props.match.params.id)
+
+  useBreadcrumb([{ link: '/admin/article/manager', name: '文章管理' }, editId ? '编辑文章' : '新增文章'])
 
   useEffect(() => {
     // did mounted
@@ -139,7 +141,7 @@ function Edit(props) {
         }}
       />
 
-      <BackTop target={() => document.querySelector('.admin-main')} />
+      <BackTop target={() => document.querySelector('.admin-content-wrap')} />
     </div>
   )
 }
