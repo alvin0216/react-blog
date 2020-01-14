@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from 'react'
 import { connect, useSelector, useDispatch } from 'react-redux'
-import { Table, Form, Tag, Modal, message, Input, Button, Popconfirm, Select } from 'antd'
+import { Table, Form, Tag, Switch, message, Input, Button, Popconfirm, Select } from 'antd'
 
 import axios from '@/utils/axios'
 
@@ -13,12 +13,16 @@ import useAntdTable from '@/hooks/useAntdTable'
 import useBreadcrumb from '@/hooks/useBreadcrumb'
 
 function ArticleManager(props) {
+  useBreadcrumb(['文章管理'])
+
   const { tagList, categoryList } = useSelector(state => ({
     tagList: state.article.tagList,
     categoryList: state.article.categoryList
   }))
   const { getFieldDecorator } = props.form
   const [queryParams, setQueryParams] = useState({})
+  const [batch, setBatch] = useState(false)
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
   const { tableProps, updateList, onSearch } = useAntdTable({
     requestUrl: '/article/list',
@@ -101,8 +105,19 @@ function ArticleManager(props) {
     download(`/article/output/${articleId}`)
   }
 
+  function outputSelected() {
+    download(`/article/output/list/${selectedRowKeys}`)
+  }
+
   function outputAll() {
     download('/article/output/all')
+  }
+
+  function delList() {
+    axios.delete(`/article/list/${selectedRowKeys}`).then(() => {
+      onSearch()
+      setSelectedRowKeys([])
+    })
   }
 
   function handleSubmit(e) {
@@ -115,7 +130,10 @@ function ArticleManager(props) {
     })
   }
 
-  useBreadcrumb(['文章管理'])
+  const rowSelection = batch ? {
+    selectedRowKeys,
+    onChange: selectList => setSelectedRowKeys(selectList)
+  } : null
 
   return (
     <div className='admin-article-manager'>
@@ -150,13 +168,37 @@ function ArticleManager(props) {
         </Form.Item>
         <Form.Item>
           <Button type='primary' htmlType='submit' style={{ marginRight: 8 }}>检索</Button>
-          <Button type='primary' onClick={outputAll} key={2}>
-            一键导出
+          <Button type='primary' onClick={outputAll} style={{ marginRight: 8 }}>
+            导出全部文章
           </Button>
         </Form.Item>
       </Form>
 
-      <Table {...tableProps} />
+      <Table {...tableProps}
+        rowSelection={rowSelection}
+        footer={() => (
+          <>
+            批量操作 <Switch checked={batch} onChange={e => setBatch(prev => !prev)} style={{ marginRight: 8 }} />
+
+            {
+              batch && (
+                <>
+                  <Button type='primary' size='small' style={{ marginRight: 8 }} disabled={selectedRowKeys.length === 0} onClick={outputSelected}>导出选中项</Button>
+                  <Popconfirm
+                    title='Are you sure delete the articles?'
+                    onConfirm={delList}
+                    // onCancel={cancel}
+                    okText='Yes'
+                    cancelText='No'
+                  >
+                    <Button type='danger' size='small' disabled={selectedRowKeys.length === 0}>批量删除</Button>
+                  </Popconfirm>
+
+                </>
+              )
+            }
+          </>
+        )} />
     </div>
   )
 }

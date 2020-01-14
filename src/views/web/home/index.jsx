@@ -4,6 +4,7 @@ import './index.less'
 import { Link } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
 import { decodeQuery, translateMarkdown, calcCommentsCount } from '@/utils'
+import { HOME_PAGESIZE } from '@/utils/config'
 
 // components
 import { Icon, Divider, Empty, Drawer, Tag, Spin } from 'antd'
@@ -42,6 +43,7 @@ function Home(props) {
 
   const { loading, pagination, dataList } = useFetchList({
     requestUrl: '/article/list',
+    queryParams: { pageSize: HOME_PAGESIZE },
     fetchDependence: [props.location.search]
   })
 
