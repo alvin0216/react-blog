@@ -219,6 +219,24 @@ class ArticleController {
     }
   }
 
+  // 删除多个文章
+  static async delList(ctx) {
+    const validator = ctx.validate(ctx.params, {
+      list: Joi.string().required()
+    })
+
+    if (validator) {
+      const list = ctx.params.list.split(',')
+      console.log(list)
+      await TagModel.destroy({ where: { articleId: list } })
+      await ArticleModel.destroy({ where: { id: list } })
+      await sequelize.query(
+        `delete comment, reply from comment left join reply on comment.id=reply.commentId where comment.articleId in (${list})`
+      )
+      ctx.status = 204
+    }
+  }
+
   /**
    * 确认文章是否存在
    *
@@ -346,18 +364,46 @@ class ArticleController {
       })
 
       const { filePath, fileName } = await generateFile(article)
-
-      // ctx.set('Content-type', 'application/md')
-      // ctx.set('Content-type', 'application/md')
-
       ctx.attachment(decodeURI(fileName))
       await send(ctx, fileName, { root: outputPath })
+    }
+  }
 
-      // const reader = fs.createReadStream(filePath)
+  static async outputList(ctx) {
+    const validator = ctx.validate(ctx.params, {
+      list: Joi.string().required()
+    })
+    if (validator) {
+      const articleList = ctx.params.list.split(',')
 
-      // ctx.set('Content-disposition', 'attachment; filename=' + 'aaa' + '.md')
+      const list = await ArticleModel.findAll({
+        where: {
+          id: articleList
+        },
+        include: [
+          // 查找 分类
+          { model: TagModel, attributes: ['name'] },
+          { model: CategoryModel, attributes: ['name'] }
+        ]
+      })
 
-      // ctx.client(200, null, reader)
+      // const filePath = await generateFile(list[0])
+      await Promise.all(list.map(article => generateFile(article)))
+
+      // 打包压缩 ...
+      const zipName = 'mdFiles.zip'
+      const zipStream = fs.createWriteStream(`${outputPath}/${zipName}`)
+      const zip = archiver('zip')
+      zip.pipe(zipStream)
+      list.forEach(item => {
+        zip.append(fs.createReadStream(`${outputPath}/${item.title}.md`), {
+          name: `${item.title}.md` // 压缩文件名
+        })
+      })
+      await zip.finalize()
+
+      ctx.attachment(decodeURI(zipName))
+      await send(ctx, zipName, { root: outputPath })
     }
   }
 

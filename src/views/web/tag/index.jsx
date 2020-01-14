@@ -40,7 +40,7 @@ function List(props) {
 
   const { loading, pagination, dataList } = useFetchList({
     requestUrl: '/article/list',
-    queryParams: { [type]: name },
+    queryParams: { [type]: name, pageSize: TAG_PAGESIZE },
     fetchDependence: [props.location.search, props.location.pathname]
   })
 
@@ -50,7 +50,6 @@ function List(props) {
         <TimeLineList list={dataList} name={name} type={type} />
         <Pagination
           {...pagination}
-          pageSize={TAG_PAGESIZE}
           style={{ float: 'initial', marginTop: 10 }}
         />
       </div>
