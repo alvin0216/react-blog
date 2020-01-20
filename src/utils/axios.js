@@ -2,8 +2,6 @@ import axios from 'axios'
 import { API_BASE_URL } from '@/config'
 
 import { message } from 'antd'
-import store from '@/redux'
-import { loginout } from '@/redux/user/actions'
 import { getToken } from '@/utils'
 
 // create an axios instance
@@ -44,7 +42,6 @@ service.interceptors.response.use(
         const { status, data } = err.response
         switch (status) {
           case 401:
-            store.dispatch(loginout())
             message.error((data && data.message) || '登录信息过期或未授权，请重新登录！')
             break
 

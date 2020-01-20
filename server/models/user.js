@@ -61,6 +61,7 @@ module.exports = (sequelize, dataTypes) => {
   User.associate = models => {
     User.hasMany(models.comment)
     User.hasMany(models.reply)
+    User.hasMany(models.ip)
   }
 
   return User

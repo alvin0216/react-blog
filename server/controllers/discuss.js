@@ -9,6 +9,7 @@ const {
   comment: CommentModel,
   reply: ReplyModel,
   user: UserModel,
+  ip: IpModel,
   sequelize
 } = require('../models')
 
@@ -45,7 +46,20 @@ class DiscussController {
       let commentId = ctx.request.body.commentId
 
       const user = await UserModel.findOne({ where: { id: userId } })
-      if (!user.disabledDiscuss) {
+      const ipInfo = await IpModel.findOne({ where: { ip: ctx.request.ip }, attributes: ['auth'] })
+
+      if (ipInfo && !ipInfo.auth) {
+        ctx.status = 401
+        ctx.response.body = {
+          message: '该 IP 已被拉入黑名单'
+        }
+      } else if (user.disabledDiscuss) {
+        ctx.status = 401
+        ctx.response.body = {
+          message: '您已被禁言，请文明留言！'
+        }
+      } else {
+        const ip = ctx.request.ip
         if (!commentId) {
           // 添加评论
           const comment = await CommentModel.create({ userId, articleId, content })
@@ -54,17 +68,12 @@ class DiscussController {
           // 添加回复
           await ReplyModel.create({ userId, articleId, content, commentId })
         }
-
+        await IpModel.findOrCreate({ where: { ip }, defaults: { userId, ip } })
         const list = await DiscussController.fetchCommentList(articleId)
 
         EMAIL_NOTICE.enable && sendingEmail(articleId, list, commentId, userId)
-        // ctx.client(200, 'success', list)
+
         ctx.body = list
-      } else {
-        ctx.status = 401
-        ctx.response.body = {
-          message: '您已被禁言，请文明留言！'
-        }
       }
     }
   }

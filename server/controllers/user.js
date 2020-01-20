@@ -4,7 +4,7 @@ const { GITHUB } = require('../config')
 const { decodeQuery } = require('../utils')
 const { comparePassword, encrypt } = require('../utils/bcrypt')
 const { createToken } = require('../utils/token')
-const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } = require('../models')
+const { user: UserModel, comment: CommentModel, reply: ReplyModel, ip: IpModel, sequelize } = require('../models')
 
 /**
  * 读取 github 用户信息
@@ -235,7 +235,9 @@ class UserController {
       const { userId } = ctx.params
       const { notice, disabledDiscuss } = ctx.request.body
       await UserController.updateUserById(userId, { notice, disabledDiscuss })
-      // ctx.client(200)
+      if (typeof disabledDiscuss !== 'undefined') {
+        await IpModel.update({ auth: !disabledDiscuss }, { where: { userId: parseInt(userId) } })
+      }
       ctx.status = 204
     }
   }
