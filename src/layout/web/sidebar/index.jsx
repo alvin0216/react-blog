@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom'
 import Href from '@/components/Href'
 import { Icon, Divider, Tag } from 'antd'
 
+import { Alert } from 'antd'
+import { ANNOUNCEMENT } from '@/config'
+
 import useFetchList from '@/hooks/useFetchList'
 
 function SideBar(props) {
@@ -36,6 +39,8 @@ function SideBar(props) {
           </li>
         ))}
       </ul>
+
+      {ANNOUNCEMENT.enable && <Alert message={ANNOUNCEMENT.content} type='info' />}
 
       <Divider orientation='left'>热门文章</Divider>
       <ul className='article-list'>

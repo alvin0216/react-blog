@@ -14,6 +14,13 @@
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
+### 网站迁移
+
+网站所用的服务器 / 域名 / ssl 证书即将失效，如果已经失效则请访问最新的链接
+
+* 我的博客地址: [郭大大的博客](http://47.112.48.225:4002/)
+* 测试博客地址: [测试使用的郭大大的博客](http://47.112.48.225:4003/) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！
+
 ### 实现功能
 
 - [x] 前台：主页 + 列表页 + 搜索页 + 分类页 + 标签页

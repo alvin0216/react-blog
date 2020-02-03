@@ -2,6 +2,7 @@ import React from 'react'
 import { Icon } from 'antd'
 import SvgIcon from '@/components/SvgIcon'
 
+import Href from '@/components/Href'
 import MyInfo from '@/views/web/about/MyInfo'
 
 // API_BASE_URL
@@ -45,4 +46,15 @@ export const ABOUT = {
   describe: SIDEBAR.subTitle,
   discuss: true, // 关于页面是否开启讨论
   renderMyInfo: <MyInfo /> // 我的介绍 自定义组件 => src/views/web/about/MyInfo.jsx
+}
+
+// 公告 announcement
+export const ANNOUNCEMENT = {
+  enable: true, // 是否开启
+  content: (
+    <>
+      由于服务器期限将至 / ssl 证书过期 / 域名过期，请访问
+      <Href href='http://47.112.48.225:4002/'>最新的博客地址</Href>
+    </>
+  )
 }
