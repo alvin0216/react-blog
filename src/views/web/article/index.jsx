@@ -61,7 +61,7 @@ function Article(props) {
   const isFoldNavigation = useMediaQuery({ query: '(max-width: 1300px)' })
   return (
     <Spin tip='Loading...' spinning={loading}>
-      <div className='app-article' style={{ paddingRight: isFoldNavigation ? 0 : 265 }}>
+      <div className='app-article' style={{ paddingRight: isFoldNavigation ? 0 : 275 }}>
         <div className='post-header'>
           <h1 className='post-title'>{title}</h1>
 
@@ -101,11 +101,12 @@ function Article(props) {
               </div>
             </Drawer>
           </>
-        ) : (
-          <div className='article-navigation'>
-            <Navigation content={content} />
-          </div>
-        )}
+        )
+          : (
+            <div className='article-navigation'>
+              <Navigation content={content} />
+            </div>
+          )}
 
         <Discuss articleId={articleId} commentList={comments} setCommentList={setCommentList} />
       </div>
