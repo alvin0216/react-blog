@@ -7,8 +7,11 @@ import { SIDEBAR, ABOUT } from '@/config'
 import axios from '@/utils/axios'
 import Discuss from '@/components/Discuss'
 
+import { useMediaQuery } from 'react-responsive'
+
 function About(props) {
   const [commentList, setCommentList] = useState([])
+  const iphoneScreen = useMediaQuery({ query: '(max-width: 576px)' })
 
   useEffect(() => {
     const fetchList = () => {
@@ -20,7 +23,7 @@ function About(props) {
   }, [])
 
   return (
-    <div className='app-about'>
+    <div className='app-about' style={{ paddingRight: iphoneScreen ? 0 : 20 }}>
       <Avatar src={SIDEBAR.avatar} />
       <span style={{ paddingLeft: 10 }}>{ABOUT.describe}</span>
       {ABOUT.renderMyInfo || null}
