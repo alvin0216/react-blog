@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
-import { Table, Input, Tag, Form, Switch, Button, Popconfirm } from 'antd'
+import { Table, Input, Tag, Form, Switch, Button, Popconfirm, Select } from 'antd'
 
 import axios from '@/utils/axios'
 import moment from 'moment'
 
 import useAntdTable from '@/hooks/useAntdTable'
 import useBreadcrumb from '@/hooks/useBreadcrumb'
+
+const typeMapList = [
+  { value: 1, label: 'github 用户' },
+  { value: 2, label: '站内用户' }
+]
 
 function AdminUser(props) {
   useBreadcrumb(['用户管理'])
@@ -80,6 +85,18 @@ function AdminUser(props) {
         <Form.Item label='姓名'>
           {getFieldDecorator('username')(
             <Input placeholder='请输入姓名' allowClear />
+          )}
+        </Form.Item>
+
+        <Form.Item label='用户类型'>
+          {getFieldDecorator('type')(
+            <Select style={{ width: 200 }} allowClear>
+              {typeMapList.map(item => (
+                <Select.Option key={item.value} value={item.value}>
+                  {item.label}
+                </Select.Option>
+              ))}
+            </Select>
           )}
         </Form.Item>
 

@@ -172,20 +172,24 @@ class UserController {
   static async getList(ctx) {
     const validator = ctx.validate(ctx.query, {
       username: Joi.string().allow(''),
+      type: Joi.number(), // 检索类型 type = 1 github 用户 type = 2 站内用户 不传则检索所有
       page: Joi.string(),
       pageSize: Joi.number()
     })
 
     if (validator) {
-      const { page = 1, pageSize = 10, username } = ctx.query
+      const { page = 1, pageSize = 10, username, type } = ctx.query
       const where = {
-        role: {
-          $not: 1
-        }
+        role: { $not: 1 }
       }
+
       if (username) {
         where.username = {}
         where.username['$like'] = `%${username}%`
+      }
+
+      if (type) {
+        where.github = parseInt(type) === 1 ? { $not: null } : null
       }
       const result = await UserModel.findAndCountAll({
         where,
