@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Table, Input, Tag, Form, Switch, Button, Popconfirm, Select } from 'antd'
+import { Table, Input, Tag, Form, Switch, Button, Popconfirm, Select, DatePicker } from 'antd'
 
 import axios from '@/utils/axios'
 import moment from 'moment'
@@ -72,6 +72,9 @@ function AdminUser(props) {
     e.preventDefault()
     props.form.validateFields((err, values) => {
       if (!err) {
+        if (Array.isArray(values.rangeDate)) {
+          values.rangeDate = values.rangeDate.map(m => m.format('YYYY-MM-DD'))
+        }
         setQueryParams({ ...queryParams, ...values })
         onSearch({ ...queryParams, ...values })
       }
@@ -97,6 +100,12 @@ function AdminUser(props) {
                 </Select.Option>
               ))}
             </Select>
+          )}
+        </Form.Item>
+
+        <Form.Item label='创建日期'>
+          {getFieldDecorator('rangeDate')(
+            <DatePicker.RangePicker />
           )}
         </Form.Item>
 

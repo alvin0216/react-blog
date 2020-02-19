@@ -173,12 +173,14 @@ class UserController {
     const validator = ctx.validate(ctx.query, {
       username: Joi.string().allow(''),
       type: Joi.number(), // 检索类型 type = 1 github 用户 type = 2 站内用户 不传则检索所有
+      'rangeDate[]': Joi.array(),
       page: Joi.string(),
       pageSize: Joi.number()
     })
 
     if (validator) {
       const { page = 1, pageSize = 10, username, type } = ctx.query
+      const rangeDate = ctx.query['rangeDate[]']
       const where = {
         role: { $not: 1 }
       }
@@ -191,6 +193,11 @@ class UserController {
       if (type) {
         where.github = parseInt(type) === 1 ? { $not: null } : null
       }
+
+      if (Array.isArray(rangeDate) && rangeDate.length === 2) {
+        where.createdAt = { $between: rangeDate }
+      }
+
       const result = await UserModel.findAndCountAll({
         where,
         offset: (page - 1) * pageSize,
