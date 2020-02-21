@@ -7,19 +7,12 @@
 - 具备了代码高亮、权限管理、第三方 `github` 登录、评论与通知、以及邮件通知功能的个人博客...
 - 具备文件导入导出功能，假如你之前用 `hexo` 博客, 那么你可以直接通过导入 `md` 文件迁移你的文章。
 
-* 我的博客地址: [郭大大的博客](https://guodada.fun)
-* 测试博客地址: [测试使用的郭大大的博客](http://test.guodada.fun) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！
+* 我的博客地址: [郭大大的博客](http://47.112.48.225:4002/)
+* 测试博客地址: [测试使用的郭大大的博客](http://47.112.48.225:4003/)) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！
 
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
-
-### 网站迁移
-
-网站所用的服务器 / 域名 / ssl 证书即将失效，如果已经失效则请访问最新的链接
-
-* 我的博客地址: [郭大大的博客](http://47.112.48.225:4002/)
-* 测试博客地址: [测试使用的郭大大的博客](http://47.112.48.225:4003/) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！
 
 ### 实现功能
 
