@@ -58,7 +58,7 @@ const HeaderLeft = props => {
 
   return (
     <div className='header-left'>
-      <SvgIcon type='iconblog' style={{ color: '#055796', width: 16, height: 16 }} />
+      <SvgIcon type='iconblog' style={{ color: '#055796', width: 16, height: 16, transform: 'translateY(-2px)' }} />
       <span className='blog-name'>{HEADER_BLOG_NAME}</span>
       <Dropdown
         overlayClassName='header-dropdown'
