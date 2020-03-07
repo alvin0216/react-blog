@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -14,6 +14,10 @@ function CommentItem(props) {
   const { children, item, userInfo, articleId, commentId, replyId, replyVisible } = props
   const { user } = item
   const [value, setValue] = useState('')
+
+  useEffect(() => {
+    replyVisible && setValue('')
+  }, [replyVisible])
 
   function handleChange(e) {
     setValue(e.target.value)
