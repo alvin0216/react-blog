@@ -69,7 +69,7 @@ class DiscussController {
           await ReplyModel.create({ userId, articleId, content, commentId })
         }
         await IpModel.findOrCreate({ where: { ip }, defaults: { userId, ip } })
-        const list = await DiscussController.fetchCommentList(articleId)
+        const list = await DiscussController.fetchDiscussList(articleId)
 
         EMAIL_NOTICE.enable && sendingEmail(articleId, list, commentId, userId)
 
@@ -106,7 +106,7 @@ class DiscussController {
     }
   }
 
-  static async fetchCommentList(articleId) {
+  static async fetchDiscussList(articleId) {
     const data = await CommentModel.findAndCountAll({
       where: { articleId },
       attributes: ['id', 'content', 'createdAt'],
@@ -119,7 +119,7 @@ class DiscussController {
         { model: UserModel, as: 'user', attributes: { exclude: ['updatedAt', 'password'] } }
       ],
       row: true,
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC'], [ReplyModel, 'createdAt', 'ASC']]
     })
 
     // 格式化 github

@@ -76,16 +76,17 @@ class ArticleController {
             model: CommentModel,
             attributes: ['id', 'content', 'createdAt'],
             include: [
-              { model: UserModel, as: 'user', attributes: ['id', 'username', 'role', 'github'] },
               {
                 model: ReplyModel,
-                attributes: ['id', 'userId', 'content', 'createdAt'],
-                include: [{ model: UserModel, as: 'user', attributes: ['id', 'username', 'role', 'github'] }]
-              }
-            ]
+                attributes: ['id', 'content', 'createdAt'],
+                include: [{ model: UserModel, as: 'user', attributes: { exclude: ['updatedAt', 'password'] } }]
+              },
+              { model: UserModel, as: 'user', attributes: { exclude: ['updatedAt', 'password'] } }
+            ],
+            row: true
           }
         ],
-        order: [[CommentModel, 'createdAt', 'DESC']], // comment model order
+        order: [[CommentModel, 'createdAt', 'DESC'], [[CommentModel, ReplyModel, 'createdAt', 'ASC']]], // comment model order
         row: true
       })
 
@@ -279,7 +280,7 @@ class ArticleController {
       const upStream = fs.createWriteStream(filePath)
       reader.pipe(upStream)
 
-      reader.on('end', function() {
+      reader.on('end', function () {
         console.log('上传成功')
       })
     }
