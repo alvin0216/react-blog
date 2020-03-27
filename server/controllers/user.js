@@ -258,19 +258,15 @@ class UserController {
    * @param {String} githubLoginName - github name
    */
   static async initGithubUser(githubLoginName) {
-    const github = await getGithubInfo(githubLoginName)
-    const temp = await UserController.find({ id: github.id })
-    if (!temp) {
-      UserController.createGithubUser(github, 1)
+    try {
+      const github = await getGithubInfo(githubLoginName)
+      const temp = await UserController.find({ id: github.id })
+      if (!temp) {
+        UserController.createGithubUser(github, 1)
+      }
+    } catch (error) {
+      console.trace('create github user error ==============>', error.message)
     }
-
-    // const tempList = await Promise.all(list.map(username => UserController.find({ username }))) // 查找库里是否有这个用户
-    // list.forEach(async (username, i) => {
-    //   if (!tempList[i]) {
-    //     const result = await getGithubInfo(username)
-    //     UserController.createGithubUser(result, 1)
-    //   }
-    // })
   }
 }
 

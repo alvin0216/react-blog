@@ -22,7 +22,7 @@
     "koa2-cors": "^2.0.6",
     "mysql2": "^1.7.0",
     "nodemailer": "^6.3.0",
-    "sequelize": "^5.18.1"
+    "sequelize": "^5.21.5"
   },
   "devDependencies": {
     "cross-env": "^5.2.1",

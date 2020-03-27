@@ -76,7 +76,8 @@
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "dev:server": "cd server && npm run dev"
   },
   "browserslist": {
     "production": [

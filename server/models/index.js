@@ -7,6 +7,7 @@ const Op = Sequelize.Op
 
 const sequelize = new Sequelize(DATABASE.database, DATABASE.user, DATABASE.password, {
   ...DATABASE.options,
+  logging: false,
   // 在 sequelize V4 版本以后新加了符号运算符来代替 Op.xxx
   // https://sequelize.org/master/manual/querying.html#operators
   operatorsAliases: {
