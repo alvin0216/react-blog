@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import './index.less'
 
 import { Link } from 'react-router-dom'
@@ -15,10 +15,11 @@ import SvgIcon from '@/components/SvgIcon'
 // hooks
 import useFetchList from '@/hooks/useFetchList'
 
-function Preview({ list, showTitle = true }) {
+const LinkList = props => {
+  const { list, showTitle = true } = props
   return (
     <ul className='preview'>
-      {showTitle && <Divider>文章列表</Divider>}
+      {showTitle && <Divider>快速导航</Divider>}
       {list.map(item => (
         <li key={item.id}>
           <Link to={`/article/${item.id}`}>{item.title}</Link>
@@ -28,34 +29,50 @@ function Preview({ list, showTitle = true }) {
   )
 }
 
-function NoDataDesc({ keyword }) {
-  return keyword ? (
-    <span>
-      不存在标题/内容中含有 <span className='keyword'>{keyword}</span> 的文章！
-    </span>
+/**
+ * 快速导航
+*/
+const QuickLink = props => {
+  const isGreaterThan1300 = useMediaQuery({ query: '(min-width: 1300px)' })
+
+  const { list } = props
+
+  const [drawerVisible, setDrawerVisible] = useState(false)
+
+  return isGreaterThan1300 ? (
+    <LinkList list={list} />
   ) : (
-    <span>暂无数据...</span>
+    <>
+      <div className='drawer-btn' onClick={e => setDrawerVisible(true)}>
+        <Icon type='menu-o' className='nav-phone-icon' />
+      </div>
+      <Drawer
+        title='快速导航'
+        placement='right'
+        closable={false}
+        onClose={e => setDrawerVisible(false)}
+        visible={drawerVisible}
+        getContainer={() => document.querySelector('.app-home')}>
+        <LinkList list={list} showTitle={false} />
+      </Drawer>
+    </>
   )
 }
 
-function Home(props) {
-  const [drawerVisible, setDrawerVisible] = useState(false)
-
+const Home = props => {
   const { loading, pagination, dataList } = useFetchList({
     requestUrl: '/article/list',
     queryParams: { pageSize: HOME_PAGESIZE },
     fetchDependence: [props.location.search]
   })
 
-  const list = [...dataList].map(item => {
-    const index = item.content.indexOf('<!--more-->')
-    item.content = translateMarkdown(item.content.slice(0, index))
-    return item
-  })
-
-  const isGreaterThan1300 = useMediaQuery({
-    query: '(min-width: 1300px)'
-  })
+  const list = useMemo(() => {
+    return [...dataList].map(item => {
+      const index = item.content.indexOf('<!--more-->')
+      item.content = translateMarkdown(item.content.slice(0, index))
+      return item
+    })
+  }, [dataList])
 
   // 跳转到文章详情
   function jumpTo(id) {
@@ -63,6 +80,7 @@ function Home(props) {
   }
 
   const { keyword } = decodeQuery(props.location.search)
+
   return (
     <Spin tip='Loading...' spinning={loading}>
       <div className='app-home'>
@@ -94,35 +112,17 @@ function Home(props) {
             </li>
           ))}
         </ul>
-        {list.length > 0 ? (
-          <>
-            {isGreaterThan1300 ? (
-              <Preview list={list} />
-            ) : (
-              <>
-                <div className='drawer-btn' onClick={e => setDrawerVisible(true)}>
-                  <Icon type='menu-o' className='nav-phone-icon' />
-                </div>
-                <Drawer
-                  title='文章列表'
-                  placement='right'
-                  closable={false}
-                  onClose={e => setDrawerVisible(false)}
-                  visible={drawerVisible}
-                  getContainer={() => document.querySelector('.app-home')}>
-                  <Preview list={list} showTitle={false} />
-                </Drawer>
-              </>
-            )}
-          </>
-        ) : (
-          <>
-            {keyword && (
-              <div className='no-data'>
-                <Empty description={<NoDataDesc keyword={keyword} />} />
-              </div>
-            )}
-          </>
+        <QuickLink list={list} />
+
+        {/* 结果为空 */}
+        {list.length === 0 && keyword && (
+          <div className='no-data'>
+            <Empty description={(
+              <span>
+                不存在标题/内容中含有 <span className='keyword'>{keyword}</span> 的文章！
+              </span>
+            )} />
+          </div>
         )}
 
         <Pagination {...pagination} onChange={

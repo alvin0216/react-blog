@@ -8,6 +8,7 @@ import { DISCUSS_AVATAR } from '@/config'
 import axios from '@/utils/axios'
 import { calcCommentsCount } from '@/utils'
 import { loginout } from '@/redux/user/actions'
+import useAjaxLoading from '@/hooks/useAjaxLoading'
 
 // components
 import SvgIcon from '@/components/SvgIcon'
@@ -44,7 +45,7 @@ function Discuss(props) {
 
   const { commentList, articleId } = props
   const [value, setValue] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+  const [submitting, withLoading] = useAjaxLoading()
 
   const renderDropdownMenu = () => {
     return username ? (
@@ -84,16 +85,12 @@ function Discuss(props) {
     if (!value) return
     if (!userInfo.username) return message.warn('您未登陆，请登录后再试。')
 
-    setSubmitting(true)
-
-    axios
-      .post('/discuss', { articleId: props.articleId, content: value, userId: userInfo.userId })
-      .then(res => {
-        setSubmitting(false)
-        setValue('')
-        props.setCommentList(res.rows)
-      })
-      .catch(e => setSubmitting(false))
+    withLoading(
+      axios.post('/discuss', { articleId: props.articleId, content: value, userId: userInfo.userId })
+    ).then(res => {
+      setValue('')
+      props.setCommentList(res.rows)
+    })
   }
 
   return (

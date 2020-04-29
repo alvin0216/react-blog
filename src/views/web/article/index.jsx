@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive'
 // methods
 import axios from '@/utils/axios'
 import { translateMarkdown, calcCommentsCount } from '@/utils'
+import useAjaxLoading from '@/hooks/useAjaxLoading'
 
 // components
 import { Drawer, Icon, Divider, Spin } from 'antd'
@@ -14,7 +15,8 @@ import Navigation from './Navigation'
 import Discuss from '@/components/Discuss'
 
 function Article(props) {
-  const [loading, setLoading] = useState(true)
+  const [loading, withLoading] = useAjaxLoading()
+
   const [article, setArticle] = useState({
     title: '',
     content: '',
@@ -35,21 +37,14 @@ function Article(props) {
   }, [])
 
   useEffect(() => {
-    const fetchData = id => {
-      setLoading(true)
-      axios
-        .get(`/article/${id}`)
-        .then(res => {
-          res.content = translateMarkdown(res.content)
-          setArticle(res)
-          setLoading(false)
-        })
-        .catch(e => {
-          props.history.push('/404')
-        })
-    }
-    fetchData(props.match.params.id)
-    /*eslint react-hooks/exhaustive-deps: "off"*/
+    withLoading(axios.get(`/article/${props.match.params.id}`))
+      .then(res => {
+        res.content = translateMarkdown(res.content)
+        setArticle(res)
+      })
+      .catch(e => {
+        props.history.push('/404')
+      })
   }, [props.match.params.id])
 
   function setCommentList(list) {
