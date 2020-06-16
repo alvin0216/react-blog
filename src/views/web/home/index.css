@@ -1,0 +1,126 @@
+.app-home {
+  min-height: 10vh;
+  padding-bottom: 40px;
+}
+.app-home .app-home-list {
+  width: calc(100% - 292px);
+}
+.app-home .app-home-list-item {
+  position: relative;
+  border: 1px solid #ebedf0;
+  padding: 16px 24px;
+  margin-bottom: 10px;
+  transition: all 0.2s linear;
+}
+.app-home .app-home-list-item:hover {
+  background: #effbff;
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.1);
+  transform: translate3d(0, -5px 0);
+}
+.app-home .app-home-list-item .title {
+  color: #394d69;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.app-home .app-home-list-item .title:hover {
+  color: #48b2ff;
+}
+.app-home .app-home-list-item .posted-time {
+  font-size: 0.5em;
+  padding-left: 20px;
+}
+.app-home .app-home-list-item .content {
+  cursor: pointer;
+  max-height: 260px;
+  overflow: hidden;
+}
+.app-home .app-home-list-item .list-item-others {
+  vertical-align: middle;
+  margin-top: 10px;
+  color: rgba(0, 0, 0, 0.45);
+}
+.app-home .app-home-list-item .list-item-others a {
+  color: inherit;
+}
+.app-home .preview {
+  position: fixed;
+  width: 260px;
+  top: 90px;
+  right: 20px;
+  list-style-type: circle;
+}
+.app-home .preview .title {
+  color: #394d69;
+  font-size: 22px;
+}
+.app-home .preview li {
+  cursor: pointer;
+  display: block;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: -1px;
+}
+.app-home .preview li a {
+  color: #8590a6;
+  display: block;
+}
+.app-home .preview li:hover {
+  background: #f0f2f5;
+}
+.app-home .preview li:hover a {
+  color: #40a9ff;
+}
+.app-home .app-pagination {
+  margin-right: 292px;
+}
+.app-home .ant-drawer-body {
+  padding: 0;
+  width: 256px;
+  height: 100%;
+}
+.app-home .ant-drawer-body .preview {
+  position: static;
+  margin: 0;
+  margin-top: 10px;
+}
+.app-home .ant-drawer-body .preview li {
+  padding-left: 20px;
+}
+.app-home .ant-drawer-body .preview li a {
+  line-height: 26px;
+}
+.app-home .drawer-btn {
+  position: fixed;
+  width: 41px;
+  height: 41px;
+  top: 20vh;
+  right: 0;
+  cursor: pointer;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  border-radius: 4px 0 0 4px;
+  text-align: center;
+  line-height: 41px;
+  z-index: 999;
+  background: #fff;
+}
+.app-home .no-data {
+  margin-top: 24%;
+}
+.app-home .no-data .keyword {
+  font-size: 18px;
+  font-weight: bold;
+  color: #f00;
+}
+@media screen and (max-width: 1300px) {
+  .app-home .app-home-list {
+    width: 100%;
+  }
+  .app-home .app-pagination {
+    margin-right: 0;
+  }
+}

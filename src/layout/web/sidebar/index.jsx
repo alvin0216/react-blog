@@ -27,7 +27,7 @@ function SideBar(props) {
   })
 
   return (
-    <div className='app-sidebar'>
+    <aside className='app-sidebar'>
       <img src={SIDEBAR.avatar} className='sider-avatar' alt='' />
       <h2 className='title'>{SIDEBAR.title}</h2>
       <h5 className='sub-title'>{SIDEBAR.subTitle}</h5>
@@ -59,7 +59,7 @@ function SideBar(props) {
           </Tag>
         ))}
       </div>
-    </div>
+    </aside>
   )
 }
 
