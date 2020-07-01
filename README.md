@@ -7,8 +7,8 @@
 - 具备了代码高亮、权限管理、第三方 `github` 登录、评论与通知、以及邮件通知功能的个人博客...
 - 具备文件导入导出功能，假如你之前用 `hexo` 博客, 那么你可以直接通过导入 `md` 文件迁移你的文章。
 
-* 我的博客地址: [郭大大的博客](http://47.112.48.225:4002/)
-* 测试博客地址: [测试使用的郭大大的博客](http://47.112.48.225:4003/)) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！
+* 我的博客地址: [郭大大的博客](https://blog.alvin.run)
+* 测试博客地址: [测试使用的郭大大的博客](https://test.alvin.run)) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！
 
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
@@ -106,12 +106,12 @@ const verifyList1 = [
   { regexp: /\/article\/output/, required: 'get', verifyTokenBy: 'url' }, // 导出文章 verifyTokenBy 从哪里验证 token
   { regexp: /\/article/, required: 'post, put, delete' }, // 普通用户 禁止修改或者删除、添加文章
   { regexp: /\/discuss/, required: 'delete, post' }, // 普通用户 禁止删除评论
-  { regexp: /\/user/, required: 'get, put, delete' } // 普通用户 禁止获取用户、修改用户、以及删除用户
+  { regexp: /\/user/, required: 'get, put, delete' }, // 普通用户 禁止获取用户、修改用户、以及删除用户
 ]
 
 // role === 2 需要权限的路由
 const verifyList2 = [
-  { regexp: /\/discuss/, required: 'post' } // 未登录用户 禁止评论
+  { regexp: /\/discuss/, required: 'post' }, // 未登录用户 禁止评论
 ]
 
 /**
@@ -121,7 +121,7 @@ const verifyList2 = [
  */
 function checkAuth(method, url) {
   function _verify(list, role) {
-    const target = list.find(v => {
+    const target = list.find((v) => {
       return v.regexp.test(url) && (v.required === 'all' || v.required.toUpperCase().includes(method))
     })
 
@@ -177,8 +177,8 @@ export const SIDEBAR = {
   // 个人主页
   homepages: {
     github: 'https://github.com/gershonv',
-    juejin: 'https://juejin.im/user/5acac6c4f265da2378408f92'
-  }
+    juejin: 'https://juejin.im/user/5acac6c4f265da2378408f92',
+  },
 }
 
 // === discuss avatar
@@ -188,14 +188,14 @@ export const DISCUSS_AVATAR = SIDEBAR.avatar // 评论框博主头像
 export const GITHUB = {
   enable: true, // github 第三方授权开关
   client_id: '', // Setting > Developer setting > OAuth applications => client_id
-  url: 'https://github.com/login/oauth/authorize' // 跳转的登录的地址
+  url: 'https://github.com/login/oauth/authorize', // 跳转的登录的地址
 }
 
 export const ABOUT = {
   avatar: SIDEBAR.avatar,
   describe: SIDEBAR.subTitle,
   discuss: true, // 关于页面是否开启讨论
-  renderMyInfo: <MyInfo /> // 我的介绍 自定义组件 => src/views/web/about/MyInfo.jsx
+  renderMyInfo: <MyInfo />, // 我的介绍 自定义组件 => src/views/web/about/MyInfo.jsx
 }
 ```
 
@@ -212,7 +212,7 @@ const config = {
     client_secret: '',
     access_token_url: 'https://github.com/login/oauth/access_token',
     fetch_user_url: 'https://api.github.com/user', // 用于 oauth2
-    fetch_user: 'https://api.github.com/users/' // fetch user url https://api.github.com/users/gershonv
+    fetch_user: 'https://api.github.com/users/', // fetch user url https://api.github.com/users/gershonv
   },
   EMAIL_NOTICE: {
     // 邮件通知服务
@@ -224,16 +224,16 @@ const config = {
       secure: true, // true for 465, false for other ports
       auth: {
         user: 'guodadablog@163.com', // generated ethereal user
-        pass: '123456' // generated ethereal password 授权码 而非 密码
-      }
+        pass: '123456', // generated ethereal password 授权码 而非 密码
+      },
     },
     subject: '郭大大的博客 - 您的评论获得新的回复！', // 主题
     text: '您的评论获得新的回复！',
-    WEB_HOST: 'http://127.0.0.1:3000' // email callback url
+    WEB_HOST: 'http://127.0.0.1:3000', // email callback url
   },
   TOKEN: {
     secret: 'guo-test', // secret is very important!
-    expiresIn: '720h' // token 有效期
+    expiresIn: '720h', // token 有效期
   },
   DATABASE: {
     database: 'test',
@@ -246,15 +246,15 @@ const config = {
         max: 5,
         min: 0,
         acquire: 30000,
-        idle: 10000
+        idle: 10000,
       },
       define: {
         timestamps: false, // 默认不加时间戳
-        freezeTableName: true // 表名默认不加 s
+        freezeTableName: true, // 表名默认不加 s
       },
-      timezone: '+08:00'
-    }
-  }
+      timezone: '+08:00',
+    },
+  },
 }
 
 // 部署的环境变量设置
@@ -266,7 +266,7 @@ if (!devMode) {
     ...config.DATABASE,
     database: '', // 数据库名
     user: '', // 账号
-    password: '' // 密码
+    password: '', // 密码
   }
 
   // 配置 github 授权
@@ -281,7 +281,7 @@ if (!devMode) {
   // config.EMAIL_NOTICE.enable = true
   config.EMAIL_NOTICE.transporterConfig.auth = {
     user: 'guodadablog@163.com', // generated ethereal user
-    pass: '123456XXX' // generated ethereal password 授权码 而非 密码
+    pass: '123456XXX', // generated ethereal password 授权码 而非 密码
   }
   config.EMAIL_NOTICE.WEB_HOST = 'https://guodada.fun'
 }
