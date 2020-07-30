@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import '@/styles/app.less'
 import { Layout, Icon, Row, Col, BackTop } from 'antd'
 
 import Header from './header'

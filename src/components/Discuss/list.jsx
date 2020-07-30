@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import axios from '@/utils/axios'
-import { random, groupBy, translateMarkdown } from '@/utils'
+import { translateMarkdown } from '@/utils'
 import moment from 'moment'
 import AppAvatar from '@/components/Avatar'
 import { Comment, Button, Tooltip, Input, Icon, Popconfirm, message } from 'antd'
@@ -109,63 +109,42 @@ function CommentItem(props) {
   )
 }
 
-@connect(state => ({
-  userInfo: state.user
-}))
-class CommentList extends React.Component {
-  static propTypes = {
-    commentList: PropTypes.array,
-    articleId: PropTypes.number,
-    setCommentList: PropTypes.func
-  }
+const CommentList = props => {
+  const userInfo = useSelector(state => state.user)
+  const { commentList, articleId } = props
+  const [replyTarget, setReplyTarget] = useState({ commentId: 0, replyId: 0 })
 
-  state = {
-    replyTarget: {
-      commentId: 0,
-      replyId: 0
-    }
-  }
-
-  setReplyTarget = replyTarget => {
-    this.setState({ replyTarget })
-  }
-
-  render() {
-    const { commentList, userInfo, articleId } = this.props
-    const { replyTarget } = this.state
-
-    return (
-      <div className='discuss-list'>
-        {commentList.map(comment => (
-          <CommentItem
-            item={comment}
-            key={comment.id}
-            articleId={articleId}
-            userInfo={userInfo}
-            commentId={comment.id}
-            setCommentList={this.props.setCommentList}
-            commentList={this.props.commentList}
-            onReply={this.setReplyTarget}
-            replyVisible={replyTarget.commentId === comment.id && !replyTarget.replyId}>
-            {comment.replies.map(reply => (
-              <CommentItem
-                item={reply}
-                key={reply.id}
-                articleId={articleId}
-                userInfo={userInfo}
-                commentId={comment.id}
-                replyId={reply.id}
-                setCommentList={this.props.setCommentList}
-                commentList={this.props.commentList}
-                onReply={this.setReplyTarget}
-                replyVisible={replyTarget.commentId === comment.id && replyTarget.replyId === reply.id}
-              />
-            ))}
-          </CommentItem>
-        ))}
-      </div>
-    )
-  }
+  return (
+    <div className='discuss-list'>
+      {commentList.map(comment => (
+        <CommentItem
+          item={comment}
+          key={comment.id}
+          articleId={articleId}
+          userInfo={userInfo}
+          commentId={comment.id}
+          setCommentList={props.setCommentList}
+          commentList={props.commentList}
+          onReply={setReplyTarget}
+          replyVisible={replyTarget.commentId === comment.id && !replyTarget.replyId}>
+          {comment.replies.map(reply => (
+            <CommentItem
+              item={reply}
+              key={reply.id}
+              articleId={articleId}
+              userInfo={userInfo}
+              commentId={comment.id}
+              replyId={reply.id}
+              setCommentList={props.setCommentList}
+              commentList={props.commentList}
+              onReply={setReplyTarget}
+              replyVisible={replyTarget.commentId === comment.id && replyTarget.replyId === reply.id}
+            />
+          ))}
+        </CommentItem>
+      ))}
+    </div>
+  )
 }
 
 export default CommentList

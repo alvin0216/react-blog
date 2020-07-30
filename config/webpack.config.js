@@ -25,7 +25,15 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin')
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter')
 const CompressionPlugin = require('compression-webpack-plugin')
+
+// ==== plugins
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
+const os = require('os')
+const HappyPack = require('happypack')
+// 手动创建进程池
+const happyThreadPool =  HappyPack.ThreadPool({ size: os.cpus().length })
+// ==== plugins end
 
 const postcssNormalize = require('postcss-normalize')
 
@@ -43,10 +51,12 @@ const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10
 const useTypeScript = fs.existsSync(paths.appTsConfig)
 
 // style files regexes
-const cssRegex = /\.(css|less)$/
+const cssRegex = /\.css$/
 const cssModuleRegex = /\.module\.css$/
 const sassRegex = /\.(scss|sass)$/
 const sassModuleRegex = /\.module\.(scss|sass)$/
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -105,10 +115,6 @@ module.exports = function(webpackEnv) {
           ],
           sourceMap: isEnvProduction && shouldUseSourceMap
         }
-      },
-      {
-        loader: require.resolve('less-loader'),
-        options: cssOptions
       }
     ].filter(Boolean)
     if (preProcessor) {
@@ -183,6 +189,9 @@ module.exports = function(webpackEnv) {
       // Prevents conflicts when multiple Webpack runtimes (from different apps)
       // are used on the same page.
       jsonpFunction: `webpackJsonp${appPackageJson.name}`
+    },
+    externals: {
+      'highlight.js': 'hljs'
     },
     optimization: {
       minimize: isEnvProduction,
@@ -261,19 +270,18 @@ module.exports = function(webpackEnv) {
             chunks: 'initial',
             minChunks: 2
           },
-          'react-vendor': {
-            test: /[\\/]node_modules[\\/](react|react-dom|redux|react-router-dom)[\\/]/,
-            name: 'react-vendor',
-            priority: 3,
-            reuseExistingChunk: false
-          },
+          // 'react-vendor': {
+          //   test: /[\\/]node_modules[\\/](react|react-dom|redux|react-router-dom)[\\/]/,
+          //   name: 'react-vendor',
+          //   priority: 3,
+          //   reuseExistingChunk: false
+          // },
           'antd-vendor': {
             test: /[\\/]node_modules[\\/](antd)[\\/]/,
             name: 'antd-vendor',
             priority: 2,
             reuseExistingChunk: false
           },
-
         }
       },
       // Keep the runtime chunk separated to enable long term caching
@@ -362,50 +370,14 @@ module.exports = function(webpackEnv) {
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
               include: paths.appSrc,
-              loader: require.resolve('babel-loader'),
-              options: {
-                customize: require.resolve('babel-preset-react-app/webpack-overrides'),
-
-                plugins: [
-                  [
-                    require.resolve('babel-plugin-named-asset-import'),
-                    {
-                      loaderMap: {
-                        svg: {
-                          ReactComponent: '@svgr/webpack?-svgo,+titleProp,+ref![path]'
-                        }
-                      }
-                    }
-                  ]
-                ],
-                // This is a feature of `babel-loader` for webpack (not Babel itself).
-                // It enables caching results in ./node_modules/.cache/babel-loader/
-                // directory for faster rebuilds.
-                cacheDirectory: true,
-                cacheCompression: isEnvProduction,
-                compact: isEnvProduction
-              }
+              loader: 'happypack/loader?id=babelInside'
             },
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
             {
               test: /\.(js|mjs)$/,
               exclude: /@babel(?:\/|\\{1,2})runtime/,
-              loader: require.resolve('babel-loader'),
-              options: {
-                babelrc: false,
-                configFile: false,
-                compact: false,
-                presets: [[require.resolve('babel-preset-react-app/dependencies'), { helpers: true }]],
-                cacheDirectory: true,
-                cacheCompression: isEnvProduction,
-
-                // If an error happens in a package, it's possible to be
-                // because it was compiled. Thus, we don't want the browser
-                // debugger to show the original code. Instead, the code
-                // being evaluated would be much more helpful.
-                sourceMaps: false
-              }
+              loader: 'happypack/loader?id=babelOutside',              
             },
             // "postcss" loader applies autoprefixer to our CSS.
             // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -437,6 +409,24 @@ module.exports = function(webpackEnv) {
                 modules: true,
                 getLocalIdent: getCSSModuleLocalIdent
               })
+            },
+            {
+              test: lessRegex,
+              exclude: lessModuleRegex,
+              use: getStyleLoaders({
+                importLoaders: 1,
+                sourceMap: isEnvProduction && shouldUseSourceMap
+              }, 'less-loader'),
+              sideEffects: true
+            },
+            {
+              test: lessModuleRegex,
+              use: getStyleLoaders({
+                importLoaders: 1,
+                sourceMap: isEnvProduction && shouldUseSourceMap,
+                modules: true,
+                getLocalIdent: getCSSModuleLocalIdent
+              }, 'less-loader')
             },
             // Opt-in support for SASS (using .scss or .sass extensions).
             // By default we support SASS Modules with the
@@ -623,7 +613,70 @@ module.exports = function(webpackEnv) {
           formatter: isEnvProduction ? typescriptFormatter : undefined
         }),
       isEnvProduction && new CompressionPlugin(),
-      // isEnvProduction && new BundleAnalyzerPlugin()
+      new HappyPack({
+        id: 'babelInside',
+        threadPool: happyThreadPool, // 指定进程池
+        loaders: [
+          {
+            loader: 'babel-loader',
+            options: {
+              customize: require.resolve('babel-preset-react-app/webpack-overrides'),
+
+              plugins: [
+                [
+                  require.resolve('babel-plugin-named-asset-import'),
+                  {
+                    loaderMap: {
+                      svg: {
+                        ReactComponent: '@svgr/webpack?-svgo,+titleProp,+ref![path]'
+                      }
+                    }
+                  }
+                ]
+              ],
+              // This is a feature of `babel-loader` for webpack (not Babel itself).
+              // It enables caching results in ./node_modules/.cache/babel-loader/
+              // directory for faster rebuilds.
+              cacheDirectory: true,
+              cacheCompression: isEnvProduction,
+              compact: isEnvProduction
+            }
+          }
+        ]
+      }),
+      new HappyPack({
+        id: 'babelOutside',
+        threadPool: happyThreadPool, // 指定进程池
+        loaders: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: false,
+              configFile: false,
+              compact: false,
+              presets: [[require.resolve('babel-preset-react-app/dependencies'), { helpers: true }]],
+              cacheDirectory: true,
+              cacheCompression: isEnvProduction,
+
+              // If an error happens in a package, it's possible to be
+              // because it was compiled. Thus, we don't want the browser
+              // debugger to show the original code. Instead, the code
+              // being evaluated would be much more helpful.
+              sourceMaps: false
+            }
+          }
+        ]
+      }),
+
+      isEnvProduction && new BundleAnalyzerPlugin(),
+      new webpack.DllReferencePlugin({
+        manifest: path.resolve(__dirname, '../dll/manifest.json')
+      }),
+      new AddAssetHtmlPlugin([
+        { filepath: path.resolve(__dirname, '../dll/react.js') },
+        { filepath: path.resolve(__dirname, '../dll/redux.js') },
+        { filepath: path.resolve(__dirname, '../dll/router.js') }
+      ])
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.

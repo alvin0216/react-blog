@@ -14,7 +14,7 @@ export default {
     { path: 'categories/:name', component: lazy(() => import('@/views/web/tag')) },
     { path: 'tags/:name', component: lazy(() => import('@/views/web/tag')) },
     { path: '/github', component: GITHUB.enable && lazy(() => import('@/components/GithubLogining')) },
-    { path: '/about', component: lazy(() => import('@/views/web/home')) },
+    { path: '/about', component: lazy(() => import('@/views/web/about')) },
     { path: '*', component: lazy(() => import('@/components/404')) },
   ],
 }

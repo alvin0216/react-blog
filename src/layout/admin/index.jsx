@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import '@/styles/admin.less'
 
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 
