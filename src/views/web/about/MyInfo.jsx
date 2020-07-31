@@ -48,12 +48,12 @@ const MyInfo = () => {
           <Icon type='qq' /> 434358603
           <Divider type='vertical' />
           <SvgIcon type='iconemail' style={{ marginRight: 5, transform: 'translateY(2px)' }} />
-          <a href='mailto:gershonv@163.com'>gershonv@163.com</a>
+          <a href='mailto:alvin00216@163.com'>alvin00216@163.com</a>
         </li>
         <li>坐标：广州市</li>
         <li>
           其他博客地址：
-          <Href href='https://gershonv.github.io/'>hexo 博客</Href>
+          <Href href='https://alvin.run'>alvin's note</Href>
           <Divider type='vertical' />
           <Href href='https://juejin.im/user/5acac6c4f265da2378408f92'>掘金主页</Href>
         </li>
