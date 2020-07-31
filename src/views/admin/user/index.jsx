@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Table, Input, Tag, Form, Switch, Button, Popconfirm, Select, DatePicker } from 'antd'
 
 import axios from '@/utils/axios'
-import moment from 'moment'
+import dayjs from '@/utils/dayjs'
 
 import useAntdTable from '@/hooks/useAntdTable'
 import useBreadcrumb from '@/hooks/useBreadcrumb'
@@ -52,7 +52,7 @@ function AdminUser(props) {
       {
         title: '注册时间',
         dataIndex: 'createdAt',
-        sorter: (a, b) => (moment(a.createdAt).isBefore(b.createdAt) ? 1 : -1)
+        sorter: (a, b) => (dayjs(a.createdAt).isBefore(b.createdAt) ? 1 : -1)
       },
       {
         dataIndex: 'id',

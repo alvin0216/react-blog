@@ -1764,6 +1764,13 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
+antd-dayjs-webpack-plugin@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/antd-dayjs-webpack-plugin/download/antd-dayjs-webpack-plugin-1.0.0.tgz#e3f4b0bce3985aa0d75a36341b3f9f67b486423a"
+  integrity sha1-4/SwvOOYWqDXWjY0Gz+fZ7SGQjo=
+  dependencies:
+    dayjs "*"
+
 antd@^3.26.6:
   version "3.26.8"
   resolved "https://registry.npm.taobao.org/antd/download/antd-3.26.8.tgz#e40982c5cdb6c5c2c5f037ead27889b5f71e4ea3"
@@ -3445,6 +3452,11 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     abab "^2.0.0"
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
+
+dayjs@*, dayjs@^1.8.31:
+  version "1.8.31"
+  resolved "https://registry.npm.taobao.org/dayjs/download/dayjs-1.8.31.tgz#0cd1114c2539dd5ad9428be0c38df6d4bb40b9d3"
+  integrity sha1-DNERTCU53VrZQovgw4321LtAudM=
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"

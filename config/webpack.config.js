@@ -27,6 +27,7 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter')
 const CompressionPlugin = require('compression-webpack-plugin')
 
 // ==== plugins
+const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
 const os = require('os')
@@ -613,6 +614,9 @@ module.exports = function(webpackEnv) {
           formatter: isEnvProduction ? typescriptFormatter : undefined
         }),
       isEnvProduction && new CompressionPlugin(),
+      new AntdDayjsWebpackPlugin({
+        preset: 'antdv3'
+      }),
       new HappyPack({
         id: 'babelInside',
         threadPool: happyThreadPool, // 指定进程池

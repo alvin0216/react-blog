@@ -5,7 +5,7 @@ import { Table, Form, Tag, Switch, message, Input, Button, Popconfirm, Select } 
 import axios from '@/utils/axios'
 
 import { Link } from 'react-router-dom'
-import moment from 'moment'
+import dayjs from '@/utils/dayjs'
 import download from '@/utils/download'
 
 import useAntdTable from '@/hooks/useAntdTable'
@@ -62,12 +62,12 @@ function ArticleManager(props) {
       {
         title: '发布时间',
         dataIndex: 'createdAt',
-        sorter: (a, b) => (moment(a.createdAt).isBefore(b.createdAt) ? 1 : -1)
+        sorter: (a, b) => (dayjs(a.createdAt).isBefore(b.createdAt) ? 1 : -1)
       },
       {
         title: '修改时间',
         dataIndex: 'updatedAt',
-        sorter: (a, b) => (moment(a.updatedAt).isBefore(b.updatedAt) ? 1 : -1)
+        sorter: (a, b) => (dayjs(a.updatedAt).isBefore(b.updatedAt) ? 1 : -1)
       },
       {
         dataIndex: 'id',

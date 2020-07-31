@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
 
 import axios from '@/utils/axios'
 import { translateMarkdown } from '@/utils'
-import moment from 'moment'
+import dayjs from '@/utils/dayjs'
 import AppAvatar from '@/components/Avatar'
 import { Comment, Button, Tooltip, Input, Icon, Popconfirm, message } from 'antd'
 
@@ -85,7 +84,7 @@ function CommentItem(props) {
       }
       datetime={
         <Tooltip title={item.createdAt}>
-          <span>{moment(item.createdAt).fromNow()}</span>
+          <span>{dayjs(item.createdAt).fromNow()}</span>
         </Tooltip>
       }>
       {replyVisible && (
