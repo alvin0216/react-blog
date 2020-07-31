@@ -6,7 +6,7 @@ import Href from '@/components/Href'
 import MyInfo from '@/views/web/about/MyInfo'
 
 // API_BASE_URL
-export const API_BASE_URL = 'http://47.112.48.225:6002'
+export const API_BASE_URL = 'http://localhost:6060'
 
 // project config
 export const HEADER_BLOG_NAME = '郭大大的博客' // header title 显示的名字
@@ -15,11 +15,11 @@ export const HEADER_BLOG_NAME = '郭大大的博客' // header title 显示的�
 export const SIDEBAR = {
   avatar: require('@/assets/images/avatar.jpeg'), // 侧边栏头像
   title: '郭大大', // 标题
-  subTitle: '前端打杂人员，略微代码洁癖', // 子标题
+  subTitle: '学而知不足', // 子标题
   // 个人主页
   homepages: {
     github: {
-      link: 'https://github.com/gershonv',
+      link: 'https://github.com/alvin0216',
       icon: <Icon type='github' theme='filled' className='homepage-icon' />
     },
     juejin: {
@@ -53,8 +53,8 @@ export const ANNOUNCEMENT = {
   enable: true, // 是否开启
   content: (
     <>
-      由于服务器期限将至 / ssl 证书过期 / 域名过期，请访问
-      <Href href='http://47.112.48.225:4002/'>最新的博客地址</Href>
+      个人笔记网站，请访问
+      <Href href='https://alvin.run'> alvin's note</Href>
     </>
   )
 }
