@@ -135,7 +135,7 @@ function Edit(props) {
         disabled={!title}
         className='action-icon'
         title={editId ? '更新' : '新增'}
-        icon={editId ? 'sync' : 'plus'}
+        icon={editId ? 'file-sync' : 'plus'}
         onClick={() => {
           editId ? update() : add()
         }}

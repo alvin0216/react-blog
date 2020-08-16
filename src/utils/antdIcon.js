@@ -5,6 +5,7 @@ export { default as GithubFill } from '@ant-design/icons/lib/fill/GithubFill'
 export { default as GithubOutline } from '@ant-design/icons/lib/outline/GithubOutline'
 
 export { default as LoadingOutline } from '@ant-design/icons/lib/outline/LoadingOutline'
+export { default as FileSync } from '@ant-design/icons/lib/outline/FileSyncOutline'
 
 export { default as FolderOpenOutline } from '@ant-design/icons/lib/outline/FolderOpenOutline'
 
