@@ -7,23 +7,27 @@ import SvgIcon from '@/components/SvgIcon'
 
 const skills = [
   {
-    label: 'HTML、CSS、Javascript：能熟练开发符合 W3C 标准的页面！',
+    label: '具备扎实的 Javascript 基础，熟练使用 ES6+ 语法。',
     rate: 3
   },
   {
-    label: 'react vue 框架：熟练掌握使用！',
+    label: '熟悉 React 并理解其原理，熟悉 Vue 框架及其用法。',
     rate: 3
   },
   {
-    label: ' es6：日常开发必备，以及掌握基本面向对象编程实现！！',
+    label: '熟练使用 Webpack 打包工具，熟悉常用工程化和模块化方案。',
     rate: 3
   },
   {
-    label: 'webpack: 可以对脚手架进行针对性的打包配置！',
+    label: '熟悉 Koa、Mysql，针对需求可以做到简单的数据库设计、接口的开发与设计！',
     rate: 2
   },
   {
-    label: 'node mysql：针对需求可以做到简单的数据库设计、接口的开发与设计！',
+    label: '熟悉 HTTP 协议，缓存、性能优化、安全等，了解浏览器原理。',
+    rate: 2
+  },
+  {
+    label: '熟悉常用的算法与数据结构',
     rate: 2
   }
 ]
@@ -72,14 +76,13 @@ const MyInfo = () => {
           其他
           <ul>
             <li>常用开发工具： vscode、webstorm、git</li>
-            <li>熟悉的 UI 工具： antd、element-ui、vux</li>
-            <li>良好的代码习惯： 略微代码洁癖、注释规范 jsdoc</li>
+            <li>熟悉的 UI 框架： antd、element-ui、vux</li>
+            <li>具备良好的编码风格和习惯，团队规范意识，乐于分享</li>
           </ul>
         </li>
         <li>
           个人
           <ul>
-            <li>偶尔玩玩游戏、看看书</li>
             <li>欢迎交流！</li>
           </ul>
         </li>
