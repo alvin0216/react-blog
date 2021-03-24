@@ -45,12 +45,12 @@ const MyInfo = () => {
       <Divider orientation='left'>关于我</Divider>
 
       <ul className='about-list'>
-        <li>姓名：郭少威</li>
+        <li>姓名：Guodada</li>
         <li>学历专业：本科 软件工程</li>
         <li>
           联系方式：
-          <Icon type='qq' /> 434358603
-          <Divider type='vertical' />
+          {/* <Icon type='qq' /> 434358603
+          <Divider type='vertical' /> */}
           <SvgIcon type='iconemail' style={{ marginRight: 5, transform: 'translateY(2px)' }} />
           <a href='mailto:alvin00216@163.com'>alvin00216@163.com</a>
         </li>
