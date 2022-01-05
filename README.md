@@ -8,7 +8,10 @@
 - 具备文件导入导出功能，假如你之前用 `hexo` 博客, 那么你可以直接通过导入 `md` 文件迁移你的文章。
 
 * 我的博客地址: [郭大大的博客](https://blog.alvin.run)
-* 测试博客地址: [测试使用的郭大大的博客](https://test.alvin.run)) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！
+
+声明：博客仅做展示使用，（之前被比特币攻击了），所需数据已重置。
+
+<!-- * 测试博客地址: [测试使用的郭大大的博客](https://test.alvin.run)) `admin/admin` 为博主账号 小伙伴可以使用看看博客的完整功能！ -->
 
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
