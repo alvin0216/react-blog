@@ -1,3 +1,7 @@
+## 声明
+
+本项目已不再维护，项目已经升级到 ssr 版本，沿用并改进了 UI。新项目地址 [remix-ssr-blog](https://github.com/alvin0216/remix-ssr-blog)。欢迎继续关注！
+
 ## react hooks + koa + mysql
 
 > 一个及其简洁的个人博客系统、即插即用，如果你想使用这个博客、动动手改改配置即可使用！！
