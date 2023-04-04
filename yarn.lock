@@ -2824,9 +2824,9 @@ codemirror-spell-checker@1.1.2:
     typo-js "*"
 
 codemirror@^5.50.2:
-  version "5.51.0"
-  resolved "https://registry.npm.taobao.org/codemirror/download/codemirror-5.51.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcodemirror%2Fdownload%2Fcodemirror-5.51.0.tgz#7746caaf5223e68f5c55ea11e2f3cc82a9a3929e"
-  integrity sha1-d0bKr1Ij5o9cVeoR4vPMgqmjkp4=
+  version "5.61.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.61.0.tgz#318e5b034a707207948b92ffc2862195e8fdb08e"
+  integrity sha512-D3wYH90tYY1BsKlUe0oNj2JAhQ9TepkD51auk3N7q+4uz7A/cgJ5JsWHreT0PqieW1QhOuqxQ2reCXV1YXzecg==
 
 collection-visit@^1.0.0:
   version "1.0.0"
